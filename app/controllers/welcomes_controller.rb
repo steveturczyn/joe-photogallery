@@ -1,7 +1,7 @@
 class WelcomesController < ApplicationController
 
   def index
-    @images = Image.all
+    @image = Image.first
   end
 
 end
