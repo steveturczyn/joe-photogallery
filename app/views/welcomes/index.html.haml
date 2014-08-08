@@ -1,2 +1,9 @@
 %home
   %img{:src => "#{@image.url_lg}"}
+  %nav
+    %ul
+      %category Wildlife:
+      %li= link_to  "View Portfolio", root_path
+      <br/>
+      %li= link_to "Prev | ", root_path
+      %li= link_to "Next", root_path
