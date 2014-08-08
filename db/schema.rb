@@ -11,15 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140730160046) do
+ActiveRecord::Schema.define(version: 20140808165052) do
 
   create_table "images", force: true do |t|
     t.string  "title"
     t.string  "location"
     t.text    "description"
-    t.string  "url_sm"
-    t.string  "url_lg"
     t.integer "category_id"
+    t.string  "image_link"
   end
 
 end

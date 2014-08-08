@@ -1,8 +1,7 @@
 class Image < ActiveRecord::Base
 
-  # mount_uploader :url_sm, SmallUploader
-  # mount_uploader :url_lg, LargeUploader
+  mount_uploader :image_link, MyUploader
 
-  validates_presence_of :title, :location, :description, :url_sm, :url_lg, :category_id
+  validates_presence_of :title, :location, :description, :image_link, :category_id
 
 end
