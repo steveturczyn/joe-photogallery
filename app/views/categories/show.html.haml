@@ -1,0 +1,9 @@
+-# %category
+  -# %h1= @category.name
+  -# - @category.images.each do |image|
+    -# %img{:src => "#{image.image_link}"}
+
+%category
+  %h1= @category.name
+  - @category.images.each do |image|
+    %img{:src => "#{image.image_link.thumb}"}
