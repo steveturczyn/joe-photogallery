@@ -3,7 +3,7 @@ class WelcomesController < ApplicationController
   def index
     @categories = Category.order(name: :asc)
     @category = Category.find_by(name: params[:cat]) || @categories.first
-    @image = @category.images.find_by_home(true)
+    @picture = @category.pictures.find_by_home(true)
     @prev = prev_category
     @next = next_category
   end

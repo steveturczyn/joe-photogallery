@@ -5,5 +5,5 @@
 
 %category
   %h1= @category.name
-  - @category.images.each do |image|
-    %img{:src => "#{image.image_link.thumb}"}
+  - @category.pictures.each do |picture|
+    %img{:src => "#{picture.image_link.thumb}"}

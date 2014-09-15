@@ -1,8 +1,8 @@
 %home
-  %img{:src => "#{@image.image_link}"}
+  %img{:src => "#{@picture.image_link}"}
   %nav
     %ul
-      %category #{@image.category.name}:
+      %category #{@picture.category.name}:
       %li= link_to  "View Portfolio", @category
       <br/>
       %li= link_to "Prev | ", root_path(cat: @prev)

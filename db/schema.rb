@@ -19,12 +19,12 @@ ActiveRecord::Schema.define(version: 20140908184827) do
     t.datetime "updated_at"
   end
 
-  create_table "images", force: true do |t|
+  create_table "pictures", force: true do |t|
     t.string   "title"
     t.string   "location"
     t.text     "description"
-    t.integer  "category_id"
     t.string   "image_link"
+    t.integer  "category_id"
     t.boolean  "home"
     t.datetime "created_at"
     t.datetime "updated_at"
