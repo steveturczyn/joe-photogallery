@@ -1,9 +1,9 @@
--# %category
-  -# %h1= @category.name
-  -# - @category.images.each do |image|
-    -# %img{:src => "#{image.image_link}"}
-
-%category
-  %h1= @category.name
-  - @category.pictures.each do |picture|
-    %img{:src => "#{picture.image_link.thumb}"}
+%section.category
+  %header.clearfix
+    %h1= @category.name
+  %article.row
+    - @category.pictures.each do |picture|
+      .picture.col-sm-1
+        = link_to root_path, nil do
+          %img{:src => "#{picture.image_link.thumb}"}
+          <br/><br/><br/>
