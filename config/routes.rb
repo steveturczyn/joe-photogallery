@@ -1,4 +1,5 @@
 Photogallery::Application.routes.draw do
+  devise_for :users
   root 'welcomes#index'
 
   resources :categories, only: [:show]

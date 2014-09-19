@@ -13,6 +13,7 @@ gem 'haml-rails'
 gem 'sidekiq'
 gem 'carrierwave'
 gem 'mini_magick'
+gem 'devise'
 
 group :development, :test do
   gem 'sqlite3'
