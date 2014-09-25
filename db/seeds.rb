@@ -5,13 +5,20 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-Picture.delete_all
+User.delete_all
 Category.delete_all
+Picture.delete_all
 
-c1 = Category.create(name: "Wildlife")
-c2 = Category.create(name: "Abstractions")
-c3 = Category.create(name: "Flowers")
-c4 = Category.create(name: "Nature")
+User.create(email: "joe@joelevinger.com", password: "joelevinger", name: "Joe Levinger")
+User.create(email: "steve.turczyn@gotealeaf.com", password: "steveturczyn", name: "Steve Turczyn")
+
+c1 = Category.create(name: "Wildlife", user_id: 1)
+c2 = Category.create(name: "Abstractions", user_id: 1)
+c3 = Category.create(name: "Flowers", user_id: 1)
+c4 = Category.create(name: "Nature", user_id: 1)
+
+c5 = Category.create(name: "Wildlife", user_id: 2)
+c6 = Category.create(name: "Architecture", user_id: 2)
 
 Picture.create(title: "Florida Bird", location: "Fort Pierce, FL", description: "Beautiful bird, shot with a 400 mm zoom lens", image_link: File.open(Rails.root.join('public/tmp/bird.jpg')), home: false, category: c1)
 Picture.create(title: "Panda", location: "Washington, DC", description: "A hungry panda", image_link: File.open(Rails.root.join('public/tmp/panda.jpg')), home: true, category: c1)

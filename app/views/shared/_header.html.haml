@@ -1,6 +1,15 @@
 %section#header
   %nav
     %ul
-      %name Joe Levinger
-      %li= link_to "Image Galleries", root_path
-      %li= link_to "Bio", root_path
+      - if current_user
+        %name #{current_user.name}
+        %li= link_to "Image Galleries", root_path
+        %li= link_to "Bio", root_path
+        %li= link_to "Add Photos", new_category_path
+        %li= link_to "Log Off", destroy_user_session_path, :method => :delete
+      - else
+        %name Photo Gallery
+        %li= link_to "Image Galleries", root_path
+        %li= link_to "Bio", root_path
+        %li= link_to "Log In", user_session_path
+      
