@@ -1,9 +1,9 @@
 %home
-  %img{:src => "#{@picture.image_link}"}
+  %img{:src => "#{@picture_photographer.image_link}"}
   %nav
     %ul
-      %category #{@picture.category.name}:
-      %li= link_to  "View Portfolio", @category
+      %photographer #{@photographer}:
+      %li= link_to  "View Portfolio", users_path(id: @picture_photographer.category.user.name)
       <br/>
-      %li= link_to "Prev | ", root_path(cat: @prev)
-      %li= link_to "Next", root_path(cat: @next)
+      %li= link_to "Prev | ", root_path(id: @prev_picture)
+      %li= link_to "Next", root_path(id: @next_picture)

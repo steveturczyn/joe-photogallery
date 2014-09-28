@@ -1,8 +1,8 @@
 %section#header
   %nav
     %ul
-      - if current_user
-        %name #{current_user.name}
+      - if @picture.present?
+        %name #{@picture.category.user.name}
         %li= link_to "Image Galleries", root_path
         %li= link_to "Bio", root_path
         %li= link_to "Add Photos", new_category_path
