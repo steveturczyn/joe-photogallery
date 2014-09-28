@@ -1,9 +1,10 @@
-%section.category
-  %header.clearfix
+.category
+  %header
     %h1= @category.name
-  %article.row
-    - @category.pictures.each do |picture|
-      .picture.col-sm-1
-        = link_to root_path, nil do
-          %img{:src => "#{picture.image_link.thumb}"}
-          <br/><br/><br/>
+  .wrapper
+    - @category.pictures.each_slice(4) do |pictures|
+      .pictures
+        - pictures.each do |picture|
+          .picture
+            = link_to root_path, nil do
+              %img{:src => "#{picture.image_link.thumb}"}

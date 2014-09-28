@@ -7,15 +7,11 @@
     = csrf_meta_tag
     = stylesheet_link_tag "application"
     = javascript_include_tag "application"
-  %body
+  %body{:class => controller_name}
     %header
       = render 'shared/header'
-    %imagepadding
-      = render 'shared/imagepadding'
     %section.content.clearfix
       = render 'shared/messages'
       = yield
-    %imagepadding
-      = render 'shared/imagepadding'
     %footer
       = render 'shared/footer'

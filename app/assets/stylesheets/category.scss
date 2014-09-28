@@ -1,0 +1,30 @@
+.category {
+  header {
+    h1 {
+      color: #FFFFFF;
+      font-family: verdana;
+      font-size: 28px;
+      text-align: center;
+      padding-bottom: 30px;
+    }
+  }
+  .wrapper {
+    .pictures {
+      text-align: center;
+    }
+    .picture {
+      display: inline-block;
+      margin: 20px;
+      a {
+        display: inline-block;
+        border: 5px solid white;
+        &:hover {
+          border: 5px solid yellow;
+        }
+        img {
+          height: 149px;
+        }
+      }
+    }
+  }
+}
