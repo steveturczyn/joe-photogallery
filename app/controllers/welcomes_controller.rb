@@ -5,6 +5,7 @@ class WelcomesController < ApplicationController
     @picture_photographer = Picture.find_by(id: params[:id]) || @pictures.first
     category = Category.find(@picture_photographer.category_id)
     @photographer = User.find(category.user_id).name
+    session[:user_id] = category.user_id
 
     prev_photographer
     next_photographer

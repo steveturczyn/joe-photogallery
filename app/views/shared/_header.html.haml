@@ -1,15 +1,19 @@
 %section#header
   %nav
     %ul
-      - if @picture.present?
-        %name #{@picture.category.user.name}
+      - if @picture.present? || @category.present?
+        - if user_signed_in?
+          %name #{current_user.name}
+        - else
+          %name #{(@category || @picture.category).user.name}
         %li= link_to "Image Galleries", root_path
         %li= link_to "Bio", root_path
+      - else
+        %name Photo Gallery
+        %li= link_to "Photographers", root_path
+      
+      - if user_signed_in?
         %li= link_to "Add Photos", new_category_path
         %li= link_to "Log Off", destroy_user_session_path, :method => :delete
       - else
-        %name Photo Gallery
-        %li= link_to "Image Galleries", root_path
-        %li= link_to "Bio", root_path
-        %li= link_to "Log In", user_session_path
-      
+        %li= link_to "Log In", user_session_path 

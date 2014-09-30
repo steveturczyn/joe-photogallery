@@ -3,11 +3,11 @@ class UsersController < ApplicationController
   # before_action :authenticate_user!
 
   def index
+    determine_categories
     if params[:id].present?
-      determine_categories
-      @category = @@categories.first
+      @category = @categories.first
     else
-      @category = Category.find_by(name: params[:cat])
+      @category = Category.find_by(name: params[:cat], user_id: session[:user_id])
     end
 
     @pictures = @category.pictures
@@ -21,7 +21,11 @@ class UsersController < ApplicationController
 
   def determine_categories
     pictures = Picture.all
-    user = User.find_by(name: params[:id])
+    if params[:id]
+      user = User.find_by(name: params[:id])
+    else
+      user = User.find(session[:user_id])
+    end
     id = user.id
     user_categories = Category.select{|category| category.user_id == id }
     user_categories_array = []
@@ -33,20 +37,20 @@ class UsersController < ApplicationController
     good_categories = pictures.map{|picture| picture.category_id}.uniq
     good_user_categories = good_categories & user_categories_array
     all_categories = Category.order(name: :asc)
-    @@categories = []
+    @categories = []
 
     all_categories.each_with_index do |category, index|  
-      @@categories << all_categories[index] if good_user_categories.include?(all_categories[index].id)
+      @categories << all_categories[index] if good_user_categories.include?(all_categories[index].id)
     end
   end
 
   def prev_category
-    category = @@categories[@@categories.find_index(@category)-1] || @@categories.last
+    category = @categories[@categories.find_index(@category)-1] || @categories.last
     category.name
   end
 
   def next_category
-    category = @@categories[@@categories.find_index(@category)+1] || @@categories.first
+    category = @categories[@categories.find_index(@category)+1] || @categories.first
     category.name
   end
 
