@@ -1,10 +1,8 @@
 class UsersController < ApplicationController
 
-  # before_action :authenticate_user!
-
   def index
     determine_categories
-    if params[:id].present?
+    if params[:first_name].present?
       @category = @categories.first
     else
       @category = Category.find_by(name: params[:cat], user_id: session[:user_id])
@@ -21,8 +19,8 @@ class UsersController < ApplicationController
 
   def determine_categories
     pictures = Picture.all
-    if params[:id]
-      user = User.find_by(name: params[:id])
+    if params[:first_name]
+      user = User.find_by(first_name: params[:first_name], last_name: params[:last_name])
     else
       user = User.find(session[:user_id])
     end

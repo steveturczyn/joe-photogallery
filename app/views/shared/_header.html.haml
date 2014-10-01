@@ -1,11 +1,14 @@
 %section#header
   %nav
     %ul
-      - if @picture.present? || @category.present?
-        - if user_signed_in?
-          %name #{current_user.name}
-        - else
-          %name #{(@category || @picture.category).user.name}
+      - if request.env['PATH_INFO'] == "/categories/new"
+        %name #{current_user.first_name} #{current_user.last_name}
+        %li= link_to "Home", root_path
+        %li= link_to "Image Galleries", root_path
+        %li= link_to "Bio", root_path
+      - elsif @picture.present? || @category.present?
+        %name #{(@category || @picture.category).user.first_name} #{(@category || @picture.category).user.last_name}
+        %li= link_to "Home", root_path
         %li= link_to "Image Galleries", root_path
         %li= link_to "Bio", root_path
       - else

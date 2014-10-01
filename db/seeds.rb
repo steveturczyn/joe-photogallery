@@ -9,8 +9,8 @@ User.delete_all
 Category.delete_all
 Picture.delete_all
 
-User.create(email: "joe@joelevinger.com", password: "joelevinger", name: "Joe Levinger")
-User.create(email: "steve.turczyn@gotealeaf.com", password: "steveturczyn", name: "Steve Turczyn")
+User.create(email: "joe@joelevinger.com", password: "joelevinger", first_name: "Joe", last_name: "Levinger")
+User.create(email: "steve.turczyn@gotealeaf.com", password: "steveturczyn", first_name: "Steve", last_name: "Adams")
 
 c1 = Category.create(name: "Wildlife", user_id: 1)
 c2 = Category.create(name: "Abstractions", user_id: 1)
