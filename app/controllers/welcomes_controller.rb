@@ -2,7 +2,7 @@ class WelcomesController < ApplicationController
 
   def index
     pictures = Picture.select {|picture| picture.represent_user? }
-    
+
     unsorted_pictures = []
     pictures.each do |picture|
       category = Category.find(picture.category_id)

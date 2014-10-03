@@ -4,6 +4,6 @@ class Picture < ActiveRecord::Base
 
   mount_uploader :image_link, MyUploader
 
-  validates_presence_of :title, :location, :description, :category_id, :image_link
+  validates_presence_of :title, :location, :description, :category_id
 
 end
