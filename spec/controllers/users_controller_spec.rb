@@ -26,17 +26,17 @@ describe UsersController do
     end
     it "selects the correct category when category name and user id are provided as params" do
       session[:user_id] = 1
-      get :index, cat: "Bananas", user_id: 1
+      get :index, cat: "Bananas", user_id: bananas.id
       expect(assigns(:category)).to eq(bananas)
     end
     it "creates an array of Pictures objects from a Category object" do
       session[:user_id] = 1
-      get :index, cat: "Bananas", user_id: 1
+      get :index, cat: "Bananas", user_id: bananas.id
       expect(assigns(:pictures)).to eq([chiquita])
     end
     it "creates a Picture object from an array of Pictures objects" do
       session[:user_id] = 1
-      get :index, cat: "Bananas", user_id: 1
+      get :index, cat: "Bananas", user_id: bananas.id
       expect(assigns(:picture)).to eq(chiquita)
     end
     it "verifies that categories are in alpha order" do

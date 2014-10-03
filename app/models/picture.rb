@@ -6,4 +6,8 @@ class Picture < ActiveRecord::Base
 
   validates_presence_of :title, :location, :description, :category_id
 
+  def user
+    category.user
+  end
+
 end
