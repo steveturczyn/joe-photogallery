@@ -1,0 +1,41 @@
+section#header {
+  background: #650c03;
+  height: 50px;
+  a {
+    color: white;
+    text-decoration: none;
+  }
+  a:hover {
+    color: goldenrod;
+  }
+  nav {
+    clear: both;
+    position: relative;
+    margin: 0 auto;
+    ul {
+      margin: 0;
+      display: block;
+      text-align: center;
+      padding: 15px 0;
+      name {
+        font-family: arial;
+        font-size: 20px;
+        text-transform: uppercase;
+        color: white;
+        padding: 0 15px;
+      }
+      li {
+        font-family: arial;
+        font-weight: bold;
+        display: inline-block;
+        position: relative;
+        margin: 0;
+        padding: 0 15px;
+        list-style-type: none;
+        text-transform: uppercase;
+        font-family: verdana;
+        font-size: 11px;
+      }
+    }
+  }
+}
