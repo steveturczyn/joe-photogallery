@@ -11,10 +11,10 @@ home {
   a {
     color: #DAA520;
     text-decoration: none;
-  }
-  a:hover {
-    color: #FFFFFF;
-    text-decoration: none;
+    &:hover {
+      color: #FFFFFF;
+      text-decoration: none;
+    }
   }
   nav {
     clear: both;
@@ -41,6 +41,24 @@ home {
         text-transform: uppercase;
         font-family: verdana;
         font-size: 11px;
+      }
+    }
+  }
+  arrows {
+    left {
+      position: absolute;
+      left: 0;
+      top: 45%;
+      &:hover {
+        background: url('/tmp/prev-1.jpg');
+      }
+    }
+    right {
+      position: absolute;
+      right: 0;
+      top: 45%;
+      &:hover {
+        background: url('/tmp/next-1.jpg');
       }
     }
   }

@@ -4,6 +4,8 @@
     %ul
       %photographer #{@photographer}:
       %li= link_to  "View Portfolio", users_path(first_name: @photographer_first_name, last_name: @photographer_last_name)
-      <br/>
-      %li= link_to "Prev | ", root_path(id: @prev_picture)
-      %li= link_to "Next", root_path(id: @next_picture)
+  %arrows
+    %left
+      = link_to(image_tag("/tmp/prev-0.jpg"), root_path(id: @prev_picture))
+    %right
+      = link_to(image_tag("/tmp/next-0.jpg"), root_path(id: @next_picture))

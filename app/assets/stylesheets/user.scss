@@ -44,4 +44,22 @@ user {
       }
     }
   }
+  arrows {
+    left {
+      position: absolute;
+      left: 0;
+      top: 45%;
+      &:hover {
+        background: url('/tmp/prev-1.jpg');
+      }
+    }
+    right {
+      position: absolute;
+      right: 0;
+      top: 45%;
+      &:hover {
+        background: url('/tmp/next-1.jpg');
+      }
+    }
+  }
 }
