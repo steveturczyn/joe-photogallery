@@ -80,3 +80,7 @@ RSpec.configure do |config|
 end
 
 Capybara.server_port = 52662
+
+RSpec.configure do |config|
+  config.include Devise::TestHelpers, type: :controller
+end
