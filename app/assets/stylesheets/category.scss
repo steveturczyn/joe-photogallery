@@ -14,12 +14,12 @@
     }
     .picture {
       display: inline-block;
-      margin: 20px;
+      margin: 10px;
       a {
         display: inline-block;
-        border: 5px solid white;
+        border: 4px solid #6B2400;
         &:hover {
-          border: 5px solid yellow;
+          border: 4px solid #AD5C5C;
         }
         img {
           height: 149px;
