@@ -1,5 +1,5 @@
 Photogallery::Application.routes.draw do
-  devise_for :users
+  devise_for :users, :controllers => {:sessions => "sessions"}
   root 'welcomes#index'
 
   resources :categories, only: [:new, :create, :show]

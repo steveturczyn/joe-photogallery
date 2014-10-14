@@ -1,5 +1,8 @@
 class CategoriesController < ApplicationController
 
+  before_filter :get_sorted_pictures
+  before_action :authenticate_user!, except: [:show]
+
   def new
     @category = Category.new
   end

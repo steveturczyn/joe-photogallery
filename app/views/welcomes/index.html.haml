@@ -2,7 +2,6 @@
   %img{:src => "#{@picture.image_link}"}
   %nav
     %ul
-      %photographer #{@photographer}:
       %li= link_to  "View Portfolio", users_path(first_name: @photographer_first_name, last_name: @photographer_last_name)
   %arrows
     %left

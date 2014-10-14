@@ -2,21 +2,26 @@
   %nav
     %ul
       - if request.env['PATH_INFO'] == "/categories/new"
-        %name #{current_user.first_name} #{current_user.last_name}
-        %li= link_to "Home", root_path
-        %li= link_to "Image Galleries", root_path
-        %li= link_to "Bio", root_path
+        - hdr_name = "#{current_user.first_name} #{current_user.last_name}"
       - elsif @picture.present? || @category.present?
-        %name #{(@category || @picture.category).user.first_name} #{(@category || @picture.category).user.last_name}
-        %li= link_to "Home", root_path
-        %li= link_to "Image Galleries", root_path
-        %li= link_to "Bio", root_path
+        - hdr_name = "#{(@category || @picture.category).user.first_name} #{(@category || @picture.category).user.last_name}"
       - else
-        %name Photo Gallery
-        %li= link_to "Photographers", root_path
+        - hdr_name = "Photo Gallery"
+
+      %name #{hdr_name}
+      %li.dropdown
+        %a(href="#" id="dlabel" role="button" data-toggle="dropdown" class="dropdown-toggle" data-target="#")
+          = "Photographers"
+          %b.caret
+        %ul.dropdown-menu
+          %li
+            - @sorted_pictures.each do |picture|
+              = link_to "#{picture.user.first_name} #{picture.user.last_name}", root_path(id: picture)
+      %li= link_to "Image Galleries", root_path
+      %li= link_to "Bio", root_path
       
       - if user_signed_in?
         %li= link_to "Add Photos", new_category_path
         %li= link_to "Log Off", destroy_user_session_path, :method => :delete
       - else
-        %li= link_to "Log In", user_session_path 
+        %li= link_to "Log In", user_session_path

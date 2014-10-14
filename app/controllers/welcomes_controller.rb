@@ -1,8 +1,8 @@
 class WelcomesController < ApplicationController
 
   def index
-    @sorted_pictures = Picture.select {|picture| picture.represent_user? }.sort_by {|p| p.user.last_name }
-
+    get_sorted_pictures
+    
     @picture = Picture.find_by(id: params[:id]) || @sorted_pictures.first
     @photographer_first_name = @picture.user.first_name
     @photographer_last_name = @picture.user.last_name

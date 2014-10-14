@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
 
   def index
+    get_sorted_pictures
+
     @categories = Picture.select{|picture| picture.represent_category }.map{|p| p.category }.select{|category| category.user_id == session[:user_id] }.sort!{|a, b| a.name.downcase <=> b.name.downcase }
     
     @category = Category.find_by(name: params[:cat], user_id: session[:user_id]) || @categories.first
