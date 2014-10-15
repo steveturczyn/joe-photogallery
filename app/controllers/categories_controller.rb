@@ -9,6 +9,7 @@ class CategoriesController < ApplicationController
 
   def show
     @category = Category.find(params[:id])
+    session[:category_id] = params[:id].to_i
   end
 
   def create

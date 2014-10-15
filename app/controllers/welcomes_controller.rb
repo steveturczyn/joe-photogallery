@@ -8,6 +8,8 @@ class WelcomesController < ApplicationController
     @photographer_last_name = @picture.user.last_name
     @photographer = "#{@photographer_first_name} #{@photographer_last_name}"
     session[:user_id] = @picture.user.id
+    session[:photographer] = @photographer
+    session[:photographer_first_name] = @photographer_first_name
 
     prev_photographer
     next_photographer

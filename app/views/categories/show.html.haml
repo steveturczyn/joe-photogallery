@@ -6,5 +6,5 @@
       .pictures
         - pictures.each do |picture|
           .picture
-            = link_to root_path, nil do
+            = link_to picture_path(id: picture.id), nil do
               %img{:src => "#{picture.image_link.thumb}"}

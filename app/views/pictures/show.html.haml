@@ -1,0 +1,13 @@
+%categorydetail
+  %header
+    %h1= link_to(@picture_of_category.category.name, category_path(id: session[:category_id]))
+  %img{:src => "#{@picture_of_category.image_link}"}
+  %nav
+    %ul
+      .title
+        = "#{@picture_of_category.title} &nbsp;&nbsp;&#149;&nbsp;&nbsp; #{@picture_of_category.location}".html_safe
+  %arrows
+    %left
+      = link_to(image_tag("/tmp/prev-0.jpg"), picture_path(id: @prev_picture))
+    %right
+      = link_to(image_tag("/tmp/next-0.jpg"), picture_path(id: @next_picture))
