@@ -1,7 +1,12 @@
 class CategoriesController < ApplicationController
 
   before_filter :get_sorted_pictures
-  before_action :authenticate_user!, except: [:show]
+  before_action :authenticate_user!, except: [:index, :show]
+
+  def index
+    categories = Category.select{|category| category.user_id == session[:user_id] }.map{|c| c.id }
+    @pictures = Picture.select{|picture| categories.include? picture.category_id }.select{|p| p.represent_category }.sort!{|a, b| a.category.name <=> b.category.name }
+  end
 
   def new
     @category = Category.new

@@ -1,0 +1,12 @@
+.categories
+  %header
+    %h1= "#{session[:photographer_first_name]}'s Categories"
+  .wrapper
+    - @pictures.each_slice(4) do |pictures|
+      .pictures
+        - pictures.each do |picture|
+          #picture
+            = link_to category_path(id: picture.category_id), nil do
+              %img{:src => "#{picture.image_link.thumb}"}
+            .caption
+              = picture.category.name
