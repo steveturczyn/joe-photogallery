@@ -5,6 +5,7 @@ Photogallery::Application.routes.draw do
   resources :categories, only: [:index, :new, :create, :show]
   resources :users, only: [:index]
   resources :pictures, only: [:show]
+  resources :bios, only: [:index]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
