@@ -5,14 +5,11 @@ section#header {
     color: white;
     text-decoration: none;
   }
-  a:hover {
-    color: goldenrod;
-  }
   nav {
     clear: both;
     position: relative;
     margin: 0 auto;
-    ul {
+    > ul {
       margin: 0;
       display: block;
       text-align: center;
@@ -25,7 +22,6 @@ section#header {
         padding: 0 15px;
       }
       li {
-        font-family: arial;
         font-weight: bold;
         display: inline-block;
         position: relative;
@@ -35,6 +31,44 @@ section#header {
         text-transform: uppercase;
         font-family: verdana;
         font-size: 11px;
+        a {
+          font-weight: bold;
+          font-family: verdana;
+          font-size: 11px;
+          .caret {
+            border-top-color: white;
+          }
+        }
+      }
+      > li {
+        &:hover {
+          > a {
+            color: goldenrod;
+            .caret {
+              border-top-color: goldenrod;
+            }
+          }
+        }
+        &.dropdown {
+          &:hover {
+            .dropdown-menu {
+              display: block;
+            }
+          }
+          .dropdown-menu {
+            margin-top: 0;
+            a {
+              color: #650c03;
+            }
+            li {
+              &:hover {
+                a {
+                  background-color: lighten(goldenrod, 40%);
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

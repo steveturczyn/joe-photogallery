@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   def index
     get_sorted_pictures
 
-    @categories = Picture.select{|picture| picture.represent_category }.map{|p| p.category }.select{|category| category.user_id == session[:user_id] }.sort!{|a, b| a.name.downcase <=> b.name.downcase }
+    @categories = users_pictures.sort!{|a, b| a.name.downcase <=> b.name.downcase }
     
     @category = Category.find_by(name: params[:cat], user_id: session[:user_id]) || @categories.first
 
@@ -14,6 +14,14 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def representational_pictures
+    Picture.select{|picture| picture.represent_category }.map{|p| p.category }
+  end
+
+  def users_pictures
+    representational_pictures.select{|category| category.user_id == session[:user_id] }
+  end
 
   def prev_category
     category = @categories[@categories.find_index(@category)-1] || @categories.last

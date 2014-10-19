@@ -10,4 +10,7 @@ class Picture < ActiveRecord::Base
     category.user
   end
 
+  def self.user_representations
+    select {|picture| picture.represent_user? }.sort_by {|p| p.user.last_name }
+  end
 end

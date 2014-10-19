@@ -12,7 +12,7 @@
     .pictures {
       text-align: center;
     }
-    #picture {
+    .picture {
       display: inline-block;
       margin: 10px;
       a {
@@ -27,12 +27,12 @@
       }
     }
     .caption {
-      display: inline-block;
       color: #DAA520;
       text-transform: uppercase;
       font-weight: bold;
       font-size: 11px;
       font-family: verdana;
+      margin-top: 5px;
     }
   }
 }

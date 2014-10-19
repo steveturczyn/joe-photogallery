@@ -1,7 +1,7 @@
 %section#header
   %nav
     %ul
-      - if request.env['PATH_INFO'] == "/categories/new"
+      - if user_signed_in?
         - hdr_name = "#{current_user.first_name} #{current_user.last_name}"
       - else 
         - hdr_name = session[:photographer]
@@ -11,12 +11,12 @@
       %li= link_to "Bio", bios_path
       
       %li.dropdown
-        %a(href="#" id="dlabel" role="button" data-toggle="dropdown" class="dropdown-toggle" data-target="#")
+        %a.dropdown-toggle(href="#" data-toggle="dropdown")
           = "All Photographers"
-          %b.caret
+          %span.caret
         %ul.dropdown-menu
-          %li
-            - @sorted_pictures.each do |picture|
+          - @sorted_pictures.each do |picture|
+            %li
               = link_to "#{picture.user.first_name} #{picture.user.last_name}", root_path(id: picture)
 
       - if user_signed_in?

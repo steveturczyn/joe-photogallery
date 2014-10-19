@@ -9,7 +9,16 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require bootstrap
- *= require whitespace-reset
- *= require_tree .
 */
+@import "bootstrap";
+@import "bio";
+@import "categories";
+@import "category";
+@import "categorydetail";
+@import "footer";
+@import "gallery";
+@import "general";
+@import "header";
+@import "home";
+@import "user";
+@import "whitespace-reset";

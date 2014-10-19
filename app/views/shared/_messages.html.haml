@@ -1,4 +1,5 @@
-- flash.each do |name, msg|
-  %div(class="alert alert-#{convert_flash(name, msg)}")
-    %a.close(data-dismiss='alert') &#215;
-    = content_tag :div, msg, :id => "flash_#{name}" if msg.is_a?(String)
+%section#messages
+  - flash.each do |name, msg|
+    %div(class="alert alert-#{convert_flash(name)}")
+      %a.close(data-dismiss='alert') &#215;
+      = content_tag :div, msg, :id => "flash_#{name}" if msg.is_a?(String)

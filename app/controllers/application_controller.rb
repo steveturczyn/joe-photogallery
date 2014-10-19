@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   def get_sorted_pictures
-    @sorted_pictures = Picture.select {|picture| picture.represent_user? }.sort_by {|p| p.user.last_name }
+    @sorted_pictures = Picture.user_representations
   end
 
 end
