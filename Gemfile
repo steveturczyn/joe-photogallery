@@ -15,6 +15,7 @@ gem 'sidekiq'
 gem 'carrierwave'
 gem 'mini_magick'
 gem 'devise'
+gem 'possessive', '~> 1.0.1'
 
 group :development, :test do
   gem 'sqlite3'

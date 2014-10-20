@@ -4,8 +4,8 @@ class CategoriesController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
 
   def index
-    categories = Category.select{|category| category.user_id == session[:user_id] }.map{|c| c.id }
-    @pictures = Picture.select{|picture| categories.include?(picture.category_id) && picture.represent_category }.sort!{|a, b| a.category.name <=> b.category.name }
+    @categories = user_categories.map{|category| category.id }
+    @pictures = representational_categories.sort!{|a, b| a.category.name <=> b.category.name }
   end
 
   def new
@@ -30,6 +30,14 @@ class CategoriesController < ApplicationController
   end
 
   private
+
+  def user_categories
+    Category.select{|category| category.user_id == session[:user_id] }
+  end
+
+  def representational_categories
+    Picture.select{|picture| @categories.include?(picture.category_id) && picture.represent_category }
+  end
 
   def category_params
     params.require(:category).permit(:name)

@@ -1,6 +1,7 @@
 .categories
   %header
-    %h1= "#{session[:photographer_first_name]}'s Categories"
+    - possessive_name = "#{session[:photographer_first_name]}".possessive
+    %h1= "#{possessive_name} Categories"
   .wrapper
     - @pictures.each_slice(4) do |pictures|
       .pictures

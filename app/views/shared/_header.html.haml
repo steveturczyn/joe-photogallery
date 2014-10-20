@@ -7,7 +7,8 @@
         - hdr_name = session[:photographer]
 
       %name #{hdr_name}
-      %li= link_to "#{session[:photographer_first_name]}'s Categories", categories_path
+      - possessive_name = "#{session[:photographer_first_name]}".possessive
+      %li= link_to "#{possessive_name} Categories", categories_path
       %li= link_to "Bio", bios_path
       
       %li.dropdown

@@ -3,7 +3,7 @@ class WelcomesController < ApplicationController
   def index
     get_sorted_pictures
     
-    @picture = Picture.find_by(id: params[:id]) || @sorted_pictures.first
+    @picture = Picture.find_by(id: params[:id]) || @sorted_pictures.sample
     @photographer_first_name = @picture.user.first_name
     @photographer_last_name = @picture.user.last_name
     @photographer = "#{@photographer_first_name} #{@photographer_last_name}"
