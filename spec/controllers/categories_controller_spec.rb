@@ -19,6 +19,11 @@ describe CategoriesController do
       get :index
       expect(assigns(:categories)).to eq([cherries.id, bananas.id, apples.id])
     end
+    it "creates a sorted array of Picture objects" do
+      set_current_user
+      get :index
+      expect(assigns(:pictures)).to eq([mcintosh, chiquita, bing])
+    end
   end
   describe "GET new" do
     it "creates a new Category object" do
