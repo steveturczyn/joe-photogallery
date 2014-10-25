@@ -4,17 +4,19 @@ class CategoriesController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
 
   def index
+    @show_user = User.find(params[:user_id])
     @categories = user_categories.map{|category| category.id }
     @pictures = representational_categories.sort!{|a, b| a.category.name <=> b.category.name }
   end
 
   def new
+    @categories = user_categories
     @category = Category.new
   end
 
   def show
     @category = Category.find(params[:id])
-    session[:category_id] = params[:id].to_i
+    @show_user = @category.user
   end
 
   def create
@@ -32,7 +34,7 @@ class CategoriesController < ApplicationController
   private
 
   def user_categories
-    Category.select{|category| category.user_id == session[:user_id] }
+    Category.select{|category| category.user_id == params[:user_id].to_i }
   end
 
   def representational_categories

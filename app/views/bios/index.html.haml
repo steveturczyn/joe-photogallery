@@ -2,6 +2,6 @@
   .wrapper
     %header
       %h1
-        = "#{@user.first_name} #{@user.last_name}"
+        = "#{@show_user.first_name} #{@show_user.last_name}"
     %text
-      = simple_format @user.bio
+      = simple_format @show_user.bio

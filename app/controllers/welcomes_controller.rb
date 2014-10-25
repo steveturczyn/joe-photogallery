@@ -4,12 +4,7 @@ class WelcomesController < ApplicationController
     get_sorted_pictures
     
     @picture = Picture.find_by(id: params[:id]) || @sorted_pictures.sample
-    @photographer_first_name = @picture.user.first_name
-    @photographer_last_name = @picture.user.last_name
-    @photographer = "#{@photographer_first_name} #{@photographer_last_name}"
-    session[:user_id] = @picture.user.id
-    session[:photographer] = @photographer
-    session[:photographer_first_name] = @photographer_first_name
+    @show_user = @picture.user
 
     prev_photographer
     next_photographer

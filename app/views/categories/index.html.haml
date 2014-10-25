@@ -1,13 +1,13 @@
 .categories
   %header
-    - possessive_name = "#{session[:photographer_first_name]}".possessive
+    - possessive_name = "#{@show_user.first_name}".possessive
     %h1= "#{possessive_name} Categories"
   .wrapper
     - @pictures.each_slice(4) do |pictures|
       .pictures
         - pictures.each do |picture|
           .picture
-            = link_to category_path(id: picture.category_id), nil do
+            = link_to user_category_path(@show_user, picture.category), nil do
               %img{:src => "#{picture.image_link.thumb}"}
             .caption
               = picture.category.name

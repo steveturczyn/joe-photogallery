@@ -1,0 +1,12 @@
+%user
+  %img{:src => "#{@picture.image_link}"}
+  %nav
+    %ul
+      %category #{@picture.category.name}:
+      %li= link_to  "View Portfolio", user_category_path(@show_user, @category)
+      <br/>
+  %arrows
+    %left
+      = link_to(image_tag("/tmp/prev-0.jpg"), user_path(@show_user, @category, cat: @prev_category))
+    %right
+      = link_to(image_tag("/tmp/next-0.jpg"), user_path(@show_user, @category, cat: @next_category))

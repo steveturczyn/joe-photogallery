@@ -1,15 +1,11 @@
 %section#header
   %nav
     %ul
-      - if user_signed_in?
-        - hdr_name = "#{current_user.first_name} #{current_user.last_name}"
-      - else 
-        - hdr_name = session[:photographer]
-
-      %name #{hdr_name}
-      - possessive_name = "#{session[:photographer_first_name]}".possessive
-      %li= link_to "#{possessive_name} Categories", categories_path
-      %li= link_to "Bio", bios_path
+      - if @show_user
+        %name #{@show_user.full_name}
+        - possessive_name = "#{@show_user.first_name}".possessive
+        %li= link_to "#{possessive_name} Categories", user_categories_path(@show_user)
+        %li= link_to "Bio", user_bios_path(@show_user)
       
       %li.dropdown
         %a.dropdown-toggle(href="#" data-toggle="dropdown")
@@ -21,7 +17,7 @@
               = link_to "#{picture.user.first_name} #{picture.user.last_name}", root_path(id: picture)
 
       - if user_signed_in?
-        %li= link_to "Add Photos", new_category_path
+        %li= link_to "Add Photos", new_user_category_path(current_user)
         %li= link_to "Log Off", destroy_user_session_path, :method => :delete
       - else
         %li= link_to "Log In", user_session_path

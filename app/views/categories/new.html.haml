@@ -4,7 +4,11 @@
     .container
       .row
         .col-sm-3
-          = bootstrap_form_for [@category] do |f|
+          - @categories.each do |category|
+            = category.name
+      .row
+        .col-sm-3
+          = bootstrap_form_for [current_user, @category] do |f|
             %fieldset
               = f.text_field :name, label: "Category Name"
             %fieldset.actions.form-group

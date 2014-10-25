@@ -2,10 +2,12 @@ Photogallery::Application.routes.draw do
   devise_for :users, :controllers => {:sessions => "sessions"}
   root 'welcomes#index'
 
-  resources :categories, only: [:index, :new, :create, :show]
-  resources :users, only: [:index]
-  resources :pictures, only: [:show]
-  resources :bios, only: [:index]
+  
+  resources :users, only: [:show] do
+    resources :categories, only: [:index, :new, :create, :show]
+    resources :pictures, only: [:show]
+    resources :bios, only: [:index]
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
