@@ -63,3 +63,12 @@ user {
     }
   }
 }
+
+@-moz-document url-prefix() { 
+  user {
+    img {
+      height: -moz-calc(100% - 50px); /* old Firefox */
+      height: calc(100% - 50px); /* new Firefox */
+    }
+  }
+}

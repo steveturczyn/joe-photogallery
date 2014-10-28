@@ -1,20 +1,31 @@
-%h2 Sign up
-= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
-  = devise_error_messages!
-  %div
-    = f.label :email
-    %br/
-    = f.email_field :email, autofocus: true
-  %div
-    = f.label :password
-    - if @validatable
-      %i
-        (#{@minimum_password_length} characters minimum)
-    %br/
-    = f.password_field :password, autocomplete: "off"
-  %div
-    = f.label :password_confirmation
-    %br/
-    = f.password_field :password_confirmation, autocomplete: "off"
-  %div= f.submit "Sign up"
-= render "devise/shared/links"
+%signup
+  .wrapper
+    %header
+      %h1 Sign up
+    %text
+      = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
+        - devise_error_messages!
+        .form-group
+          = f.label :email
+          .row
+            .col-sm-4
+              = f.email_field :email, autofocus: true
+              %p
+        .form-group
+          = f.label :password
+          - if @validatable
+            (#{@minimum_password_length} characters minimum)
+          .row
+            .col-sm-4
+              = f.password_field :password, autocomplete: "off"
+              %p
+        .form-group
+          = f.label :password_confirmation
+          .row
+            .col-sm-4
+              = f.password_field :password_confirmation, autocomplete: "off"
+              %p
+          .row
+            .col-sm-4
+              = f.submit "Sign up"
+      = render "devise/shared/links"

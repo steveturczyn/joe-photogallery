@@ -79,3 +79,12 @@ categorydetail {
     }
   }
 }
+
+@-moz-document url-prefix() { 
+  categorydetail {
+    img {
+      height: -moz-calc(90% - 50px); /* old Firefox */
+      height: calc(90% - 50px); /* new Firefox */
+    }
+  }
+}

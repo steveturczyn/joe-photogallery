@@ -1,6 +1,3 @@
 class SessionsController < Devise::SessionsController
-  def new
-    get_sorted_pictures
-    super
-  end
+  before_action :get_sorted_pictures
 end 

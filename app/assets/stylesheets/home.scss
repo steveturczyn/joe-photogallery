@@ -79,3 +79,12 @@ home {
     }
   }
 }
+
+@-moz-document url-prefix() { 
+  home {
+    img {
+      height: -moz-calc(100% - 50px); /* old Firefox */
+      height: calc(100% - 50px); /* new Firefox */
+    }
+  }
+}
