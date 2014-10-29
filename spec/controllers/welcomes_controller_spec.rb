@@ -17,26 +17,15 @@ describe WelcomesController do
       get :index
       expect(assigns(:sorted_pictures).first).to eq(apple)
     end
-    # it "retrieves first Picture object when no ID is present in params" do
-    #   get :index
-    #   expect(assigns(:picture)).to eq(apple)
-    # end
+    it "retrieves random Picture object when no ID is present in params" do
+      get :index
+      picture_list = [apple, banana, cheetah]
+      expect(picture_list).to include(assigns(:picture))
+    end
     it "retrieves Picture object requested by params" do
       get :index, id: cheetah.id
       expect(assigns(:picture)).to eq(cheetah)
     end
-    # it "retrieves photographer's full name" do
-    #   get :index
-    #   expect(assigns(:photographer)).to eq("Angela Atkins")
-    # end
-    # it "retrieves photographer's first name" do
-    #   get :index
-    #   expect(assigns(:photographer_first_name)).to eq("Angela")
-    # end
-    # it "retrieves photographer's last name" do
-    #   get :index
-    #   expect(assigns(:photographer_last_name)).to eq("Atkins")
-    # end
     it "retrieves the second (previous) Picture object when we started with the third Picture object" do
       get :index, id: cheetah.id
       expect(assigns(:prev_picture)).to eq(banana)

@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe PicturesController do
   describe 'GET show' do
-    before { set_current_user }
     let!(:charlie) {Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)}
 
     let!(:cherries) {Fabricate(:category, name: "Cherries", user: charlie)}
@@ -15,29 +14,20 @@ describe PicturesController do
     let!(:chiquita) {Fabricate(:picture, title: "Chiquita", category: bananas, category_id: bananas.id, represent_category: true)}
     let!(:mcintosh) {Fabricate(:picture, title: "McIntosh", category: apples, category_id: apples.id, represent_category: true)}
 
+    it "selects the correct picture object" do
+      get :show, user_id: charlie.id, id: bright_red_sour.id
+      expect(assigns(:picture)).to eq(bright_red_sour)
+    end
     it "builds an array of pictures sorted within a category" do
-      session[:category_id] = cherries.id
-      get :show, id: cherries.id
+      get :show, user_id: charlie.id, id: bing.id
       expect(assigns(:sorted_pictures_of_category).first).to eq(dark_hudson)
     end
-    it "selects a picture object when an id is present" do
-      session[:category_id] = cherries.id
-      get :show, id: "2"
-      expect(assigns(:picture_of_category)).to eq(bright_red_sour)
-    end
-    it "selects a picture object when no id is present" do
-      session[:category_id] = cherries.id
-      get :show, id: "1"
-      expect(assigns(:picture_of_category)).to eq(dark_hudson)
-    end
     it "verifies that previous picture is selected" do
-      session[:category_id] = cherries.id
-      get :show, id: "2"
+      get :show, user_id: charlie.id, id: bright_red_sour.id
       expect(assigns(:prev_picture)).to eq(dark_hudson)
     end
     it "verifies that next picture is selected" do
-      session[:category_id] = cherries.id
-      get :show, id: "2"
+      get :show, user_id: charlie.id, id: bright_red_sour.id
       expect(assigns(:next_picture)).to eq(bing)
     end
   end

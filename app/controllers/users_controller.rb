@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   def show
     get_sorted_pictures
 
-    @show_user = User.find(params[:id])
+    @show_user = User.find_by(id: params[:id])
 
     @categories = user_pictures.sort!{|a, b| a.name.downcase <=> b.name.downcase }
     
