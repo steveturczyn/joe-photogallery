@@ -30,11 +30,11 @@ Photogallery::Application.configure do
   }
   ActionMailer::Base.delivery_method = :smtp
 
-  # config.assets.version = '1.0'
+  config.assets.version = '1.0'
 
-  # config.log_level = :info
+  config.log_level = :info
 
-  # config.action_mailer.default_url_options = { :host => 'photogallery-joe.herokuapp.com' }
+  config.action_mailer.default_url_options = { :host => 'photogallery-joe.herokuapp.com' }
 
-  # config.log_formatter = ::Logger::Formatter.new
+  config.log_formatter = ::Logger::Formatter.new
 end
