@@ -1,19 +1,27 @@
-%section.category
-  %header.clearfix
-    %h1= "Add a Category"
-    .container
+%category
+  .wrapper
+    %header
+      %h1 Add a Category
+    %text
       .row
-        .col-sm-3
+        .categories
           - @categories.each do |category|
-            = category.name
+            .col-sm-3
+              = category.name
+            .col-sm-9
+              =link_to "Add Photo", root_path
+            .row
+              %p
       .row
-        .col-sm-3
-          = bootstrap_form_for [current_user, @category] do |f|
-            %fieldset
-              = f.text_field :name, label: "Category Name"
-            %fieldset.actions.form-group
-              .col-sm-3
-                %input(type="submit" value="Add Category" class="btn btn-default")
+        %p
+      = bootstrap_form_for [current_user, @category] do |f|
+        .form-group
+          .row
+            .col-sm-3
+              = f.text_field :name, label: "Name of new category"
+          .row
+            .col-sm-3
+              = f.submit "Add Category"
 
 
 

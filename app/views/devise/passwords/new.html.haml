@@ -3,15 +3,14 @@
     %header
       %h1 Forgot your password?
     %text
-      = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|
+      = bootstrap_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|
         - devise_error_messages!
         .form-group
-          = f.label :email
           .row
-            .col-sm-4
+            .col-sm-3
               = f.email_field :email, autofocus: true
               %p
           .row
-            .col-sm-4
+            .col-sm-3
               = f.submit "Send me reset password instructions"
       = render "devise/shared/links"
