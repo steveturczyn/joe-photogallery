@@ -15,3 +15,7 @@
 /log/*.log
 /tmp
 /uploads/tmp
+
+# Ignore environmental variables and Procfile
+.env
+Procfile

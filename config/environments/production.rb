@@ -19,14 +19,18 @@ Photogallery::Application.configure do
   config.active_support.deprecation = :notify
 
   config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.default :charset => "utf-8"
 
-  ActionMailer::Base.smtp_settings = {
-    :port           => ENV['MAILGUN_SMTP_PORT'],
-    :address        => ENV['MAILGUN_SMTP_SERVER'],
-    :user_name      => ENV['MAILGUN_SMTP_LOGIN'],
-    :password       => ENV['MAILGUN_SMTP_PASSWORD'],
-    :domain         => 'photogallery-joe.heroku.com',
-    :authentication => :plain,
+  config.action_mailer.smtp_settings = {
+    :address              => ENV['MAILGUN_SMTP_SERVER'],
+    :port                 => ENV['MAILGUN_SMTP_PORT'],
+    :user_name            => ENV['MAILGUN_SMTP_LOGIN'],
+    :password             => ENV['MAILGUN_SMTP_PASSWORD'],
+    :domain               => ENV['MAILGUN_DOMAIN'],
+    :authentication       => :plain,
+    :enable_starttls_auto => true,
   }
   ActionMailer::Base.delivery_method = :smtp
 
