@@ -24,13 +24,13 @@ Photogallery::Application.configure do
   config.action_mailer.default :charset => "utf-8"
 
   config.action_mailer.smtp_settings = {
-    :address              => ENV['MAILGUN_SMTP_SERVER'],
-    :port                 => ENV['MAILGUN_SMTP_PORT'],
-    :user_name            => ENV['MAILGUN_SMTP_LOGIN'],
-    :password             => ENV['MAILGUN_SMTP_PASSWORD'],
-    :domain               => ENV['MAILGUN_DOMAIN'],
-    :authentication       => :plain,
-    :enable_starttls_auto => true,
+    address:              "smtp.gmail.com",
+    port:                 587,
+    domain:               ENV['GMAIL_DOMAIN'],
+    authentication:       "plain",
+    enable_starttls_auto: true,
+    user_name:            ENV['GMAIL_USERNAME'],
+    password:             ENV['GMAIL_PASSWORD']
   }
   ActionMailer::Base.delivery_method = :smtp
 
