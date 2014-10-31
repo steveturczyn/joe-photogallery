@@ -1,0 +1,21 @@
+%addpicture
+  .wrapper
+    %header
+      %h1 Add a Photo
+    %text
+      .row
+      = bootstrap_form_for [current_user, @picture] do |f|
+        .form-group
+          .row
+            .col-sm-3
+              = f.text_field :title, autofocus: true
+          .row
+            .col-sm-3
+              = f.text_field :location
+          .row
+            .col-sm-3
+              = f.text_field :description
+          .row
+            .col-sm-3
+              %p
+              = f.submit "Sign up"

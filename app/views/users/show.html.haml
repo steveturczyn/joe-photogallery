@@ -7,6 +7,6 @@
       <br/>
   %arrows
     %left
-      = link_to(image_tag("/tmp/prev-0.jpg"), user_path(@show_user, @category, cat: @prev_category))
+      = link_to(image_tag("/tmp/prev-0.jpg"), user_path(@show_user, cat: @prev_category))
     %right
-      = link_to(image_tag("/tmp/next-0.jpg"), user_path(@show_user, @category, cat: @next_category))
+      = link_to(image_tag("/tmp/next-0.jpg"), user_path(@show_user, cat: @next_category))

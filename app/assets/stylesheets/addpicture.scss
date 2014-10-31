@@ -1,0 +1,36 @@
+addpicture {
+  .wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    width: 1000px;
+    header {
+      h1 {
+        color: #DAA520;
+        font-family: verdana;
+        font-size: 28px;
+        text-align: center;
+        padding-bottom: 30px;
+      }
+    }
+    text {
+      color: white;
+      font-family: verdana;
+      font-size: 11px;
+      text-align: left;
+      font-weight: bold;
+      padding-bottom: 30px;
+      text-transform: uppercase;
+    }
+    p {
+      margin-bottom: 20px; 
+    }
+    a {
+      color: #DAA520;
+      text-decoration: none;
+      &:hover {
+        color: #FFFFFF;
+        text-decoration: none;
+      }
+    }
+  }
+}

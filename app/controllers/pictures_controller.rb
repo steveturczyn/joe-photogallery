@@ -1,8 +1,17 @@
 class PicturesController < ApplicationController
 
+  def new
+    get_sorted_pictures
+    @picture = Picture.new
+    @category = Category.find(params[:category])
+  end
+
+  def create
+  end
+
   def show
     get_sorted_pictures
-    @picture = Picture.find_by(id: params[:id])
+    @picture = Picture.find(params[:id])
     @sorted_pictures_of_category = Picture.select {|picture| picture.category_id == @picture.category_id }.sort_by {|p| p.id }
     @show_user = @picture.user
 

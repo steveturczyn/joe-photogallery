@@ -7,7 +7,7 @@
       .pictures
         - pictures.each do |picture|
           .picture
-            = link_to user_category_path(@show_user, picture.category), nil do
+            = link_to user_category_path(@show_user, picture.category) do
               %img{:src => "#{picture.image_link.thumb}"}
             .caption
               = picture.category.name

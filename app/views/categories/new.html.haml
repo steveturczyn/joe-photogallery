@@ -9,7 +9,7 @@
             .col-sm-3
               = category.name
             .col-sm-9
-              =link_to "Add Photo", root_path
+              =link_to "Add Photo", new_user_picture_path(current_user, category: category)
             .row
               %p
       .row

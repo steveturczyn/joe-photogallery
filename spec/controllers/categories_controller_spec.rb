@@ -23,37 +23,35 @@ describe CategoriesController do
       expect(assigns(:pictures)).to eq([mcintosh, chiquita, bing])
     end
   end
-  describe "GET new" do
-    it "creates a new Category object" do
-      user = Fabricate(:user)
+  describe "tests where user is already signed in" do
+    let(:user) {Fabricate(:user)}
+    before do
       sign_in user
-      get :new, user_id: user.id
-      expect(assigns(:category)).to be_new_record
-      expect(assigns(:category)).to be_instance_of(Category)
     end
-    it "should render the Add Photo page" do
-      user = Fabricate(:user)
-      sign_in user
-      get :new, user_id: user.id
-      expect(response).to render_template :new
+    describe "GET new" do
+      it "creates a new Category object" do
+        get :new, user_id: user.id
+        expect(assigns(:category)).to be_new_record
+        expect(assigns(:category)).to be_instance_of(Category)
+      end
+      it "should render the Add Photo page" do
+        get :new, user_id: user.id
+        expect(response).to render_template :new
+      end
     end
-  end
-  describe "GET show" do
-    it "should render show template if category is valid" do
-      user = Fabricate(:user)
-      sign_in user
-      category = Fabricate(:category)
-      get :show, user_id: user.id, id: category.id
-      expect(response).to render_template :show
+    describe "GET show" do
+      it "should render show template if category is valid" do
+        category = Fabricate(:category)
+        get :show, user_id: user.id, id: category.id
+        expect(response).to render_template :show
+      end
     end
-  end
-  describe "POST create" do
-    it "should redirect to the New Category page" do
-      user = Fabricate(:user)
-      sign_in user
-      category = Fabricate(:category)
-      post :create, user_id: user.id, category: { name: category.name }
-      expect(response).to redirect_to new_user_category_path
+    describe "POST create" do
+      it "should redirect to the New Category page" do
+        category = Fabricate(:category)
+        post :create, user_id: user.id, category: { name: category.name }
+        expect(response).to redirect_to new_user_category_path
+      end
     end
   end
 end

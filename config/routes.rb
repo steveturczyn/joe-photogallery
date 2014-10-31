@@ -1,11 +1,10 @@
 Photogallery::Application.routes.draw do
   devise_for :users, :controllers => {:sessions => "sessions", :registrations => "registrations", :passwords => "passwords"}
   root 'welcomes#index'
-
   
   resources :users, only: [:show] do
     resources :categories, only: [:index, :new, :create, :show]
-    resources :pictures, only: [:show]
+    resources :pictures, only: [:new, :create, :show]
     resources :bios, only: [:index]
   end
 
