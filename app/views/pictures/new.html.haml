@@ -5,17 +5,21 @@
     %text
       .row
       = bootstrap_form_for [current_user, @picture] do |f|
-        .form-group
+        %fieldset
           .row
-            .col-sm-3
+            .col-sm-5
               = f.text_field :title, autofocus: true
-          .row
-            .col-sm-3
               = f.text_field :location
-          .row
-            .col-sm-3
               = f.text_field :description
-          .row
-            .col-sm-3
-              %p
-              = f.submit "Sign up"
+              = f.file_field :image_link, label: "Name of Photo", class: "btn btn-default btn-file"
+              = label_tag 'Represents this Category?'
+              %label.radio
+                .display-inline
+                  = f.radio_button :represent_category, true, label: "Yes"
+                  = f.radio_button :represent_category, false, label: "No", checked: true
+              = label_tag 'Represents this User?'
+              %label.radio
+                .display-inline
+                  = f.radio_button :represent_user, true, label: "Yes"
+                  = f.radio_button :represent_user, false, label: "No", checked: true
+              = f.submit "Add Photo"

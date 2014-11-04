@@ -14,7 +14,7 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
-/uploads/tmp
+/public/uploads/tmp
 
 # Ignore environmental variables and Procfile
 .env
