@@ -23,7 +23,7 @@ group :development, :test do
   gem 'pry'
   gem 'pry-nav'
   gem 'fabrication'
-  gem 'faker'
+  gem 'faker', '~> 1.4.3'
   gem 'letter_opener'
 end
 
