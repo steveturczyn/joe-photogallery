@@ -34,7 +34,7 @@ describe CategoriesController do
         expect(assigns(:category)).to be_new_record
         expect(assigns(:category)).to be_instance_of(Category)
       end
-      it "should render the Add Photo page" do
+      it "should render the Add a Photo or Category page" do
         get :new, user_id: user.id
         expect(response).to render_template :new
       end

@@ -1,6 +1,140 @@
 require 'spec_helper'
 
 describe PicturesController do
+  describe 'GET new' do
+    let!(:charlie) {Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)}
+
+    it "creates a new Picture object" do
+      get :new, user_id: charlie.id
+      expect(assigns(:picture)).to be_new_record
+      expect(assigns(:picture)).to be_instance_of(Picture)
+    end
+    it "should render the Add a Photo page" do
+      get :new, user_id: charlie.id
+      expect(response).to render_template :new
+    end
+  end
+
+  describe 'POST create' do
+    context "bad input" do
+      let!(:charlie) {Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)}
+
+      let!(:cherries) {Fabricate(:category, name: "Cherries", user: charlie)}
+
+      let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)}
+      let!(:dark_hudson) {Fabricate(:picture, title: "Dark Hudson", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)}
+
+      it "should render the new template" do
+        session[:category_id] = cherries.id
+        post :create, user_id: charlie.id, picture: { location: bing.location, description: bing.description, image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: bing.represent_category, represent_user: bing.represent_user }
+        expect(response).to render_template :new
+      end
+      it "should return a flash error message" do
+        session[:category_id] = cherries.id
+        post :create, user_id: charlie.id, picture: { location: bing.location, description: bing.description, image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: bing.represent_category, represent_user: bing.represent_user }
+        expect(flash[:error]).to eq("Please fix the 1 error below:")
+      end
+    end
+
+    context "represent_user is true and represent_category is true" do
+      it "should alter represent_user and represent_category fields in existing record in database and add new record to database" do
+        @request.env["devise.mapping"] = Devise.mappings[:user]
+  
+        charlie = Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)
+
+        cherries = Fabricate(:category, name: "Cherries", user: charlie)
+
+        bing = Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)
+  
+        sign_in charlie
+
+        session[:category_id] = cherries.id
+        post :create, user_id: charlie.id, picture: { title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: "true", represent_user: "true" }
+        updated_bing = Picture.select {|picture| picture.title == "Bing" }.first
+        expect(updated_bing.represent_category).to be_falsey
+        expect(updated_bing.represent_user).to be_falsey
+        dark_hudson = Picture.select {|picture| picture.title == "Dark Hudson" }.first
+        expect(dark_hudson.title).to eq("Dark Hudson")
+      end
+    end
+
+    context "represent_user is true and represent_category is false" do
+      it "should produce a flash error message" do
+        @request.env["devise.mapping"] = Devise.mappings[:user]
+  
+        charlie = Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)
+
+        cherries = Fabricate(:category, name: "Cherries", user: charlie)
+
+        bing = Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)
+  
+        sign_in charlie
+
+        session[:category_id] = cherries.id
+        post :create, user_id: charlie.id, picture: { title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: "false", represent_user: "true" }
+        expect(flash[:error]).to be_present
+        bing = Picture.select {|picture| picture.title == "Bing" }.first
+        expect(bing.represent_category).to be_truthy
+        expect(bing.represent_user).to be_truthy
+      end
+    end
+
+    context "represent_user is false and represent_category is true" do
+      it "should alter represent_category field in existing record in database and add new record to database" do
+        @request.env["devise.mapping"] = Devise.mappings[:user]
+  
+        charlie = Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)
+
+        cherries = Fabricate(:category, name: "Cherries", user: charlie)
+
+        bing = Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)
+  
+        sign_in charlie
+
+        session[:category_id] = cherries.id
+        post :create, user_id: charlie.id, picture: { title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: "true", represent_user: "false" }
+        updated_bing = Picture.select {|picture| picture.title == "Bing" }.first
+        expect(updated_bing.represent_category).to be_falsey
+        expect(updated_bing.represent_user).to be_truthy
+        dark_hudson = Picture.select {|picture| picture.title == "Dark Hudson" }.first
+        expect(dark_hudson.title).to eq("Dark Hudson")
+      end
+    end
+
+    context "represent_user is false and represent_category is false" do
+      it "should leave existing record in database unchanged and add new record to database" do
+        @request.env["devise.mapping"] = Devise.mappings[:user]
+  
+        charlie = Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)
+
+        cherries = Fabricate(:category, name: "Cherries", user: charlie)
+
+        bing = Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)
+  
+        sign_in charlie
+
+        session[:category_id] = cherries.id
+        post :create, user_id: charlie.id, picture: { title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: "false", represent_user: "false" }
+        bing = Picture.select {|picture| picture.title == "Bing" }.first
+        expect(bing.represent_category).to be_truthy
+        expect(bing.represent_user).to be_truthy
+        dark_hudson = Picture.select {|picture| picture.title == "Dark Hudson" }.first
+        expect(dark_hudson.title).to eq("Dark Hudson")
+      end
+      it "should redirect to the Add a Photo or Category page" do
+        charlie = Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)
+
+        cherries = Fabricate(:category, name: "Cherries", user: charlie)
+
+        bing = Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)
+        
+        session[:category_id] = cherries.id
+        post :create, user_id: charlie.id, picture: { title: bing.title, location: bing.location, description: bing.description, image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: bing.represent_category, represent_user: bing.represent_user }
+        expect(response).to redirect_to new_user_category_path
+      end
+    end    
+  end
+
   describe 'GET show' do
     let!(:charlie) {Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)}
 
