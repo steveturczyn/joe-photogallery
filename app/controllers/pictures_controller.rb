@@ -10,15 +10,14 @@ class PicturesController < ApplicationController
     get_sorted_pictures
     @picture = Picture.new(picture_params)
     @picture.category_id = session[:category_id]
-    set_represent_user_and_represent_category_values
-    if flash[:error].nil?
-      if @picture.save
-        flash[:success] = "You have successfully added your new photo \"#{@picture.title}.\""
-        redirect_to new_user_category_path
-      else
-        flash[:error] = "Please fix the #{help.pluralize(@picture.errors.count, "error")} below:"
-        render :new
-      end
+    if @picture.save
+      flash[:success] = "You have successfully added your new photo \"#{@picture.title}.\""
+      redirect_to new_user_category_path
+    else
+      flash[:error] = @picture.errors[:represent_category].first
+      flash[:error] ||= @picture.errors[:represent_user].first
+      flash[:error] ||= "Please fix the #{help.pluralize(@picture.errors.count, "error")} below:"
+      render :new
     end
   end
 
@@ -40,20 +39,6 @@ class PicturesController < ApplicationController
 
   def next_picture
     @next_picture = @sorted_pictures_of_category[@sorted_pictures_of_category.find_index(@picture)+1] || @sorted_pictures_of_category.first
-  end
-
-  def set_represent_user_and_represent_category_values
-    if params[:picture][:represent_user] == "true"
-      if params[:picture][:represent_category] == "false"
-        flash[:error] = "Since your picture represents this user, it must also represent this category. Please change the \"Represents this Category?\" field to \"YES\"."
-        render :new
-        return
-      else
-        current_user_id = current_user.id
-        Picture.set_represent_user_to_false(current_user_id)
-      end
-    end
-    Picture.set_represent_category_to_false(session[:category_id]) if params[:picture][:represent_category] == "true"
   end
 
   def picture_params

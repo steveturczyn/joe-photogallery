@@ -80,7 +80,7 @@ describe PicturesController do
     end
 
     context "represent_user is false and represent_category is true" do
-      it "should alter represent_category field in existing record in database and add new record to database" do
+      it "should display a flash error message" do
         @request.env["devise.mapping"] = Devise.mappings[:user]
   
         charlie = Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)
@@ -93,11 +93,8 @@ describe PicturesController do
 
         session[:category_id] = cherries.id
         post :create, user_id: charlie.id, picture: { title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: "true", represent_user: "false" }
-        updated_bing = Picture.select {|picture| picture.title == "Bing" }.first
-        expect(updated_bing.represent_category).to be_falsey
-        expect(updated_bing.represent_user).to be_truthy
-        dark_hudson = Picture.select {|picture| picture.title == "Dark Hudson" }.first
-        expect(dark_hudson.title).to eq("Dark Hudson")
+        expect(flash[:error]).to eq("Please fix the 1 error below:")
+        
       end
     end
 
@@ -126,10 +123,8 @@ describe PicturesController do
 
         cherries = Fabricate(:category, name: "Cherries", user: charlie)
 
-        bing = Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)
-        
         session[:category_id] = cherries.id
-        post :create, user_id: charlie.id, picture: { title: bing.title, location: bing.location, description: bing.description, image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: bing.represent_category, represent_user: bing.represent_user }
+        post :create, user_id: charlie.id, picture: { title: "Bing", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: false, represent_user: false }
         expect(response).to redirect_to new_user_category_path
       end
     end    
@@ -144,7 +139,7 @@ describe PicturesController do
     
     let!(:dark_hudson) {Fabricate(:picture, title: "Dark Hudson", category: cherries, category_id: cherries.id, represent_category: true, id: 1)}
     let!(:bright_red_sour) {Fabricate(:picture, title: "Bright Red Sour", category: cherries, category_id: cherries.id, represent_category: false, id: 2)}
-    let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: false, represent_user: true, id: 3)}
+    let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: false, represent_user: false, id: 3)}
     let!(:chiquita) {Fabricate(:picture, title: "Chiquita", category: bananas, category_id: bananas.id, represent_category: true)}
     let!(:mcintosh) {Fabricate(:picture, title: "McIntosh", category: apples, category_id: apples.id, represent_category: true)}
 
