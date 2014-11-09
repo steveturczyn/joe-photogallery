@@ -32,5 +32,11 @@ addpicture {
         text-decoration: none;
       }
     }
+    .radio {
+      input[type="radio"] {
+        float: none;
+        margin-right: 5px;
+      }
+    }
   }
 }

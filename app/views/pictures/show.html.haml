@@ -5,9 +5,11 @@
   %nav
     %ul
       .title
-        = "#{@picture.title} &nbsp;&nbsp;&#149;&nbsp;&nbsp; #{@picture.location}".html_safe
+        = @picture.title
+        %span.location
+          = @picture.location
   %arrows
     %left
-      = link_to(image_tag("/tmp/prev-0.jpg"), user_picture_path(@show_user, @prev_picture))
+      = link_to("", user_picture_path(@show_user, @prev_picture))
     %right
-      = link_to(image_tag("/tmp/next-0.jpg"), user_picture_path(@show_user, @next_picture))
+      = link_to("", user_picture_path(@show_user, @next_picture))

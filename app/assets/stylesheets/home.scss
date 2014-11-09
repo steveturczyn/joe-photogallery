@@ -68,21 +68,29 @@ home {
       margin-top: -35px;
       a {
         display: block;
-        height: 70px;
         width: 34px;
+        height: 70px;
         background-repeat: no-repeat;
-        background-image: asset-url('prev-0.jpg');
+        background-image: asset-url('prev-0.png');
         &:hover {
-          background-image: asset-url('prev-1.jpg');
+          background-image: asset-url('prev-1.png');
         }
       }
     }
     right {
       position: absolute;
       right: 0;
-      top: 45%;
-      &:hover {
-        background: url('/tmp/next-1.jpg');
+      top: 50%;
+      margin-top: -35px;
+      a {
+        display: block;
+        width: 34px;
+        height: 70px;
+        background-repeat: no-repeat;
+        background-image: asset-url('next-0.png');
+        &:hover {
+          background-image: asset-url('next-1.png');
+        }
       }
     }
   }

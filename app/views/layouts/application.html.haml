@@ -8,7 +8,7 @@
     = csrf_meta_tag
     = stylesheet_link_tag "application"
     = javascript_include_tag "application"
-  %body{:class => controller_name}
+  %body{:class => "#{controller_name} #{controller_name}-#{action_name}"}
     %header
       = render 'shared/header'
     %section.content.clearfix

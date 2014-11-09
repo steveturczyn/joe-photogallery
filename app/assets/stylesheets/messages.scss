@@ -1,4 +1,11 @@
 section#messages {
-  margin-left: 100px;
-  margin-right: 100px;
+  left: 100px;
+  right: 100px;
+  position: absolute;
+  top: 10px;
+  .alert {
+    -webkit-box-shadow: 4px 5px 15px 1px rgba(189,189,189,1);
+    -moz-box-shadow: 4px 5px 15px 1px rgba(189,189,189,1);
+    box-shadow: 4px 5px 15px 1px rgba(189,189,189,1);
+  }
 }

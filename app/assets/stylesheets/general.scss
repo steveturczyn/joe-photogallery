@@ -25,3 +25,9 @@ body.welcomes, body.users, body.pictures, body.categories, body.bios, body.sessi
     padding-bottom: 15px;
   }
 }
+
+body.pictures-new, body.pictures-create {
+  section.content {
+    overflow-y: scroll;
+  }
+}

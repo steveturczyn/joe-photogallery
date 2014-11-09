@@ -12,14 +12,10 @@
               = f.text_field :location
               = f.text_field :description
               = f.file_field :image_link, label: "Name of Photo", class: "btn btn-default btn-file"
-              = label_tag 'Represents this Category?'
-              %label.radio
-                .display-inline
-                  = f.radio_button :represent_category, true, label: "Yes", checked: @picture.represent_category
-                  = f.radio_button :represent_category, false, label: "No", checked: !@picture.represent_category
-              = label_tag 'Represents this User?'
-              %label.radio
-                .display-inline
-                  = f.radio_button :represent_user, true, label: "Yes", checked: @picture.represent_user
-                  = f.radio_button :represent_user, false, label: "No", checked: !@picture.represent_user
+              = f.form_group :represent_category, label: {text: 'Represents this Category?'} do
+                = f.radio_button :represent_category, true, label: "Yes", checked: @picture.represent_category
+                = f.radio_button :represent_category, false, label: "No", checked: !@picture.represent_category
+              = f.form_group :represent_user, label: {text: 'Represents this User?'} do
+                = f.radio_button :represent_user, true, label: "Yes", checked: @picture.represent_user
+                = f.radio_button :represent_user, false, label: "No", checked: !@picture.represent_user
               = f.submit "Add Photo"
