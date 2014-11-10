@@ -20,8 +20,7 @@ class Picture < ActiveRecord::Base
 
   def there_must_be_one_picture_representing_user
     if !represent_user && represent_category
-      other_picture = self.class.category_representation(category)
-      if other_picture && other_picture.represent_user && other_picture != self
+      if self.class.user_representation(user) == nil
         errors.add(:represent_user, "A picture must represent a user.")
       end
     end
@@ -41,8 +40,8 @@ class Picture < ActiveRecord::Base
     category.user
   end
 
-  def self.category_representation(category)
-    picture = select {|picture| picture.represent_category == true && picture.category_id == category.id }.first
+  def self.user_representation(user)
+    picture = select {|picture| picture.represent_user == true && picture.category.user == user }.first
   end
 
   def self.user_representations
