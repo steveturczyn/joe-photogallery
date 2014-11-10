@@ -92,9 +92,9 @@ describe PicturesController do
         sign_in charlie
 
         session[:category_id] = cherries.id
-        binding.pry
         post :create, user_id: charlie.id, picture: { title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: "true", represent_user: "false" }
         expect(flash[:error]).to eq("A picture must represent a user.")
+        
       end
     end
 
