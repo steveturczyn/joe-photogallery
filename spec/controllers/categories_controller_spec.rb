@@ -11,9 +11,9 @@ describe CategoriesController do
     let!(:bananas) {Fabricate(:category, name: "Bananas", user: charlie)}
     let!(:apples) {Fabricate(:category, name: "Apples", user: charlie)}
     
-    let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true)}
-    let!(:chiquita) {Fabricate(:picture, title: "Chiquita", category: bananas, category_id: bananas.id, represent_category: true)}
-    let!(:mcintosh) {Fabricate(:picture, title: "McIntosh", category: apples, category_id: apples.id, represent_category: true)}
+    let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)}
+    let!(:chiquita) {Fabricate(:picture, title: "Chiquita", category: bananas, category_id: bananas.id, represent_category: true, represent_user: true)}
+    let!(:mcintosh) {Fabricate(:picture, title: "McIntosh", category: apples, category_id: apples.id, represent_category: true, represent_user: true)}
     it "creates an array of Category id's" do
       get :index, user_id: charlie.id
       expect(assigns(:categories)).to eq([cherries.id, bananas.id, apples.id])

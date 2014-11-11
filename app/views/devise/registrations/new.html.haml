@@ -1,4 +1,4 @@
-%signup
+%registration
   .wrapper
     %header
       %h1 Sign up
@@ -7,16 +7,25 @@
         - devise_error_messages!
         .form-group
           .row
-            .col-sm-3
+            .col-sm-4
               = f.email_field :email, autofocus: true
           .row
-            .col-sm-3
+            .col-sm-4
               = f.password_field :password, label: "Password (#{@minimum_password_length} characters min.)", autocomplete: "off"
           .row
-            .col-sm-3
+            .col-sm-4
               = f.password_field :password_confirmation, autocomplete: "off"
           .row
-            .col-sm-3
+            .col-sm-4
+              = f.text_field :first_name
+          .row
+            .col-sm-4
+              = f.text_field :last_name
+          .row
+            .col-sm-4
+              = f.text_area :bio, label: "Biographical information (optional)"
+          .row
+            .col-sm-4
               %p
               = f.submit "Sign up"
       = render "devise/shared/links"

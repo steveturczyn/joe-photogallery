@@ -4,4 +4,7 @@
       %h1
         = "#{@show_user.first_name} #{@show_user.last_name}"
     %text
-      = simple_format @show_user.bio
+      - if @show_user.bio.empty?
+        = "#{@show_user.first_name} #{@show_user.last_name} hasn't entered any biographical information yet."
+      - else
+        = simple_format @show_user.bio

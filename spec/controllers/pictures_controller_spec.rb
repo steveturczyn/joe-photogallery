@@ -36,6 +36,32 @@ describe PicturesController do
       end
     end
 
+    context "first picture" do
+      let!(:charlie) {Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)}
+
+      let!(:cherries) {Fabricate(:category, name: "Cherries", user: charlie)}
+      context "bad input" do
+        it "should return a flash error message if represent_category is false" do
+          session[:category_id] = cherries.id
+          post :create, user_id: charlie.id, picture: { title: "Bing", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: false, represent_user: false }
+          expect(flash[:error]).to eq("Your first picture must represent the category.")
+        end
+        it "should return a flash error message if represent_user is false" do
+          session[:category_id] = cherries.id
+          post :create, user_id: charlie.id, picture: { title: "Bing", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: true, represent_user: false }
+          expect(flash[:error]).to eq("Your first picture must represent the user.")
+        end
+      end
+      context "good input" do
+        it "should add the picture to the database if represent_category and represent_user are both true" do
+          session[:category_id] = cherries.id
+          post :create, user_id: charlie.id, picture: { title: "Bing", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: true, represent_user: true }
+          updated_bing = Picture.select {|picture| picture.title == "Bing" }.first
+          expect(updated_bing.title).to eq("Bing")
+        end
+      end
+    end
+
     context "represent_user is true and represent_category is true" do
       it "should alter represent_user and represent_category fields in existing record in database and add new record to database" do
         @request.env["devise.mapping"] = Devise.mappings[:user]
@@ -123,8 +149,10 @@ describe PicturesController do
 
         cherries = Fabricate(:category, name: "Cherries", user: charlie)
 
+        bing = Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)
+
         session[:category_id] = cherries.id
-        post :create, user_id: charlie.id, picture: { title: "Bing", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: false, represent_user: false }
+        post :create, user_id: charlie.id, picture: { title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: false, represent_user: false }
         expect(response).to redirect_to new_user_category_path
       end
     end    
@@ -137,7 +165,7 @@ describe PicturesController do
     let!(:bananas) {Fabricate(:category, name: "Bananas", user: charlie)}
     let!(:apples) {Fabricate(:category, name: "Apples", user: charlie)}
     
-    let!(:dark_hudson) {Fabricate(:picture, title: "Dark Hudson", category: cherries, category_id: cherries.id, represent_category: true, id: 1)}
+    let!(:dark_hudson) {Fabricate(:picture, title: "Dark Hudson", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true, id: 1)}
     let!(:bright_red_sour) {Fabricate(:picture, title: "Bright Red Sour", category: cherries, category_id: cherries.id, represent_category: false, id: 2)}
     let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: false, represent_user: false, id: 3)}
     let!(:chiquita) {Fabricate(:picture, title: "Chiquita", category: bananas, category_id: bananas.id, represent_category: true)}
