@@ -2,9 +2,6 @@
   .wrapper
     %header
       %h1
-        = "#{@show_user.first_name} #{@show_user.last_name}"
+        = @show_user.full_name
     %text
-      - if @show_user.bio.empty?
-        = "#{@show_user.first_name} #{@show_user.last_name} hasn't entered any biographical information yet."
-      - else
-        = simple_format @show_user.bio
+      = simple_format @show_user.bio_or_default

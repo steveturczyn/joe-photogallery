@@ -44,12 +44,12 @@ describe PicturesController do
         it "should return a flash error message if represent_category is false" do
           session[:category_id] = cherries.id
           post :create, user_id: charlie.id, picture: { title: "Bing", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: false, represent_user: false }
-          expect(flash[:error]).to eq("Your first picture must represent the category.")
+          expect(flash[:error]).to be_present
         end
         it "should return a flash error message if represent_user is false" do
           session[:category_id] = cherries.id
           post :create, user_id: charlie.id, picture: { title: "Bing", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: true, represent_user: false }
-          expect(flash[:error]).to eq("Your first picture must represent the user.")
+          expect(flash[:error]).to be_present
         end
       end
       context "good input" do

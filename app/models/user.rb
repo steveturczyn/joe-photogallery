@@ -10,4 +10,12 @@ def full_name
   "#{first_name} #{last_name}"
 end
 
+def bio_or_default
+  if bio.blank?
+    "#{first_name} #{last_name} hasn't entered any biographical information yet."
+  else
+    bio
+  end
+end
+
 end

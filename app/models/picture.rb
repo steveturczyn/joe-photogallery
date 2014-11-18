@@ -8,7 +8,8 @@ class Picture < ActiveRecord::Base
 
   validate :represent_user_must_represent_category
   validate :there_must_be_one_picture_representing_user
-  validate :first_picture_must_represent_user_and_category
+  validate :first_picture_must_represent_user
+  validate :first_picture_in_category_must_represent_category
 
   before_save :fix_represent_user
   before_save :fix_represent_category
@@ -20,6 +21,7 @@ class Picture < ActiveRecord::Base
   end
 
   def there_must_be_one_picture_representing_user
+    return unless category
     if !represent_user && represent_category
       other_picture = self.class.category_representation(category)
       if other_picture && other_picture.represent_user && other_picture != self
@@ -28,12 +30,20 @@ class Picture < ActiveRecord::Base
     end
   end
 
-  def first_picture_must_represent_user_and_category
+  def first_picture_must_represent_user
+    return unless category
     if self.class.find_pictures_of_user(category.user_id).empty?
-      if !represent_category
-        errors.add(:represent_category, "Your first picture must represent the category.")
-      elsif !represent_user
+      if !represent_user
         errors.add(:represent_user, "Your first picture must represent the user.")
+      end
+    end
+  end
+
+  def first_picture_in_category_must_represent_category
+    return unless category
+    if self.class.find_pictures_of_category(category_id).empty?
+      if !represent_category
+        errors.add(:represent_category, "This picture must represent the category.")
       end
     end
   end
@@ -62,6 +72,10 @@ class Picture < ActiveRecord::Base
 
   def self.find_pictures_of_user(current_user_id)
     select {|picture| picture.category.user_id == current_user_id }
+  end
+
+  def self.find_pictures_of_category(category_id)
+    select {|picture| picture.category_id == category_id }
   end
 
   def self.set_represent_category_to_false(category_id)

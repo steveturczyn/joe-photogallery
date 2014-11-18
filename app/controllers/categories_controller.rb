@@ -26,7 +26,7 @@ class CategoriesController < ApplicationController
       flash[:success] = "You have successfully added your new category \"#{@category.name}.\""
       redirect_to new_user_category_path
     else
-      flash[:error] = "Please fix the #{help.pluralize(@picture.errors.count, "error")} below:"
+      flash[:error] = "Please fix the #{help.pluralize(@category.errors.count, "error")} below:"
       render :new
     end
   end
