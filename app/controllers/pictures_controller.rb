@@ -11,12 +11,12 @@ class PicturesController < ApplicationController
     @picture = Picture.new(picture_params)
     @picture.category_id = session[:category_id]
     if @picture.save
-      flash[:success] = "You have successfully added your new photo \"#{@picture.title}.\""
+      flash.now[:success] = "You have successfully added your new photo \"#{@picture.title}.\""
       redirect_to new_user_category_path
     else
-      flash[:error] = @picture.errors[:represent_category].first
-      flash[:error] ||= @picture.errors[:represent_user].first
-      flash[:error] ||= "Please fix the #{help.pluralize(@picture.errors.count, "error")} below:"
+      flash.now[:error] = @picture.errors[:represent_category].first
+      flash.now[:error] ||= @picture.errors[:represent_user].first
+      flash.now[:error] ||= "Please fix the #{view_context.pluralize(@picture.errors.count, "error")} below:"
       render :new
     end
   end

@@ -6,13 +6,4 @@ class ApplicationController < ActionController::Base
   def get_sorted_pictures
     @sorted_pictures = Picture.user_representations
   end
-
-  def help
-    Helper.instance
-  end
-
-  class Helper
-    include Singleton
-    include ActionView::Helpers::TextHelper
-  end
 end
