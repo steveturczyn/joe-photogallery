@@ -1,7 +1,5 @@
 class Picture < ActiveRecord::Base
 
-  attr_accessor :image_link_cache
-
   belongs_to :category
 
   mount_uploader :image_link, MyUploader

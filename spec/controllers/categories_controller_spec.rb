@@ -34,7 +34,7 @@ describe CategoriesController do
         expect(assigns(:category)).to be_new_record
         expect(assigns(:category)).to be_instance_of(Category)
       end
-      it "should render the Add a Photo or Category page" do
+      it "should render the Add a Category page" do
         get :new, user_id: user.id
         expect(response).to render_template :new
       end
@@ -47,7 +47,7 @@ describe CategoriesController do
       end
     end
     describe "POST create" do
-      it "should redirect to the New Category page" do
+      it "should redirect to the Add a Category page" do
         category = Fabricate(:category)
         post :create, user_id: user.id, category: { name: category.name }
         expect(response).to redirect_to new_user_category_path
