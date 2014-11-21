@@ -23,13 +23,15 @@ describe PicturesController do
       let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)}
       let!(:dark_hudson) {Fabricate(:picture, title: "Dark Hudson", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)}
       it "should render the new template" do
-        session[:category_id] = cherries.id
-        post :create, user_id: charlie.id, picture: { location: bing.location, description: bing.description, image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: bing.represent_category, represent_user: bing.represent_user }
+        @request.env["devise.mapping"] = Devise.mappings[:user]
+        sign_in charlie
+        post :create, user_id: charlie.id, picture: { category_id: cherries.id, location: bing.location, description: bing.description, image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: bing.represent_category, represent_user: bing.represent_user }
         expect(response).to render_template :new
       end
       it "should return a flash error message" do
-        session[:category_id] = cherries.id
-        post :create, user_id: charlie.id, picture: { location: bing.location, description: bing.description, image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: bing.represent_category, represent_user: bing.represent_user }
+        @request.env["devise.mapping"] = Devise.mappings[:user]
+        sign_in charlie
+        post :create, user_id: charlie.id, picture: { category_id: cherries.id, location: bing.location, description: bing.description, image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: bing.represent_category, represent_user: bing.represent_user }
         expect(flash[:error]).to eq("Please fix the 1 error below:")
       end
     end
@@ -39,34 +41,39 @@ describe PicturesController do
       let!(:cherries) {Fabricate(:category, name: "Cherries", user: charlie)}
       context "bad input" do
         it "should return a flash error message if represent_category is false" do
-          session[:category_id] = cherries.id
-          post :create, user_id: charlie.id, picture: { title: "Bing", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: false, represent_user: false }
-          expect(flash[:error]).to be_present
+          @request.env["devise.mapping"] = Devise.mappings[:user]
+          sign_in charlie
+          post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Bing", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: false, represent_user: false }
+          expect(flash[:error]).to eq("This picture must represent the category.")
         end
         it "should return a flash error message if represent_user is false" do
-          session[:category_id] = cherries.id
-          post :create, user_id: charlie.id, picture: { title: "Bing", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: true, represent_user: false }
-          expect(flash[:error]).to be_present
+          @request.env["devise.mapping"] = Devise.mappings[:user]
+          sign_in charlie
+          post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Bing", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: true, represent_user: false }
+          expect(flash[:error]).to eq("Your first picture must represent the user.")
         end
       end
       context "good input" do
         it "should add the picture to the database if represent_category and represent_user are both true" do
-          session[:category_id] = cherries.id
-          post :create, user_id: charlie.id, picture: { title: "Bing", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: true, represent_user: true }
+          @request.env["devise.mapping"] = Devise.mappings[:user]
+          sign_in charlie
+          post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Bing", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: true, represent_user: true }
           updated_bing = Picture.select {|picture| picture.title == "Bing" }.first
           expect(updated_bing.title).to eq("Bing")
         end
         it "should add the picture to the database when it's the second picture of a given category and the picture does not represent the category" do
+          @request.env["devise.mapping"] = Devise.mappings[:user]
+          sign_in charlie
           bing = Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)
-          session[:category_id] = cherries.id
-          post :create, user_id: charlie.id, picture: { title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: false, represent_user: false }
+          post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: false, represent_user: false }
           updated_darkhudson = Picture.select {|picture| picture.title == "Dark Hudson" }.first
           expect(updated_darkhudson.title).to eq("Dark Hudson")
         end
         it "should set represent_category boolean of existing picture to false when adding a new picture that represents the category" do
+          @request.env["devise.mapping"] = Devise.mappings[:user]
+          sign_in charlie
           bing = Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)
-          session[:category_id] = cherries.id
-          post :create, user_id: charlie.id, picture: { title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: true, represent_user: true }
+          post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: true, represent_user: true }
           updated_bing = Picture.select {|picture| picture.title == "Bing" }.first
           expect(updated_bing.represent_category).to eq(false)
           updated_darkhudson = Picture.select {|picture| picture.title == "Dark Hudson" }.first
@@ -83,8 +90,7 @@ describe PicturesController do
         it "should alter represent_user and represent_category fields in existing record in database and add new record to database" do
           @request.env["devise.mapping"] = Devise.mappings[:user]
           sign_in charlie
-          session[:category_id] = cherries.id
-          post :create, user_id: charlie.id, picture: { title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: "true", represent_user: "true" }
+          post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: "true", represent_user: "true" }
           updated_bing = Picture.select {|picture| picture.title == "Bing" }.first
           expect(updated_bing.represent_category).to be_falsey
           expect(updated_bing.represent_user).to be_falsey
@@ -96,9 +102,8 @@ describe PicturesController do
         it "should produce a flash error message" do
           @request.env["devise.mapping"] = Devise.mappings[:user]
           sign_in charlie
-          session[:category_id] = cherries.id
-          post :create, user_id: charlie.id, picture: { title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: "false", represent_user: "true" }
-          expect(flash[:error]).to be_present
+          post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: "false", represent_user: "true" }
+          expect(flash[:error]).to eq("Since your picture represents this user, it must also represent this category.")
           bing = Picture.select {|picture| picture.title == "Bing" }.first
           expect(bing.represent_category).to be_truthy
           expect(bing.represent_user).to be_truthy
@@ -108,8 +113,7 @@ describe PicturesController do
         it "should display a flash error message" do
           @request.env["devise.mapping"] = Devise.mappings[:user]
           sign_in charlie
-          session[:category_id] = cherries.id
-          post :create, user_id: charlie.id, picture: { title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: "true", represent_user: "false" }
+          post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: "true", represent_user: "false" }
           expect(flash[:error]).to eq("A picture must represent a user.")
           
         end
@@ -118,18 +122,18 @@ describe PicturesController do
         it "should leave existing record in database unchanged and add new record to database" do
           @request.env["devise.mapping"] = Devise.mappings[:user]
           sign_in charlie
-          session[:category_id] = cherries.id
-          post :create, user_id: charlie.id, picture: { title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: "false", represent_user: "false" }
+          post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: "false", represent_user: "false" }
           bing = Picture.select {|picture| picture.title == "Bing" }.first
           expect(bing.represent_category).to be_truthy
           expect(bing.represent_user).to be_truthy
           dark_hudson = Picture.select {|picture| picture.title == "Dark Hudson" }.first
           expect(dark_hudson.title).to eq("Dark Hudson")
         end
-        it "should redirect to the Add a Photo or Category page" do
-          session[:category_id] = cherries.id
-          post :create, user_id: charlie.id, picture: { title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: false, represent_user: false }
-          expect(response).to redirect_to new_user_category_path
+        it "should redirect to the Add a Photo page" do
+          @request.env["devise.mapping"] = Devise.mappings[:user]
+          sign_in charlie
+          post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: false, represent_user: false }
+          expect(response).to redirect_to new_user_picture_path
         end
       end
     end  
@@ -163,4 +167,6 @@ describe PicturesController do
       expect(assigns(:next_picture)).to eq(bing)
     end
   end
+
+  private
 end

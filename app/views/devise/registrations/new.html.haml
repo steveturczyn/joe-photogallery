@@ -4,28 +4,17 @@
       %h1 Sign up
     %text
       = bootstrap_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
-        - devise_error_messages!
-        .form-group
+        %fieldset
           .row
             .col-sm-4
+              - devise_error_messages!
               = f.email_field :email, autofocus: true
-          .row
-            .col-sm-4
-              = f.password_field :password, label: "Password (#{@minimum_password_length} characters min.)", autocomplete: "off"
-          .row
-            .col-sm-4
+              = f.password_field :password, label: "Password (#{@minimum_password_length} characters minimum)", autocomplete: "off"
               = f.password_field :password_confirmation, autocomplete: "off"
-          .row
-            .col-sm-4
               = f.text_field :first_name
-          .row
-            .col-sm-4
               = f.text_field :last_name
-          .row
-            .col-sm-4
-              = f.text_area :bio, label: "Biographical information (optional)"
-          .row
-            .col-sm-4
+            .col-sm-10
+              = f.text_area :bio, label: "Biographical information (optional)", rows: 10
               %p
               = f.submit "Sign up"
       = render "devise/shared/links"

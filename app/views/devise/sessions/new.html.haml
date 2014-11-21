@@ -4,19 +4,13 @@
       %h1 Log In
     %text
       = bootstrap_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-        .form_group
+        %fieldset
           .row
-            .col-sm-3
+            .col-sm-4
               = f.email_field :email, autofocus: true
-          .row
-            .col-sm-3
               = f.password_field :password, autocomplete: "off"
-          .row
-            .col-sm-3
               = f.check_box :remember_me
-        .form-group
-          .row
-            .col-sm-3
               %p
               = f.submit "Log in"
+              %p
       = render "devise/shared/links"

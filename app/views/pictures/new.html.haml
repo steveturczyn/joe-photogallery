@@ -3,11 +3,13 @@
     %header
       %h1 Add a Photo
     %text
-      .row
       = bootstrap_form_for [current_user, @picture] do |f|
         %fieldset
           .row
-            .col-sm-5
+            .col-sm-4
+              = f.form_group :category_id, label: {text: 'Category'} do
+                - @categories.each do |category|
+                  = f.radio_button :category_id, category.id, label: "#{category.name}"
               = f.text_field :title, autofocus: true
               = f.text_field :location
               = f.text_field :description

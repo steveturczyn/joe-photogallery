@@ -6,16 +6,17 @@ class User < ActiveRecord::Base
 
   validates_presence_of :first_name, :last_name
 
-def full_name
-  "#{first_name} #{last_name}"
-end
+  has_many :categories, dependent: :destroy
 
-def bio_or_default
-  if bio.blank?
-    "#{first_name} #{last_name} hasn't entered any biographical information yet."
-  else
-    bio
+  def full_name
+    "#{first_name} #{last_name}"
   end
-end
 
+  def bio_or_default
+    if bio.blank?
+      "#{first_name} #{last_name} hasn't entered any biographical information yet."
+    else
+      bio
+    end
+  end
 end

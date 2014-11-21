@@ -2,17 +2,17 @@ class PicturesController < ApplicationController
 
   def new
     get_sorted_pictures
+    @categories = user_categories
     @picture = Picture.new
-    session[:category_id] = params[:category]
   end
 
   def create
     get_sorted_pictures
+    @categories = user_categories
     @picture = Picture.new(picture_params)
-    @picture.category_id = session[:category_id]
     if @picture.save
-      flash.now[:success] = "You have successfully added your new photo \"#{@picture.title}.\""
-      redirect_to new_user_category_path
+      flash[:success] = "You have successfully added your new photo \"#{@picture.title}.\""
+      redirect_to new_user_picture_path
     else
       flash.now[:error] = @picture.errors[:represent_category].first
       flash.now[:error] ||= @picture.errors[:represent_user].first
@@ -33,6 +33,10 @@ class PicturesController < ApplicationController
 
   private
 
+  def user_categories
+    Category.select{|category| category.user_id == current_user.id.to_i }
+  end
+
   def prev_picture
     @prev_picture = @sorted_pictures_of_category[@sorted_pictures_of_category.find_index(@picture)-1] || @sorted_pictures_of_category.last
   end
@@ -42,7 +46,7 @@ class PicturesController < ApplicationController
   end
 
   def picture_params
-    params.require(:picture).permit(:title, :location, :description, :image_link, :represent_category, :represent_user)
+    params.require(:picture).permit(:title, :location, :description, :image_link, :category_id, :represent_category, :represent_user)
   end
 
 end

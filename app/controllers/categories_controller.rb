@@ -10,7 +10,6 @@ class CategoriesController < ApplicationController
   end
 
   def new
-    @categories = user_categories
     @category = Category.new
   end
 
@@ -20,11 +19,10 @@ class CategoriesController < ApplicationController
   end
 
   def create
-    @categories = user_categories
     @category = Category.new(category_params)
     @category.user_id = current_user.id
     if @category.save
-      flash.now[:success] = "You have successfully added your new category \"#{@category.name}.\""
+      flash[:success] = "You have successfully added your new category \"#{@category.name}.\""
       redirect_to new_user_category_path
     else
       flash.now[:error] = "Please fix the #{view_context.pluralize(@category.errors.count, "error")} below:"
@@ -35,7 +33,7 @@ class CategoriesController < ApplicationController
   private
 
   def user_categories
-    Category.select{|category| category.user_id == params[:user_id].to_i }
+    Category.select{|category| category.user_id == @show_user.id.to_i }
   end
 
   def representational_categories

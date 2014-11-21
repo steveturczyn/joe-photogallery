@@ -1,26 +1,13 @@
 %category
   .wrapper
     %header
-      %h1 Add a Photo or Category
+      %h1 Add a Category
     %text
-      .row
-        .categories
-          - @categories.each do |category|
-            .col-sm-3
-              = category.name
-            .col-sm-9
-              =link_to "Add Photo", new_user_picture_path(current_user, category: category)
-            .row
-              %p
-      .row
-        %p
       = bootstrap_form_for [current_user, @category] do |f|
-        .form-group
+        %fieldset
           .row
-            .col-sm-3
+            .col-sm-4
               = f.text_field :name, label: "Name of new category"
-          .row
-            .col-sm-3
               = f.submit "Add Category"
 
 
