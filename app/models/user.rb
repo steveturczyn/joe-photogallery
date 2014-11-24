@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
 
   validates_presence_of :first_name, :last_name
 
-  has_many :categories, dependent: :destroy
+  has_many :categories, -> { order(:name) }, dependent: :destroy
 
   def full_name
     "#{first_name} #{last_name}"

@@ -3,6 +3,9 @@ require 'spec_helper'
 describe PicturesController do
   describe 'GET new' do
     let!(:charlie) {Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)}
+    before do
+      sign_in charlie
+    end
     it "creates a new Picture object" do
       get :new, user_id: charlie.id
       expect(assigns(:picture)).to be_new_record
@@ -66,8 +69,7 @@ describe PicturesController do
         it "should set represent_category boolean of existing picture to false when adding a new picture that represents the category" do
           bing = Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)
           post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: true, represent_user: true }
-          updated_bing = Picture.select {|picture| picture.title == "Bing" }.first
-          expect(updated_bing.represent_category).to eq(false)
+          expect(bing.reload.represent_category).to eq(false)
           updated_darkhudson = Picture.select {|picture| picture.title == "Dark Hudson" }.first
           expect(updated_darkhudson.title).to eq("Dark Hudson")
         end

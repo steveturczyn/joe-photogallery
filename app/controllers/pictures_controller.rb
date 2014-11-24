@@ -2,13 +2,13 @@ class PicturesController < ApplicationController
 
   def new
     get_sorted_pictures
-    @categories = user_categories
+    @categories = current_user.categories
     @picture = Picture.new
   end
 
   def create
     get_sorted_pictures
-    @categories = user_categories
+    @categories = current_user.categories
     @picture = Picture.new(picture_params)
     if @picture.save
       flash[:success] = "You have successfully added your new photo \"#{@picture.title}.\""
@@ -32,10 +32,6 @@ class PicturesController < ApplicationController
   end
 
   private
-
-  def user_categories
-    Category.select{|category| category.user_id == current_user.id.to_i }
-  end
 
   def prev_picture
     @prev_picture = @sorted_pictures_of_category[@sorted_pictures_of_category.find_index(@picture)-1] || @sorted_pictures_of_category.last

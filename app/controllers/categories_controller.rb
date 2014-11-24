@@ -5,7 +5,7 @@ class CategoriesController < ApplicationController
 
   def index
     @show_user = User.find(params[:user_id])
-    @categories = user_categories.map{|category| category.id }
+    @categories = @show_user.categories.map{|category| category.id }
     @pictures = representational_categories.sort!{|a, b| a.category.name <=> b.category.name }
   end
 
@@ -31,10 +31,6 @@ class CategoriesController < ApplicationController
   end
 
   private
-
-  def user_categories
-    Category.select{|category| category.user_id == @show_user.id.to_i }
-  end
 
   def representational_categories
     Picture.select{|picture| @categories.include?(picture.category_id) && picture.represent_category }
