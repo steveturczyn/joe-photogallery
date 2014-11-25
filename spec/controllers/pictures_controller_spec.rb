@@ -86,9 +86,8 @@ describe PicturesController do
       context "represent_user is true and represent_category is true" do
         it "should alter represent_user and represent_category fields in existing record in database and add new record to database" do
           post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: "true", represent_user: "true" }
-          updated_bing = Picture.select {|picture| picture.title == "Bing" }.first
-          expect(updated_bing.represent_category).to be_falsey
-          expect(updated_bing.represent_user).to be_falsey
+          expect(bing.reload.represent_category).to be_falsey
+          expect(bing.reload.represent_user).to be_falsey
           dark_hudson = Picture.select {|picture| picture.title == "Dark Hudson" }.first
           expect(dark_hudson.title).to eq("Dark Hudson")
         end
