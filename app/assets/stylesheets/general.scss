@@ -31,3 +31,44 @@ body.pictures-new, body.pictures-create, body.registrations, body.categories, bo
     overflow-y: scroll;
   }
 }
+
+.carousel {
+  height: 100%;
+  .carousel-inner {
+    height: 100%;
+    .item {
+      height: 100%;
+      nav {
+        margin-top: -40px;
+        background-color: #240603;
+      }
+      .item-wrapper {
+        height: 100%;
+        padding-bottom: 40px;
+      }
+      img {
+        height: 100%;
+        max-width: auto;
+      }
+    }
+  }
+}
+
+.carousel-fade {
+  .item {
+    @include transition(.7s ease-in-out opacity);
+    left: 0 !important;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+  }
+  .next.left, .prev.right {
+    opacity: 1;
+    z-index: 1;
+  }
+  .active.left, .active.right {
+    opacity: 0;
+    z-index: 2;
+  }
+}

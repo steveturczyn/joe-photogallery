@@ -1,10 +1,15 @@
 %home
-  %img{:src => "#{@picture.image_link}"}
-  %nav
-    %ul
-      %li= link_to "View Portfolio", user_path(@show_user)
-  %arrows
-    %left
-      = link_to("", root_path(id: @prev_picture))
-    %right
-      = link_to("", root_path(id: @next_picture))
+  #home-carousel.carousel.slide.carousel-fade{data: {ride: "carousel", interval: 3000, pause: "" }}
+    .carousel-inner
+      - @pictures.each_with_index do |picture, index| 
+        .item{class:("active" if index == 0), data: {user: picture.user.as_json(methods: :full_name, only: [:full_name, :first_name])}}
+          .item-wrapper
+            %img{:src => "#{picture.image_link}"}
+          %nav
+            %ul
+              %li= link_to "View Portfolio", user_path(picture.user)
+    %arrows
+      %left
+        = link_to("", "#home-carousel", data: {slide: "prev"})
+      %right
+        = link_to("", "#home-carousel", data: {slide: "next"})

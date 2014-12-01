@@ -28,9 +28,9 @@ describe UsersController do
       get :show, id: charlie.id
       expect(assigns(:category)).to eq(apples)
     end
-    it "creates a Picture object from an array of Pictures objects" do
+    it "creates an array of Picture objects that represent the user from an array of all Pictures objects" do
       get :show, cat: "Bananas", id: charlie.id
-      expect(assigns(:picture)).to eq(chiquita)
+      expect(assigns(:pictures)).to eq([bing, chiquita, mcintosh])
     end
     it "verifies that categories are in alpha order" do
       get :show, cat: "Bananas", id: charlie.id

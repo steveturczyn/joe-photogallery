@@ -5,6 +5,11 @@ class WelcomesController < ApplicationController
     
     @picture = Picture.find_by(id: params[:id]) || @sorted_pictures.sample
     @show_user = @picture.user
+    @pictures = [@picture]
+    @sorted_pictures.each do |picture|
+      next if picture == @picture
+      @pictures << picture
+    end
 
     prev_photographer
     next_photographer

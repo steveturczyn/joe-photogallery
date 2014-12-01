@@ -9,7 +9,7 @@ class UsersController < ApplicationController
     
     @category = Category.find_by(name: params[:cat], user_id: params[:id]) || @categories.first
 
-    @picture = Picture.select{|picture| picture.represent_category }.select{|p| @category.id == p.category_id }.first
+    @pictures = Picture.select{|picture| picture.represent_category }
 
     prev_category
     next_category

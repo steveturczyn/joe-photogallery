@@ -3,6 +3,7 @@ section#messages {
   right: 100px;
   position: absolute;
   top: 10px;
+  z-index: 1000;
   .alert {
     -webkit-box-shadow: 4px 5px 15px 1px rgba(189,189,189,1);
     -moz-box-shadow: 4px 5px 15px 1px rgba(189,189,189,1);
