@@ -26,6 +26,11 @@ class PicturesController < ApplicationController
     @picture = Picture.find(params[:id])
     @sorted_pictures_of_category = Picture.select {|picture| picture.category_id == @picture.category_id }.sort_by {|p| p.id }
     @show_user = @picture.user
+    @pictures = [@picture]
+    @sorted_pictures_of_category.each do |picture|
+      next if picture == @picture
+      @pictures << picture
+    end
 
     prev_picture
     next_picture

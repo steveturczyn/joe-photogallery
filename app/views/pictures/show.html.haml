@@ -1,15 +1,20 @@
 %categorydetail
   %header
     %h1= link_to(@picture.category.name, user_category_path(@picture.user, @picture.category))
-  %img{:src => "#{@picture.image_link}"}
-  %nav
-    %ul
-      .title
-        = @picture.title
-        %span.location
-          = @picture.location
+  #categorydetail-carousel.carousel.slide.carousel-fade{data: {ride: "carousel", interval: ""}}
+    .carousel-inner
+      - @pictures.each_with_index do |picture, index| 
+        .item{class:("active" if index == 0)}
+          .item-wrapper
+            %img{:src => "#{picture.image_link}"}
+          %nav
+            %ul
+              .title
+                = picture.title
+                %span.location
+                  = picture.location
   %arrows
     %left
-      = link_to("", user_picture_path(@show_user, @prev_picture))
+      = link_to("", "#categorydetail-carousel", data: {slide: "prev"})
     %right
-      = link_to("", user_picture_path(@show_user, @next_picture))
+      = link_to("", "#categorydetail-carousel", data: {slide: "next"})

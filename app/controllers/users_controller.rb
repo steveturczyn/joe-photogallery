@@ -6,10 +6,12 @@ class UsersController < ApplicationController
     @show_user = User.find(params[:id])
 
     @categories = user_pictures.sort!{|a, b| a.name.downcase <=> b.name.downcase }
+
+    @category_ids = @categories.map{|category| category.id }
     
     @category = Category.find_by(name: params[:cat], user_id: params[:id]) || @categories.first
 
-    @pictures = Picture.select{|picture| picture.represent_category }
+    @pictures = Picture.select{|picture| picture.represent_category }.select{|p| @category_ids.include? p.category_id }
 
     prev_category
     next_category

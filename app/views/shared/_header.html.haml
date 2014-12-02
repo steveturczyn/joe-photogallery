@@ -3,7 +3,7 @@
     %ul
       - if @show_user
         %name #{@show_user.full_name}
-        - unless controller_name == "welcomes"
+        - if controller_name != "welcomes"
           - possessive_name = "#{@show_user.first_name}".possessive
           %li
             =link_to user_categories_path(@show_user) do
@@ -20,7 +20,7 @@
             %li
               = link_to "#{picture.user.first_name} #{picture.user.last_name}", user_path(picture.user)
 
-      - unless controller_name == "welcomes"
+      - if controller_name != "welcomes"
         - if user_signed_in?
           %li.dropdown
             %a.dropdown-toggle(href="#" data-toggle="dropdown")
