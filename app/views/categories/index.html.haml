@@ -1,7 +1,7 @@
 .categories
   %header
     - possessive_name = "#{@show_user.first_name}".possessive
-    %h1= "#{possessive_name} Categories"
+    %h1= "#{possessive_name} Portfolios"
   .wrapper
     - @pictures.each_slice(4) do |pictures|
       .pictures
