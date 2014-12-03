@@ -1,0 +1,14 @@
+%category
+  .wrapper
+    %header
+      %h1 Edit a Category
+    %text
+      = bootstrap_form_for [current_user, @category] do |f|
+        %fieldset
+          .row
+            .col-sm-4
+              = f.text_field :name
+
+
+
+

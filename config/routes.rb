@@ -3,7 +3,7 @@ Photogallery::Application.routes.draw do
   root 'welcomes#index'
   
   resources :users, only: [:show] do
-    resources :categories, only: [:index, :new, :create, :show]
+    resources :categories, only: [:index, :new, :create, :edit, :update, :show]
     resources :pictures, only: [:new, :create, :show]
     resources :bios, only: [:index]
   end

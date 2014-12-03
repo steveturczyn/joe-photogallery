@@ -30,6 +30,17 @@ class CategoriesController < ApplicationController
     end
   end
 
+  def choose_category
+    @categories = current_user.categories
+  end
+
+  def edit
+    @category = Category.find(params[:id])
+  end
+
+  def update
+  end
+
   private
 
   def representational_categories
