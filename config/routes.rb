@@ -8,6 +8,8 @@ Photogallery::Application.routes.draw do
     resources :bios, only: [:index]
   end
 
+  match 'users/:user_id/categories', :action => 'display', :via => [:get], :controller => 'categories'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -30,15 +30,24 @@ class CategoriesController < ApplicationController
     end
   end
 
-  def choose_category
-    @categories = current_user.categories
-  end
-
   def edit
     @category = Category.find(params[:id])
   end
 
   def update
+    @category = Category.find(params[:id])
+    if @category.update_attributes(category_params)
+      flash[:success] = "You have successfully updated your category. The category is now \"#{@category.name}.\""
+      redirect_to user_category_path
+    else
+      flash.now[:error] = "Please fix the #{view_context.pluralize(@category.errors.count, "error")} below:"
+      render :new
+    end
+  end
+
+  def display
+    @category = current_user.categories.first
+    @categories = current_user.categories
   end
 
   private
