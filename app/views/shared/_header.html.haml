@@ -23,7 +23,9 @@
       - if !user_signed_in?
         %li= link_to "Log In/Sign Up", user_session_path
 
-      - if controller_name != "welcomes"
+      - if controller_name == "welcomes"
+        %li= link_to "About", about_path
+      - else
         - if user_signed_in?
           %li.dropdown
             %a.dropdown-toggle(href="#" data-toggle="dropdown")

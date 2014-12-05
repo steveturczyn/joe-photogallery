@@ -1,0 +1,38 @@
+about {
+  .wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  width: 1000px;
+  header {
+    h1 {
+      color: #DAA520;
+      font-family: verdana;
+      font-size: 28px;
+      text-align: center;
+      padding-bottom: 30px;
+    }
+  } 
+  text {
+      color: #DAA520;
+      font-family: verdana;
+      font-size: 14px;
+      
+      p {
+        margin-bottom: 20px; 
+      }
+      ul {
+        margin: 0;
+        display: block;
+        padding: 15px 0 0 0;
+        .bullets {
+          list-style-type: square;
+        }
+      }
+      li {
+        display: inline-block;
+        position: relative;
+        margin: 0;
+      }
+    }
+  }
+}

@@ -53,5 +53,17 @@ describe CategoriesController do
         expect(response).to redirect_to new_user_category_path
       end
     end
+    describe "PUT update/:id" do
+      it "should produce a flash error when submitted without selecting a category" do
+      end
+      it "should change the category name in the database" do
+      end
+      it "should redirect to the Show Category page" do
+      end
+      it "should produce a flash error when submitting form with a blank category" do
+      end
+      it "should redirect to the Edit a Category page when user has selected a category" do
+      end
+    end
   end
 end

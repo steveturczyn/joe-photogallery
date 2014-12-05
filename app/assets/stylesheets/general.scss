@@ -9,7 +9,7 @@ body {
   }
 }
 
-body.welcomes, body.users, body.pictures, body.categories, body.bios, body.sessions, body.registrations, body.passwords {
+body.welcomes, body.users, body.pictures, body.categories, body.bios, body.sessions, body.registrations, body.passwords, body.static {
   footer {
     position: absolute;
     left: 0;
@@ -26,7 +26,7 @@ body.welcomes, body.users, body.pictures, body.categories, body.bios, body.sessi
   }
 }
 
-body.pictures-new, body.pictures-create, body.registrations, body.categories, body.bios {
+body.pictures-new, body.pictures-create, body.registrations, body.categories, body.bios, body.static {
   section.content {
     overflow-y: scroll;
   }

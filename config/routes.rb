@@ -12,6 +12,7 @@ Photogallery::Application.routes.draw do
     resources :pictures, only: [:new, :create, :show]
     resources :bios, only: [:index]
   end
+ get 'about' => 'static#about'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
