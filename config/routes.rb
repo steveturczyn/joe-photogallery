@@ -3,12 +3,15 @@ Photogallery::Application.routes.draw do
   root 'welcomes#index'
   
   resources :users, only: [:show] do
-    resources :categories, only: [:index, :new, :create, :edit, :update, :show]
+    resources :categories, only: [:index, :new, :create, :edit, :update, :show] do
+      collection do
+        get 'edit_categories'
+        post 'edit_categories', action: 'which_category'
+      end
+    end
     resources :pictures, only: [:new, :create, :show]
     resources :bios, only: [:index]
   end
-
-  match 'users/:user_id/categories', :action => 'display', :via => [:get], :controller => 'categories'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

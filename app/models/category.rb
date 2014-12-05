@@ -4,7 +4,7 @@ class Category < ActiveRecord::Base
 
   has_many :pictures, dependent: :destroy
 
-  validates_presence_of :name, :user_id
-  validates_uniqueness_of :name,:case_sensitive => false, scope: :user_id
+  validates :name, :user_id, presence: true
+  validates :name, uniqueness: { case_sensitive: false, scope: :user_id }
 
 end

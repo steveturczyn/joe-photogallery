@@ -45,9 +45,17 @@ class CategoriesController < ApplicationController
     end
   end
 
-  def display
-    @category = current_user.categories.first
+  def edit_categories
     @categories = current_user.categories
+  end
+
+  def which_category
+    if params[:id] == nil
+      flash[:error] = "Please select a category to edit."
+      redirect_to edit_categories_user_categories_path(current_user)
+    else
+      redirect_to edit_user_category_path(current_user, params[:id])
+    end
   end
 
   private

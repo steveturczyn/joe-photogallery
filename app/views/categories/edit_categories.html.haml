@@ -1,0 +1,13 @@
+%display
+  .wrapper
+    %header
+      %h1 Edit a Category
+    %text
+      = bootstrap_form_tag do |f|
+        %fieldset
+          .row
+            .col-sm-4
+              = f.form_group :id, label: {text: 'Which category would you like to edit?'} do
+                - @categories.each do |category|
+                  = f.radio_button :id, category.id, label: "#{category.name}", :checked => false
+              = f.submit "Select Category"

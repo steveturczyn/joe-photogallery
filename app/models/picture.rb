@@ -1,13 +1,15 @@
 class Picture < ActiveRecord::Base
 
   belongs_to :category
+  belongs_to :user
 
   delegate :user, to: :category
 
   mount_uploader :image_link, MyUploader
 
-  validates_presence_of :title, :location, :description, :category_id, :image_link
+  validates :title, :location, :description, :category_id, :image_link, presence: true
 
+  validate :title_must_be_unique
   validate :represent_user_must_represent_category
   validate :there_must_be_one_picture_representing_user
   validate :first_picture_must_represent_user
@@ -15,6 +17,12 @@ class Picture < ActiveRecord::Base
 
   before_save :fix_represent_user
   before_save :fix_represent_category
+
+  def title_must_be_unique
+    if !Picture.find_by_title(":title")
+      errors.add(:title, "You must first delete your existing photo with the title \"#{title}\" before adding a new photo with that title.")
+    end
+  end
 
   def represent_user_must_represent_category
     if represent_user && !represent_category
