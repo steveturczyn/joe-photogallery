@@ -2,7 +2,7 @@ class MyUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
 
   def store_dir
-    "uploads/#{model.user.id}"
+    "#{Rails.root}/public/uploads/#{model.class.to_s.underscore}/#{model.id}"
   end
 
   def is_landscape?(new_file)
