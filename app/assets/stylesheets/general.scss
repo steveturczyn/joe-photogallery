@@ -60,7 +60,7 @@ body.pictures-new, body.pictures-create, body.registrations, body.categories, bo
 
 .carousel-fade {
   .item {
-    @include transition(opacity 1s linear);
+    @include transition(opacity 0.5s linear);
     left: 0 !important;
     top: 0;
     bottom: 0;

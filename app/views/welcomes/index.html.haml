@@ -1,5 +1,5 @@
 %home
-  #home-carousel.carousel.slide.carousel-fade{data: {ride: "carousel", interval: 3000, pause: "" }}
+  #home-carousel.carousel.slide.carousel-fade{data: {ride: "carousel", interval: 5000, pause: "" }}
     .carousel-inner
       - @pictures.each_with_index do |picture, index| 
         .item{class:("active" if index == 0), data: {user: picture.user.as_json(methods: :full_name, only: [:full_name, :first_name])}}
