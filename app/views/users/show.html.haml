@@ -3,13 +3,13 @@
     .carousel-inner
       - @pictures.each_with_index do |picture, index| 
         .item{class:("active" if index == 0)}
-          .item-wrapper
-            %header
-              %h1 #{picture.category.name}
+          %header
+            %h1 #{picture.category.name}
+          .item-wrapper.with-header
             %img{:src => "#{picture.image_link}"}
-            %nav
-              %ul
-                %li= link_to  "View Portfolio", user_category_path(@show_user, picture.category)
+          %nav
+            %ul
+              %li= link_to  "View Portfolio", user_category_path(@show_user, picture.category)
     %arrows
       %left
         = link_to("", "#user-carousel", data: {slide: "prev"})

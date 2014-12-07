@@ -1,11 +1,11 @@
 %categorydetail
-  %header
-    %h1= link_to(@picture.category.name, user_category_path(@picture.user, @picture.category))
   #categorydetail-carousel.carousel.slide.carousel-fade{data: {ride: "carousel", interval: ""}}
     .carousel-inner
       - @pictures.each_with_index do |picture, index| 
         .item{class:("active" if index == 0)}
-          .item-wrapper
+          %header
+            %h1= link_to(@picture.category.name, user_category_path(@picture.user, @picture.category))
+          .item-wrapper.with-header
             %img{:src => "#{picture.image_link}"}
           %nav
             %ul
