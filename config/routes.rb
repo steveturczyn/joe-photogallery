@@ -9,7 +9,12 @@ Photogallery::Application.routes.draw do
         post 'edit_categories', action: 'which_category'
       end
     end
-    resources :pictures, only: [:new, :create, :show]
+    resources :pictures, only: [:new, :create, :edit, :update, :show] do
+      collection do
+        get 'edit_pictures'
+        post 'edit_pictures', action: 'which_picture'
+      end
+    end
     resources :bios, only: [:index]
   end
  get 'about' => 'static#about'

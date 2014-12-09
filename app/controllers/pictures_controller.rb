@@ -21,6 +21,40 @@ class PicturesController < ApplicationController
     end
   end
 
+  def edit
+    get_sorted_pictures
+    @picture = Picture.find(params[:id])
+    @categories = Category.select{|category| category.user_id == current_user.id }
+  end
+
+  def update
+    @picture = Picture.find(params[:id])
+    if @picture.update_attributes(picture_params)
+      flash[:success] = "You have successfully updated your picture \"#{@picture.title}.\""
+      redirect_to user_picture_path
+    else
+      flash.now[:error] = "Please fix the #{view_context.pluralize(@picture.errors.count, "error")} below:"
+      @categories = current_user.categories
+      get_sorted_pictures
+      render :new
+    end
+  end
+
+  def edit_pictures
+    get_sorted_pictures
+    @category_ids = Category.select{|category| category.user_id == current_user.id }.map{|c| c.id }
+    @pictures = Picture.select{|picture| @category_ids.include? picture.category_id }.sort_by {|p| p.title.upcase }
+  end
+
+  def which_picture
+    if params[:id] == nil
+      flash[:error] = "Please select a picture to edit."
+      redirect_to edit_pictures_user_pictures_path(current_user)
+    else
+      redirect_to edit_user_picture_path(current_user, params[:id])
+    end
+  end
+
   def show
     get_sorted_pictures
     @picture = Picture.find(params[:id])

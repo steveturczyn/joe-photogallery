@@ -1,0 +1,28 @@
+%category
+  .wrapper
+    %header
+      %h1 Edit a Photo
+    %text
+      = bootstrap_form_for [current_user, @picture] do |f|
+        %fieldset
+          .row
+            .col-sm-4
+              = f.form_group :category_id, label: {text: 'Category'} do
+                - @categories.each do |category|
+                  = f.radio_button :category_id, category.id, label: "#{category.name}"
+              = f.text_field :title, autofocus: true
+              = f.text_field :location
+              = f.text_field :description
+              = f.file_field :image_link, label: "Name of Photo", class: "btn btn-default btn-file"
+              = f.hidden_field :image_link_cache
+              = f.form_group :represent_category, label: {text: 'Represents this Category?'} do
+                = f.radio_button :represent_category, true, label: "Yes", checked: @picture.represent_category
+                = f.radio_button :represent_category, false, label: "No", checked: !@picture.represent_category
+              = f.form_group :represent_user, label: {text: 'Represents this User?'} do
+                = f.radio_button :represent_user, true, label: "Yes", checked: @picture.represent_user
+                = f.radio_button :represent_user, false, label: "No", checked: !@picture.represent_user
+              = f.submit "Update Photo"
+
+
+
+

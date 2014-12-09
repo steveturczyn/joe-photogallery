@@ -1,0 +1,13 @@
+%display
+  .wrapper
+    %header
+      %h1 Edit a Photo
+    %text
+      = bootstrap_form_tag do |f|
+        %fieldset
+          .row
+            .col-sm-4
+              = f.form_group :id, label: {text: 'Which photo would you like to edit?'} do
+                - @pictures.each do |picture|
+                  = f.radio_button :id, picture.id, label: "#{picture.title}", :checked => false
+              = f.submit "Select Picture"
