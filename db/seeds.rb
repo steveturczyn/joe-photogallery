@@ -10,15 +10,19 @@ Category.delete_all
 Picture.delete_all
 
 User.create(email: "joe@joelevinger.com", password: "joelevinger", first_name: "Joe", last_name: "Levinger", bio: "Joe Levinger lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
+
 User.create(email: "steve.turczyn@gotealeaf.com", password: "steveturczyn", first_name: "Steve", last_name: "Turczyn", bio: "Steve Turczyn lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
+
+User.create(email: "dcestari@gmail.com", password: "danielcestari", first_name: "Daniel", last_name: "Cestari", bio: "Daniel Cestari lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
 
 c1 = Category.create(name: "Wildlife", user_id: 1)
 c2 = Category.create(name: "Abstractions", user_id: 1)
-c3 = Category.create(name: "Flowers", user_id: 1)
-c4 = Category.create(name: "Nature", user_id: 1)
 
-c5 = Category.create(name: "Wildlife", user_id: 2)
-c6 = Category.create(name: "Architecture", user_id: 2)
+c3 = Category.create(name: "Flowers", user_id: 2)
+c4 = Category.create(name: "Nature", user_id: 2)
+
+c5 = Category.create(name: "Wildlife", user_id: 3)
+c6 = Category.create(name: "Architecture", user_id: 3)
 
 Picture.create(title: "Panda", location: "Washington, DC", description: "A hungry panda", image_link: File.open(Rails.root.join('public/tmp/panda.jpg')), represent_category: true, represent_user: true, category: c1)
 Picture.create(title: "Florida Bird", location: "Fort Pierce, FL", description: "Beautiful bird, shot with a 400 mm zoom lens", image_link: File.open(Rails.root.join('public/tmp/bird.jpg')), represent_category: false, represent_user: false, category: c1)
@@ -34,7 +38,7 @@ Picture.create(title: "Red Sky", location: "Sleepy Hollow, NY", description: "Sh
 Picture.create(title: "Stained Glass I", location: "Boston, MA", description: "Detail from Chihuly's Persian Ceiling", image_link: File.open(Rails.root.join('public/tmp/stainedglass1.jpg')), represent_category: false, represent_user: false, category: c2)
 Picture.create(title: "Stained Glass II", location: "Boston, MA", description: "Detail of Chihuly glassware", image_link: File.open(Rails.root.join('public/tmp/stainedglass2.jpg')), represent_category: false, represent_user: false, category: c2)
 
-Picture.create(title: "Goldenrod", location: "Truro, MA", description: "A hungry bee", image_link: File.open(Rails.root.join('public/tmp/goldenrod.jpg')), represent_category: true, represent_user: false, category: c3)
+Picture.create(title: "Goldenrod", location: "Truro, MA", description: "A hungry bee", image_link: File.open(Rails.root.join('public/tmp/goldenrod.jpg')), represent_category: true, represent_user: true, category: c3)
 Picture.create(title: "Magnolia", location: "Boston, MA", description: "A magnolia, in full bloom, from the Arnold Arboretum", image_link: File.open(Rails.root.join('public/tmp/magnolia.jpg')), represent_category: false, represent_user: false, category: c3)
 Picture.create(title: "Iris", location: "Washington, DC", description: "An iris, after the rain", image_link: File.open(Rails.root.join('public/tmp/iris.jpg')), represent_category: false, represent_user: false, category: c3)
 Picture.create(title: "Rose", location: "Washington, DC", description: "A rose, after the rain", image_link: File.open(Rails.root.join('public/tmp/rose.jpg')), represent_category: false, represent_user: false, category: c3)
