@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.0.0'
 
-gem 'bootstrap-sass'
+gem 'bootstrap-sass', '3.0.2.1'
 gem 'bootstrap_form'
 gem 'rails', '4.0.2'
 gem 'sass-rails', '~> 4.0.0'
