@@ -13,8 +13,9 @@
               = f.text_field :title, autofocus: true
               = f.text_field :location
               = f.text_field :description
-              = f.file_field :image_link, label: "Name of Photo", class: "btn btn-default btn-file"
-              = f.hidden_field :image_link_cache
+              <strong>Your current photo:</strong>
+              %img{:src => "#{@picture.image_link.thumb}"}
+              = f.file_field :image_link, label: "Upload Replacement Photo?", class: "btn btn-default btn-file"
               = f.form_group :represent_category, label: {text: 'Represents this Category?'} do
                 = f.radio_button :represent_category, true, label: "Yes", checked: @picture.represent_category
                 = f.radio_button :represent_category, false, label: "No", checked: !@picture.represent_category

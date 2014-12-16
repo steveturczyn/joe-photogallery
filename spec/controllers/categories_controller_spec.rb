@@ -53,16 +53,39 @@ describe CategoriesController do
         expect(response).to redirect_to new_user_category_path
       end
     end
-    describe "PUT update/:id" do
-      it "should produce a flash error when submitted without selecting a category" do
+    describe "POST #which_category" do
+      # it "should produce a flash error when submitted without selecting a category" do
+      #   post :which_category, user_id: user.id, id: ""
+      #   expect(flash[:error]).to eq("Please select a category to edit.")
+      #   expect(response).to redirect_to edit_categories_user_categories_path
+      # end
+      # it "should redirect to the Edit a Category page when user has selected a category" do
+      #   category = Fabricate(:category)
+      #   post :which_category, user_id: user.id, id: category.id
+      #   expect(response).to redirect_to edit_user_category_path
+      # end
+    end
+    describe "PUT update" do
+      it "should produce a flash error when submitting form with a blank category" do
+        category = Fabricate(:category)
+        put :update, user_id: user.id, category: category, category: { name: "" }, id: category.id
+        expect(flash[:error]).to eq("Please fix the 1 error below:")
+        expect(response).to render_template :new
       end
-      it "should change the category name in the database" do
+      it "should produce a flash success message" do
+        # category = Fabricate(:category)
+        # put :update, user_id: user.id, category: category, category: { name: "category.name" }, id: category.id
+        # expect(flash[:success]).to eq("You have successfully updated your category. The category is now \"#{category.name}.\"")
+      end
+      it "should update the category name in the database" do
+        category = Fabricate(:category)
+        put :update, user_id: user.id, category: category, category: { name: "category.name" }, id: category.id
+        expect(category.reload.name).to eq("#{category.name}")
       end
       it "should redirect to the Show Category page" do
-      end
-      it "should produce a flash error when submitting form with a blank category" do
-      end
-      it "should redirect to the Edit a Category page when user has selected a category" do
+        category = Fabricate(:category)
+        put :update, user_id: user.id, category: category, category: { name: "category.name" }, id: category.id
+        expect(response).to redirect_to user_category_path
       end
     end
   end

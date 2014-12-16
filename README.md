@@ -35,6 +35,7 @@ This app demonstrates the following:
 
 <b>BUILDING APPLICATIONS</b>
 
+* Authentication using Devise
 * Seeding data
 * Sending emails
 * Custom form builders

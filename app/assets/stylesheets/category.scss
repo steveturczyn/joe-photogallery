@@ -17,9 +17,15 @@ category {
       font-family: verdana;
       font-size: 11px;
       text-align: left;
-      font-weight: bold;
+      font-weight: normal;
       padding-bottom: 30px;
       text-transform: uppercase;
+      img {
+        margin: 7px 0 15px 0;
+        border-style: solid;
+        border-color: #650C03;
+        border-width: 5px;
+      }
     }
     p {
       margin-bottom: 20px; 
