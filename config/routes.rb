@@ -6,7 +6,14 @@ Photogallery::Application.routes.draw do
     resources :categories, only: [:index, :new, :create, :edit, :update, :show] do
       collection do
         get 'edit_categories'
-        post 'edit_categories', action: 'which_category'
+        post 'edit_categories', action: 'which_category_to_edit'
+      end
+      collection do
+        get 'delete_categories'
+        post 'delete_categories', action: 'which_category_to_delete'
+      end
+      collection do
+        delete 'destroy', as: 'delete_category'
       end
     end
     resources :pictures, only: [:new, :create, :edit, :update, :show] do

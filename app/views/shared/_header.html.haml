@@ -37,6 +37,8 @@
               %li= link_to "Edit a Photo", edit_pictures_user_pictures_path(current_user)
               %li= link_to "Add a Category", new_user_category_path(current_user)
               %li= link_to "Edit a Category", edit_categories_user_categories_path(current_user)
+              %li= link_to "Delete a Category",
+                delete_categories_user_categories_path(current_user)
               %li= link_to "Update Profile", edit_user_registration_path
           %li= link_to "Log Off", destroy_user_session_path, :method => :delete
         - else

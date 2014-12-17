@@ -49,13 +49,39 @@ class CategoriesController < ApplicationController
     @categories = current_user.categories
   end
 
-  def which_category
+  def which_category_to_edit
     if params[:id] == nil
       flash[:error] = "Please select a category to edit."
       redirect_to edit_categories_user_categories_path(current_user)
     else
       redirect_to edit_user_category_path(current_user, params[:id])
     end
+  end
+
+  def delete_categories
+    @categories = current_user.categories
+  end
+
+  def which_category_to_delete
+    if params[:id] == nil
+      flash[:error] = "Please select a category to delete."
+      redirect_to delete_categories_user_categories_path(current_user)
+    else
+      redirect_to delete_category_user_categories_path(current_user, params[:id])
+    end
+  end
+
+  def destroy
+    # if category doesn't contain any pictures   
+    #   category = Category.where(user_id: current_user.id, id: params[:id]).first
+    #   category.destroy if category
+    #   display a flash message, saying that the category has been deleted
+    #   redirect_to some page
+    # else
+    #   rename the category to "Uncategorized"
+    #   display a flash success message, saying that I've renamed the category
+    #   redirect to some page
+    # end
   end
 
   private

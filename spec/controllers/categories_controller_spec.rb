@@ -53,15 +53,15 @@ describe CategoriesController do
         expect(response).to redirect_to new_user_category_path
       end
     end
-    describe "POST #which_category" do
+    describe "POST #which_category_to_edit" do
       # it "should produce a flash error when submitted without selecting a category" do
-      #   post :which_category, user_id: user.id, id: ""
+      #   post :which_category_to_edit, user_id: user.id, id: ""
       #   expect(flash[:error]).to eq("Please select a category to edit.")
       #   expect(response).to redirect_to edit_categories_user_categories_path
       # end
       # it "should redirect to the Edit a Category page when user has selected a category" do
       #   category = Fabricate(:category)
-      #   post :which_category, user_id: user.id, id: category.id
+      #   post :which_category_to_edit, user_id: user.id, id: category.id
       #   expect(response).to redirect_to edit_user_category_path
       # end
     end
