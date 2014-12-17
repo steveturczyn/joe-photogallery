@@ -19,7 +19,14 @@ Photogallery::Application.routes.draw do
     resources :pictures, only: [:new, :create, :edit, :update, :show] do
       collection do
         get 'edit_pictures'
-        post 'edit_pictures', action: 'which_picture'
+        post 'edit_pictures', action: 'which_picture_to_edit'
+      end
+      collection do
+        get 'delete_pictures'
+        post 'delete_pictures', action: 'which_picture_to_delete'
+      end
+      collection do
+        delete 'destroy', as: 'delete_picture'
       end
     end
     resources :bios, only: [:index]

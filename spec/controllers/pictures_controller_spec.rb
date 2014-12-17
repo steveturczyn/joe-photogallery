@@ -153,7 +153,7 @@ describe PicturesController do
     end
   end
 
-  describe 'POST #which_picture' do
+  describe 'POST #which_picture_to_edit' do
     let!(:charlie) {Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)}
     let!(:cherries) {cherries = Fabricate(:category, name: "Cherries", user: charlie)}
     let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)}
@@ -161,15 +161,15 @@ describe PicturesController do
       sign_in charlie
     end
     it "should produce a flash error when submitted without selecting a picture" do
-      post :which_picture, user_id: charlie.id, params: { id: "" }
+      post :which_picture_to_edit, user_id: charlie.id, params: { id: "" }
       expect(flash[:error]).to eq("Please select a picture to edit.")
     end
     it "should redirect to the first Edit a Photo page when submitted without selecting a picture" do
-      post :which_picture, user_id: charlie.id, params: { id: "" }
+      post :which_picture_to_edit, user_id: charlie.id, params: { id: "" }
       expect(response).to redirect_to edit_pictures_user_pictures_path
     end
     # it "should redirect to the second Edit a Photo page when submitted with having selected a picture" do
-    #   post :which_picture, user_id: charlie.id, id: bing.id, params: { id: bing.id }
+    #   post :which_picture_to_edit, user_id: charlie.id, id: bing.id, params: { id: bing.id }
     #   expect(response).to redirect_to edit_user_picture_path
     # end
   end

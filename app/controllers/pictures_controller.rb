@@ -46,7 +46,7 @@ class PicturesController < ApplicationController
     @pictures = Picture.select{|picture| @category_ids.include? picture.category_id }.sort_by {|p| p.title.upcase }
   end
 
-  def which_picture
+  def which_picture_to_edit
     if params[:id] == nil
       flash[:error] = "Please select a picture to edit."
       redirect_to edit_pictures_user_pictures_path(current_user)
@@ -68,6 +68,29 @@ class PicturesController < ApplicationController
 
     prev_picture
     next_picture
+  end
+
+  def delete_pictures
+    get_sorted_pictures
+    @category_ids = Category.select{|category| category.user_id == current_user.id }.map{|c| c.id }
+    @pictures = Picture.select{|picture| @category_ids.include? picture.category_id }.sort_by {|p| p.title.upcase }
+  end
+
+  def which_picture_to_delete
+    if params[:id] == nil
+      flash[:error] = "Please select a picture to delete."
+      redirect_to delete_pictures_user_pictures_path(current_user)
+    else
+      redirect_to delete_picture_user_pictures_path(current_user, params[:id])
+    end
+  end
+
+  def destroy 
+    #   picture = Picture.where(user_id: current_user.id, id: params[:id]).first
+    #   picture.destroy if pategory
+    #   display a flash message, saying that the picture has been deleted
+    #   redirect_to some page
+    # end
   end
 
   private
