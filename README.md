@@ -1,8 +1,10 @@
 # Welcome to <i>Photographer Showcase!</i>
 
-<p><b><i>Photographer Showcase</i></b> is an app designed to enable photographers to display their photography portfolios. Photographers can create an account, log in, create unlimited portfolios (e.g. "Wildlife", "Nature", etc.), and display unlimited photographs within each portfolio.</p>
+<p><b><i>Photographer Showcase</i></b> is an app designed to enable photographers to display their photography portfolios. Photographers can create an account, log in, create unlimited portfolios (e.g. "Wildlife", "Nature", etc.), and display unlimited photographs within each portfolio. They can also edit and delete photos, edit and delete categories, and cancel an account entirely.</p>
 
-This app demonstrates the following:
+<p>To test the full functionality of the app, simply click on the LOG IN/SIGN UP link and supply login credentials.</p>
+
+<p>The app demonstrates the following:</p>
 
 <b>PROCESS</b>
 
