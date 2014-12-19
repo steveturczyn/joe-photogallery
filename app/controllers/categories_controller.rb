@@ -50,7 +50,7 @@ class CategoriesController < ApplicationController
   end
 
   def which_category_to_edit
-    if params[:id] == nil
+    if params[:id].blank?
       flash[:error] = "Please select a category to edit."
       redirect_to edit_categories_user_categories_path(current_user)
     else

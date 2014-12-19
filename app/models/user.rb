@@ -19,4 +19,12 @@ class User < ActiveRecord::Base
       bio
     end
   end
+
+  def self.save_logged_off_user(user)
+    @@logged_off_user = user
+  end
+
+  def self.retrieve_logged_off_user
+    @@logged_off_user
+  end
 end

@@ -29,8 +29,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # def after_sign_out_path_for(resource)
-  #   binding.pry
-  #   user_path(@@user.id)
-  # end
+  def after_sign_out_path_for(resource)
+    user_path(User.retrieve_logged_off_user)
+  end
 end

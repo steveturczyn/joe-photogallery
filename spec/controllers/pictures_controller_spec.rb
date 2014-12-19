@@ -161,17 +161,17 @@ describe PicturesController do
       sign_in charlie
     end
     it "should produce a flash error when submitted without selecting a picture" do
-      post :which_picture_to_edit, user_id: charlie.id, params: { id: "" }
+      post :which_picture_to_edit, user_id: charlie.id, id: ""
       expect(flash[:error]).to eq("Please select a picture to edit.")
     end
     it "should redirect to the first Edit a Photo page when submitted without selecting a picture" do
-      post :which_picture_to_edit, user_id: charlie.id, params: { id: "" }
-      expect(response).to redirect_to edit_pictures_user_pictures_path
+      post :which_picture_to_edit, user_id: charlie.id, id: ""
+      expect(response).to redirect_to edit_pictures_user_pictures_path(charlie)
     end
-    # it "should redirect to the second Edit a Photo page when submitted with having selected a picture" do
-    #   post :which_picture_to_edit, user_id: charlie.id, id: bing.id, params: { id: bing.id }
-    #   expect(response).to redirect_to edit_user_picture_path
-    # end
+    it "should redirect to the second Edit a Photo page when submitted with having selected a picture" do
+      post :which_picture_to_edit, user_id: charlie.id, id: bing.id, params: { id: bing.id }
+      expect(response).to redirect_to edit_user_picture_path(charlie, bing)
+    end
   end
 
   describe 'PATCH update' do
@@ -181,25 +181,25 @@ describe PicturesController do
     before do
       sign_in charlie
     end
-    # it "should produce a flash success message if picture has been updated" do
-    #   patch :update, user_id: charlie.id, id: bing.id, params: { picture: { title: "bing2" } }
-    #   expect(flash[:success]).to eq("You have successfully updated your picture \"#{bing2}.\"")
-    # end
-    # it "should redirect to the Show Picture page if picture has been updated" do
-    #   patch :update, user_id: charlie.id, id: bing.id, params: { picture: { title: "bing2" } }
-    #   expect(response).to redirect_to user_picture_path
-    # end
-    # it "should update the database if the input is valid" do
-    #   patch :update, user_id: charlie.id, id: bing.id, params: { picture: { title: "bing2" } }
-    #   expect(bing.reload.title).to eq("bing2")
-    # end
-    # it "should produce a flash error message if the input contains an error" do
-    #   patch :update, user_id: charlie.id, id: bing.id, params: { picture: { title: "" } }
-    #   expect(flash[:error]).to eq("Please fix the 1 error below:")
-    # end
-    # it "should render the new template if the input contains an error" do
-    #   patch :update, user_id: charlie.id, id: bing.id, params: { picture: { title: "" } }
-    #   expect(response).to render_template :new
-    # end
+    it "should produce a flash success message if picture has been updated" do
+      patch :update, user_id: charlie.id, id: bing.id, picture: { title: "bing2" }
+      expect(flash[:success]).to eq("You have successfully updated your picture \"bing2.\"")
+    end
+    it "should redirect to the Show Picture page if picture has been updated" do
+      patch :update, user_id: charlie.id, id: bing.id, picture: { title: "bing2" }
+      expect(response).to redirect_to user_picture_path(charlie, bing)
+    end
+    it "should update the database if the input is valid" do
+      patch :update, user_id: charlie.id, id: bing.id, picture: { title: "bing2" }
+      expect(bing.reload.title).to eq("bing2")
+    end
+    it "should produce a flash error message if the input contains an error" do
+      patch :update, user_id: charlie.id, id: bing.id, picture: { title: "" }
+      expect(flash[:error]).to eq("Please fix the 1 error below:")
+    end
+    it "should render the new template if the input contains an error" do
+      patch :update, user_id: charlie.id, id: bing.id, picture: { title: "" }
+      expect(response).to render_template :edit
+    end
   end
 end

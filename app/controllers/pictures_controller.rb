@@ -36,7 +36,7 @@ class PicturesController < ApplicationController
       flash.now[:error] = "Please fix the #{view_context.pluralize(@picture.errors.count, "error")} below:"
       @categories = current_user.categories
       get_sorted_pictures
-      render :new
+      render :edit
     end
   end
 
@@ -47,7 +47,7 @@ class PicturesController < ApplicationController
   end
 
   def which_picture_to_edit
-    if params[:id] == nil
+    if params[:id].blank?
       flash[:error] = "Please select a picture to edit."
       redirect_to edit_pictures_user_pictures_path(current_user)
     else
