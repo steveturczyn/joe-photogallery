@@ -16,6 +16,8 @@
 /tmp
 /public/uploads/picture
 /public/uploads/picture/*
+/public/uploads/tmp
+/public/uploads/tmp/*
 
 # Ignore environmental variables and Procfile
 .env
