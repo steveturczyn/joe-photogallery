@@ -22,10 +22,10 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    if Category.select{|category| category.user_id == @user.id } == []
-      new_user_category_path(@user)
+    if Category.select{|category| category.user_id == resource.id } == []
+      new_user_category_path(resource)
     else
-      user_path(@user)
+      user_path(resource)
     end
   end
 

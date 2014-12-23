@@ -16,7 +16,7 @@
           = "All Photographers"
           %span.caret
         %ul.dropdown-menu
-          - @sorted_pictures.each do |picture|
+          - Picture.user_representations.each do |picture|
             %li
               = link_to "#{picture.user.first_name} #{picture.user.last_name}", user_path(picture.user)
 

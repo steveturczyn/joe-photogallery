@@ -67,21 +67,24 @@ class CategoriesController < ApplicationController
       flash[:error] = "Please select a category to delete."
       redirect_to delete_categories_user_categories_path(current_user)
     else
-      redirect_to delete_category_user_categories_path(current_user, params[:id])
+      delete_category Category.find(params[:id])
+      redirect_to user_path(current_user)
     end
   end
 
-  def destroy
-    # if category doesn't contain any pictures   
-    #   category = Category.where(user_id: current_user.id, id: params[:id]).first
-    #   category.destroy if category
-    #   display a flash message, saying that the category has been deleted
-    #   redirect_to some page
-    # else
-    #   rename the category to "Uncategorized"
-    #   display a flash success message, saying that I've renamed the category
-    #   redirect to some page
-    # end
+  def delete_category(category)
+    if category.pictures.empty?
+      flash[:success] = "Your category has been deleted."
+    else
+      replacement_category = Category.where(name: "Uncategorized", user: current_user).first
+      replacement_category ||= Category.create(name: "Uncategorized", user: current_user)
+      flash[:success] = "Your pictures have been moved to the \"Uncategorized\" category."
+      category.pictures.each do |picture|
+        picture.category = replacement_category
+        picture.save
+      end
+    end
+    category.delete
   end
 
   private

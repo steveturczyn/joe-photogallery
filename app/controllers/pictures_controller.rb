@@ -87,7 +87,7 @@ class PicturesController < ApplicationController
 
   def destroy 
     #   picture = Picture.where(user_id: current_user.id, id: params[:id]).first
-    #   picture.destroy if pategory
+    #   picture.destroy if category
     #   display a flash message, saying that the picture has been deleted
     #   redirect_to some page
     # end
