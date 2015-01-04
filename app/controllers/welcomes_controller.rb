@@ -2,13 +2,12 @@ class WelcomesController < ApplicationController
 
   def index
     get_sorted_pictures
-    
-    @picture = Picture.find_by(id: params[:id]) || @sorted_pictures.sample
+    @pictures = get_sorted_pictures.dup
+    @picture = Picture.find_by(id: params[:id]) || @pictures.sample
     @show_user = @picture.user
-    @pictures = [@picture]
     @sorted_pictures.each do |picture|
-      next if picture == @picture
-      @pictures << picture
+      break if picture == @picture
+      @pictures.push(@pictures.shift)
     end
 
     prev_photographer

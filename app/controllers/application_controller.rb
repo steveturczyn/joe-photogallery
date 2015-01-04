@@ -22,14 +22,21 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    if Category.select{|category| category.user_id == resource.id } == []
+    if resource.categories.blank?
       new_user_category_path(resource)
+    elsif resource.has_no_pictures?
+      new_user_picture_path(resource)
     else
       user_path(resource)
     end
   end
 
   def after_sign_out_path_for(resource)
-    user_path(User.retrieve_logged_off_user)
+    user = User.find_by_id(User.retrieve_logged_off_user)
+    if user && user.categories.present? && user.has_pictures?
+      user_path(user)
+    else
+      root_path
+    end
   end
 end

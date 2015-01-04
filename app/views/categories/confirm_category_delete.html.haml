@@ -1,0 +1,14 @@
+%display
+  .wrapper
+    %header
+      %h1 Confirm Category Deletion
+    %text
+      = bootstrap_form_tag url: confirm_category_delete_user_categories_path(current_user) do |f|
+        %fieldset
+          .row
+            .col-sm-6
+              = f.form_group :confirm, label: {text: 'Are you sure? All of your uncategorized photos will be deleted.'} do
+                = f.radio_button :confirm, true, label: "Yes", checked: true
+                = f.radio_button :confirm, false, label: "No"
+              = f.submit "Submit"
+

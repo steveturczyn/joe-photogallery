@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
 
   def show
+
     get_sorted_pictures
 
     @show_user = User.find(params[:id])

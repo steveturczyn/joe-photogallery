@@ -67,14 +67,23 @@ class CategoriesController < ApplicationController
       flash[:error] = "Please select a category to delete."
       redirect_to delete_categories_user_categories_path(current_user)
     else
-      delete_category Category.find(params[:id])
-      redirect_to user_path(current_user)
+      if Category.find(params[:id]).name == "Uncategorized"
+        render "confirm_category_delete"
+        return
+      end
+      delete_category(Category.find(params[:id]))
+      if Category.where(user: current_user).count == 0
+        flash[:error] = "Since you have deleted your last category, please add a category."
+        redirect_to new_user_category_path
+      else
+        redirect_to user_path(current_user)
+      end
     end
   end
 
   def delete_category(category)
-    if category.pictures.empty?
-      flash[:success] = "Your category has been deleted."
+    if category.pictures.empty? || category.name == "Uncategorized"
+      flash[:success] = "Your category has been deleted." if Category.where(user: current_user).count > 1
     else
       replacement_category = Category.where(name: "Uncategorized", user: current_user).first
       replacement_category ||= Category.create(name: "Uncategorized", user: current_user)
@@ -84,7 +93,26 @@ class CategoriesController < ApplicationController
         picture.save
       end
     end
-    category.delete
+    if category.name == "Uncategorized"
+      category.destroy
+    else
+      category.delete
+    end
+  end
+
+  def confirm_category_delete
+    if params[:confirm]
+      delete_category(Category.where(name: "Uncategorized", user: current_user).first)
+      if current_user.categories.count == 0
+        flash[:error] = "Since you have deleted your last category, please add a category."
+        redirect_to new_user_category_path(current_user)
+      else
+        redirect_to user_path(current_user)
+      end
+    else
+      flash[:notice] = "Your category has not been deleted."
+      redirect_to user_path(current_user)
+    end
   end
 
   private

@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
+  @@logged_off_user = nil
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
@@ -26,5 +28,13 @@ class User < ActiveRecord::Base
 
   def self.retrieve_logged_off_user
     @@logged_off_user
+  end
+
+  def has_pictures?
+    self.categories.map{|category| category.pictures.flatten } != []
+  end
+
+  def has_no_pictures?
+    !has_pictures?
   end
 end

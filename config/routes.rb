@@ -14,6 +14,8 @@ Photogallery::Application.routes.draw do
       end
       collection do
         delete 'destroy', as: 'delete_category'
+        get 'confirm_category_delete'
+        post 'confirm_category_delete', action: 'confirm_category_delete'
       end
     end
     resources :pictures, only: [:new, :create, :edit, :update, :show] do
