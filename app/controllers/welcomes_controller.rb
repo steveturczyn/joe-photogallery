@@ -5,10 +5,7 @@ class WelcomesController < ApplicationController
     @pictures = get_sorted_pictures.dup
     @picture = Picture.find_by(id: params[:id]) || @pictures.sample
     @show_user = @picture.user
-    @sorted_pictures.each do |picture|
-      break if picture == @picture
-      @pictures.push(@pictures.shift)
-    end
+    @pictures = @pictures.slice!(@pictures.index(@picture), @pictures.size) + @pictures
 
     prev_photographer
     next_photographer
