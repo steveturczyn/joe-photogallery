@@ -47,10 +47,10 @@ describe CategoriesController do
       end
     end
     describe "POST create" do
-      it "should redirect to the Add a Category page" do
+      it "should redirect to the Add a Picture page" do
         category = Fabricate(:category)
         post :create, user_id: user.id, category: { name: category.name }
-        expect(response).to redirect_to new_user_category_path(user)
+        expect(response).to redirect_to new_user_picture_path(user)
       end
     end
     describe "POST #which_category_to_edit" do

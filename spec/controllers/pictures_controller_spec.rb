@@ -3,6 +3,8 @@ require 'spec_helper'
 describe PicturesController do
   describe 'GET new' do
     let!(:charlie) {Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)}
+    let!(:cherries) {Fabricate(:category, name: "Cherries", user: charlie)}
+    
     before do
       sign_in charlie
     end
@@ -157,6 +159,7 @@ describe PicturesController do
     let!(:charlie) {Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)}
     let!(:cherries) {cherries = Fabricate(:category, name: "Cherries", user: charlie)}
     let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)}
+    let!(:dark_hudson) {Fabricate(:picture, title: "Dark Hudson", category: cherries, category_id: cherries.id, represent_category: false, represent_user: false)}
     before do
       sign_in charlie
     end
@@ -177,23 +180,23 @@ describe PicturesController do
 
     describe 'PATCH update' do
       it "should produce a flash success message if picture has been updated" do
-        patch :update, user_id: charlie.id, id: bing.id, picture: { title: "bing2" }
-        expect(flash[:success]).to eq("You have successfully updated your picture \"bing2.\"")
+        patch :update, user_id: charlie.id, id: dark_hudson.id, params: { id: dark_hudson.id }, picture: { title: "Dark Hudson2" }
+        expect(flash[:success]).to eq("You have successfully updated your picture \"Dark Hudson2.\"")
       end
       it "should redirect to the Show Picture page if picture has been updated" do
-        patch :update, user_id: charlie.id, id: bing.id, picture: { title: "bing2" }
-        expect(response).to redirect_to user_picture_path(charlie, bing)
+        patch :update, user_id: charlie.id, id: dark_hudson.id, params: { id: dark_hudson.id }, picture: { title: "Dark Hudson" }
+        expect(response).to redirect_to user_picture_path(charlie, dark_hudson)
       end
       it "should update the database if the input is valid" do
-        patch :update, user_id: charlie.id, id: bing.id, picture: { title: "bing2" }
-        expect(bing.reload.title).to eq("bing2")
+        patch :update, user_id: charlie.id, id: dark_hudson.id, params: { id: dark_hudson.id }, picture: { title: "Dark Hudson2" }
+        expect(dark_hudson.reload.title).to eq("Dark Hudson2")
       end
       it "should produce a flash error message if the input contains an error" do
-        patch :update, user_id: charlie.id, id: bing.id, picture: { title: "" }
+        patch :update, user_id: charlie.id, id: dark_hudson.id, params: { id: dark_hudson.id }, picture: { title: "" }
         expect(flash[:error]).to eq("Please fix the 1 error below:")
       end
-      it "should render the new template if the input contains an error" do
-        patch :update, user_id: charlie.id, id: bing.id, picture: { title: "" }
+      it "should render the edit template if the input contains an error" do
+        patch :update, user_id: charlie.id, id: dark_hudson.id, params: { id: dark_hudson.id }, picture: { category_id: cherries.id, title: "" }
         expect(response).to render_template :edit
       end
     end
