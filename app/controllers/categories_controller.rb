@@ -23,7 +23,7 @@ class CategoriesController < ApplicationController
     @category.user_id = current_user.id
     if @category.save
       flash[:success] = "You have successfully added your new category \"#{@category.name}.\""
-      redirect_to new_user_category_path
+      redirect_to new_user_picture_path
     else
       flash.now[:error] = "Please fix the #{view_context.pluralize(@category.errors.count, "error")} below:"
       render :new
@@ -46,7 +46,12 @@ class CategoriesController < ApplicationController
   end
 
   def edit_categories
-    @categories = current_user.categories
+    if current_user.categories.empty?
+      flash[:error] = "You have no categories to edit. Please add a category."
+      redirect_to new_user_category_path(current_user)
+    else
+      @categories = current_user.categories
+    end
   end
 
   def which_category_to_edit
@@ -59,11 +64,16 @@ class CategoriesController < ApplicationController
   end
 
   def delete_categories
-    @categories = current_user.categories
+    if current_user.categories.empty?
+      flash[:error] = "You have no categories to delete. Please add a category."
+      redirect_to new_user_category_path(current_user)
+    else
+      @categories = current_user.categories
+    end
   end
 
   def which_category_to_delete
-    if params[:id] == nil
+    if params[:id].blank?
       flash[:error] = "Please select a category to delete."
       redirect_to delete_categories_user_categories_path(current_user)
     else
@@ -75,6 +85,8 @@ class CategoriesController < ApplicationController
       if Category.where(user: current_user).count == 0
         flash[:error] = "Since you have deleted your last category, please add a category."
         redirect_to new_user_category_path
+      elsif current_user.has_no_pictures?
+        redirect_to root_path
       else
         redirect_to user_path(current_user)
       end

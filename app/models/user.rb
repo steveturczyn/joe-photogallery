@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
   end
 
   def has_pictures?
-    self.categories.map{|category| category.pictures.flatten } != []
+    self.categories.map{|category| category.pictures }.flatten != []
   end
 
   def has_no_pictures?

@@ -7,10 +7,10 @@
         %fieldset
           .row
             .col-sm-4
-              = f.form_group :category_id, label: {text: 'Category'} do
+              = f.form_group :category_id, label: {text: 'Select Your Category'} do
                 - @categories.each do |category|
                   = f.radio_button :category_id, category.id, label: "#{category.name}"
-              = f.text_field :title, autofocus: true
+              = f.text_field :title
               = f.text_field :location
               = f.text_field :description
               - unless @picture.image_link?

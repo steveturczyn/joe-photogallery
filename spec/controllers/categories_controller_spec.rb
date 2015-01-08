@@ -88,5 +88,12 @@ describe CategoriesController do
         expect(response).to redirect_to user_category_path(user, category)
       end
     end
+    describe "POST #which_category_to_delete" do
+      it "should produce a flash error when submitted without selecting a category" do
+        post :which_category_to_delete, user_id: user.id, id: ""
+        expect(flash[:error]).to eq("Please select a category to delete.")
+        expect(response).to redirect_to delete_categories_user_categories_path(user)
+      end
+    end
   end
 end
