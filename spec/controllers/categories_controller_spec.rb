@@ -94,6 +94,61 @@ describe CategoriesController do
         expect(flash[:error]).to eq("Please select a category to delete.")
         expect(response).to redirect_to delete_categories_user_categories_path(user)
       end
+      it "should render the Confirm Category Deletion page when user has requested to delete an 'Uncategorized' category" do
+        category = Fabricate(:category, user: user, name: "Uncategorized")
+        post :which_category_to_delete, user_id: user.id, id: category.id
+        expect(response).to render_template "confirm_category_delete"
+      end
+      it "should delete the requested category" do
+        category = Fabricate(:category, user: user, name: "Wildlife")
+        post :which_category_to_delete, user_id: user.id, id: category.id
+        expect(Category.where(name: "Wildlife")).to be_empty
+      end
+      it "should produce a flash error when last category has been deleted" do
+        category = Fabricate(:category, user: user)
+        post :which_category_to_delete, user_id: user.id, id: category.id
+        expect(flash[:error]).to eq("Since you have deleted your last category, please add a category.")
+        expect(response).to redirect_to new_user_category_path(user)
+      end
+      it "should redirect to the Home page if there are no pictures" do
+        category1 = Fabricate(:category, user: user)
+        category2 = Fabricate(:category, user: user)
+        post :which_category_to_delete, user_id: user.id, id: category1.id
+        expect(response).to redirect_to root_path
+      end
+      it "should redirect to the User Show page if there are one or more pictures" do
+        category1 = Fabricate(:category, user: user)
+        category2 = Fabricate(:category, user: user)
+        photo = Fabricate(:picture, title: "Bing", category: category2, category_id: category2.id, represent_category: true, represent_user: true)
+        post :which_category_to_delete, user_id: user.id, id: category1.id
+        expect(response).to redirect_to user_path(user)
+      end
     end
+    describe "GET delete_categories" do
+      it "should create a flash message if there are no categories to delete" do
+        get :delete_categories, user_id: user.id
+        expect(flash[:error]).to eq("You have no categories to delete. Please add a category.")
+        expect(response).to redirect_to new_user_category_path(user)
+      end
+      it "should create an array of category objects" do
+        category1 = Fabricate(:category, user: user)
+        category2 = Fabricate(:category, user: user)
+        get :delete_categories, user_id: user.id
+        expect(assigns(:categories)).to include(category1, category2)
+      end
+    end
+    # describe "POST confirm_category_delete" do
+    #   it "should delete the category if the user has confirmed that it is to be deleted" do
+    #     post :confirm_category_delete, confirm: true
+    #   end
+    # end
+    # describe "DELETE #delete_category" do
+    #   it "should create a flash message if the category contains no pictures" do
+    #     category1 = Fabricate(:category, user: user)
+    #     category2 = Fabricate(:category, user: user)
+    #     delete :delete_category, user_id: user.id, id: category1.id
+    #     expect(flash[:success]).to eq("Your category has been deleted.")
+    #   end
+    # end
   end
 end

@@ -97,8 +97,8 @@ class PicturesController < ApplicationController
   end
 
   def which_picture_to_delete
-    if params[:id] == nil
-      flash[:error] = "Please select a picture to delete."
+    if params[:id].blank?
+      flash[:error] = "Please select a photo to delete."
       redirect_to delete_pictures_user_pictures_path(current_user)
     elsif Picture.find(params[:id]).represent_user
       flash.now[:error] = "Your \"#{Picture.find(params[:id]).title}\" photo is the photo that currently represents your portfolio. To delete \"#{Picture.find(params[:id]).title},\" please select a new photo to represent your portfolio."

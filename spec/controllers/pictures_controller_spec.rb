@@ -80,7 +80,7 @@ describe PicturesController do
 
     context "represent_category and represent_user tests" do
       let!(:charlie) {Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)}
-      let!(:cherries) {cherries = Fabricate(:category, name: "Cherries", user: charlie)}
+      let!(:cherries) {Fabricate(:category, name: "Cherries", user: charlie)}
       let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)}
       before do
         sign_in charlie
@@ -155,9 +155,9 @@ describe PicturesController do
     end
   end
 
-  context "edit and update tests" do
+  context "edit, update, and delete tests" do
     let!(:charlie) {Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)}
-    let!(:cherries) {cherries = Fabricate(:category, name: "Cherries", user: charlie)}
+    let!(:cherries) {Fabricate(:category, name: "Cherries", user: charlie)}
     let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)}
     let!(:dark_hudson) {Fabricate(:picture, title: "Dark Hudson", category: cherries, category_id: cherries.id, represent_category: false, represent_user: false)}
     before do
@@ -198,6 +198,52 @@ describe PicturesController do
       it "should render the edit template if the input contains an error" do
         patch :update, user_id: charlie.id, id: dark_hudson.id, params: { id: dark_hudson.id }, picture: { category_id: cherries.id, title: "" }
         expect(response).to render_template :edit
+      end
+    end
+    
+    describe "POST #which_picture_to_delete" do
+      it "should produce a flash error when submitted without selecting a picture" do
+        post :which_picture_to_delete, user_id: charlie.id, id: ""
+        expect(flash[:error]).to eq("Please select a photo to delete.")
+        expect(response).to redirect_to delete_pictures_user_pictures_path(charlie)
+      end
+      it "should produce a flash error when trying to delete a photo that represents the user" do
+        post :which_picture_to_delete, user_id: charlie.id, id: bing.id
+        expect(flash[:error]).to eq("Your \"Bing\" photo is the photo that currently represents your portfolio. To delete \"Bing,\" please select a new photo to represent your portfolio.")
+        expect(response).to render_template :edit_pictures
+      end
+      it "should produce a flash error when trying to delete a photo that represents the user's category" do
+        apples = Fabricate(:category, name: "Apples", user: charlie)
+        mcintosh = Fabricate(:picture, title: "McIntosh", category: apples, category_id: apples.id, represent_category: true, represent_user: true)
+        bright_red_sour = Fabricate(:picture, title: "Bright Red Sour", category: cherries, category_id: cherries.id, represent_category: true, represent_user: false)
+        post :which_picture_to_delete, user_id: charlie.id, id: bright_red_sour.id
+        expect(flash[:error]).to eq("Your \"Bright Red Sour\" photo currently represents the \"Cherries\" category. To delete \"Bright Red Sour,\" please select a new photo to represent the \"Cherries\" category.")
+        expect(response).to render_template :edit_pictures
+      end
+      it "should delete a picture and produce a flash error message" do
+        post :which_picture_to_delete, user_id: charlie.id, id: dark_hudson.id
+        expect(flash[:success]).to eq("Your photo \"Dark Hudson\" has been deleted.")
+        expect(Picture.where(title: "Dark Hudson")).to be_empty
+        expect(response).to redirect_to user_path(charlie)
+      end
+    end
+
+    describe "GET delete_pictures" do
+      let!(:alice) {Fabricate(:user, first_name: "Alice", last_name: "Aardvark")}
+      let!(:apples) {Fabricate(:category, name: "Apples", user: alice)}
+      before do
+        sign_in alice
+      end
+      it "should create a flash message if there are no pictures to delete" do
+        get :delete_pictures, user_id: alice.id
+        expect(flash[:error]).to eq("You don't have any photos to delete.")
+        expect(response).to redirect_to new_user_picture_path(alice)
+      end
+      it "should render the Delete a Photo page if there are photos to delete" do
+        mcintosh = Fabricate(:picture, title: "McIntosh", category: apples, category_id: apples.id, represent_category: true, represent_user: true)
+        fuji = Fabricate(:picture, title: "Fuji", category: apples, category_id: apples.id, represent_category: false, represent_user: false)
+        get :delete_pictures, user_id: alice.id
+        expect(response).to render_template :delete_pictures
       end
     end
   end
