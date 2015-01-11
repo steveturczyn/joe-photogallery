@@ -22,3 +22,6 @@
 # Ignore environmental variables and Procfile
 .env
 Procfile
+
+# Ignore application configuration
+/config/application.yml
