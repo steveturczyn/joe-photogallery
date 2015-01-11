@@ -46,12 +46,7 @@ class CategoriesController < ApplicationController
   end
 
   def edit_categories
-    if current_user.categories.empty?
-      flash[:error] = "You have no categories to edit. Please add a category."
-      redirect_to new_user_category_path(current_user)
-    else
-      @categories = current_user.categories
-    end
+    render_categories_page
   end
 
   def which_category_to_edit
@@ -64,12 +59,7 @@ class CategoriesController < ApplicationController
   end
 
   def delete_categories
-    if current_user.categories.empty?
-      flash[:error] = "You have no categories to delete. Please add a category."
-      redirect_to new_user_category_path(current_user)
-    else
-      @categories = current_user.categories
-    end
+    render_categories_page
   end
 
   def which_category_to_delete
@@ -135,5 +125,14 @@ class CategoriesController < ApplicationController
 
   def category_params
     params.require(:category).permit(:name)
+  end
+
+  def render_categories_page
+    if current_user.categories.empty?
+      flash[:error] = "You have no categories. Please add a category."
+      redirect_to new_user_category_path(current_user)
+    else
+      @categories = current_user.categories
+    end
   end
 end

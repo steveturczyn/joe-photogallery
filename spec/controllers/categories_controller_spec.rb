@@ -137,18 +137,12 @@ describe CategoriesController do
         expect(assigns(:categories)).to include(category1, category2)
       end
     end
-    # describe "POST confirm_category_delete" do
-    #   it "should delete the category if the user has confirmed that it is to be deleted" do
-    #     post :confirm_category_delete, confirm: true
-    #   end
-    # end
-    # describe "DELETE #delete_category" do
-    #   it "should create a flash message if the category contains no pictures" do
-    #     category1 = Fabricate(:category, user: user)
-    #     category2 = Fabricate(:category, user: user)
-    #     delete :delete_category, user_id: user.id, id: category1.id
-    #     expect(flash[:success]).to eq("Your category has been deleted.")
-    #   end
-    # end
+    describe "POST confirm_category_delete" do
+      # it "should confirm that the category count is now 0" do
+      #   category = Fabricate(:category, user: user, name: "Uncategorized")
+      #   post confirm_category_delete_user_categories_path(user), confirm: true
+      #   expect(flash[:error]).to eq("Since you have deleted your last category, please add a category.")
+      # end
+    end
   end
 end
