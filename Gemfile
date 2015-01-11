@@ -11,11 +11,16 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 gem 'haml-rails'
-gem 'sidekiq'
 gem 'carrierwave'
 gem 'mini_magick'
 gem 'devise'
 gem 'possessive', '~> 1.0.1'
+gem 'fog'
+gem 'figaro'
+
+group :development do
+  gem 'better_errors'
+end
 
 group :development, :test do
   gem 'sqlite3'
@@ -31,15 +36,14 @@ group :test do
   gem 'shoulda-matchers'
   gem 'capybara'
   gem 'capybara-email'
-  gem 'vcr'
-  gem 'webmock', '1.11.0'
   gem 'database_cleaner'
+  gem 'launchy'
+  gem 'selenium-webdriver', '2.39.0'
 end
 
 group :production do
   gem 'pg'
   gem 'rails_12factor'
-  gem 'unicorn'
 end
 
 group :doc do
