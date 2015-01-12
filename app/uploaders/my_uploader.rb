@@ -2,11 +2,7 @@ class MyUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
 
   def store_dir
-    if Rails.env.staging? || Rails.env.production?
-      "uploads/#{model.class.to_s.underscore}/#{model.id}"
-    else
-      "#{Rails.root}/public/uploads/#{model.class.to_s.underscore}/#{model.id}"
-    end
+    "#{Rails.root}/public/uploads/#{model.class.to_s.underscore}/#{model.id}"
   end
 
   def is_landscape?(new_file)
