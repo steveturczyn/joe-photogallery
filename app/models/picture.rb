@@ -16,6 +16,8 @@ class Picture < ActiveRecord::Base
   before_save :fix_represent_user
   before_save :fix_represent_category
 
+  after_destroy :remove_directory
+
   def represent_user_must_represent_category
     if represent_user && !represent_category
       errors.add(:represent_category, "Since your picture represents this user, it must also represent this category.")
@@ -90,5 +92,9 @@ class Picture < ActiveRecord::Base
     picture = select {|picture| picture.category.user_id == current_user_id && picture.represent_user }.first
     picture.represent_user = false if picture
     picture.save if picture
+  end
+
+  def remove_directory
+    FileUtils.remove_dir (image_link.store_dir), force: true
   end
 end
