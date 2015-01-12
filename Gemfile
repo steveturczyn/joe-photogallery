@@ -44,8 +44,6 @@ end
 group :production do
   gem 'pg'
   gem 'rails_12factor'
-  gem 'pry'
-  gem 'pry-rails'
 end
 
 group :doc do

@@ -69,7 +69,6 @@ class Picture < ActiveRecord::Base
   end
 
   def self.user_representations
-    binding.pry
     select {|picture| picture.represent_user? }.sort_by {|p| p.user.last_name }
   end
 
