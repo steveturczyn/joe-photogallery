@@ -30,9 +30,7 @@
 * Generating fake data
 * Macros
 * Shared examples
-* Feature specs
 * Capybara
-* Feature tests with Javascript
 * Testing email sending
 
 <b>BUILDING APPLICATIONS</b>
