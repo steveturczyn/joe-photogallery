@@ -17,6 +17,7 @@ gem 'devise'
 gem 'possessive', '~> 1.0.1'
 gem 'fog'
 gem 'figaro'
+gem 'sidekiq'
 
 group :development do
   gem 'better_errors'
@@ -24,7 +25,7 @@ end
 
 group :development, :test do
   gem 'sqlite3'
-  gem 'rspec-rails', '~> 3.0.0.beta'
+  gem 'rspec-rails', '3.0.0.beta1'
   gem 'pry'
   gem 'pry-nav'
   gem 'fabrication'
@@ -39,6 +40,8 @@ group :test do
   gem 'database_cleaner'
   gem 'launchy'
   gem 'selenium-webdriver', '2.39.0'
+  gem 'vcr'
+  gem 'webmock', '1.11.0'
 end
 
 group :production do

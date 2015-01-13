@@ -127,7 +127,7 @@ describe CategoriesController do
     describe "GET delete_categories" do
       it "should create a flash message if there are no categories to delete" do
         get :delete_categories, user_id: user.id
-        expect(flash[:error]).to eq("You have no categories to delete. Please add a category.")
+        expect(flash[:error]).to eq("You have no categories. Please add a category.")
         expect(response).to redirect_to new_user_category_path(user)
       end
       it "should create an array of category objects" do
