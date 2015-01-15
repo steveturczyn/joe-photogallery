@@ -1,19 +1,10 @@
-# def set_current_user(user=nil)
-#   session[:user_id] = (user || Fabricate(:user)).id
-# end
-
-# def current_user
-#   User.find(session[:user_id])
-# end
-
-# def clear_current_user
-#   session[:user_id] = nil
-# end
-
-def sign_in
-  charlie = Fabricate(:user, password: "password")
+def log_in
+  charlie = Fabricate(:user, password: "password", first_name: "Charlie", last_name: "Chan")
   cherries = Fabricate(:category, name: "Cherries", user: charlie)
   bing = Fabricate(:picture, title: "Bing", category: cherries, represent_user: true, represent_category: true)
+  dark_hudson = Fabricate(:picture, title: "Dark Hudson", category: cherries, represent_user: false, represent_category: false)
+  bananas = Fabricate(:category, name: "Bananas", user: charlie)
+  chiquita = Fabricate(:picture, title: "Chiquita", category: bananas, represent_user: true, represent_category: true)
   follow_links_to_sign_in
   fill_in "Email", with: charlie.email
   fill_in "Password", with: charlie.password
@@ -22,7 +13,7 @@ def sign_in
   charlie
 end
 
-# def sign_out
+# def log_off
 #   click_link "Log Off"
 # end
 

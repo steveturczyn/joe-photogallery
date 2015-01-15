@@ -4,7 +4,7 @@ feature "edit photo" do
 
   scenario "successfully edit photo and verify that the photo gets updated correctly" do
     
-    sign_in
+    log_in
     
     click_link "Edit a Photo"
     expect(page).to have_content "Edit a Photo"
@@ -16,7 +16,7 @@ feature "edit photo" do
     expect(page).to have_content "You have successfully updated your picture \"Updated Bing Title.\""
     expect(Picture.where(title: "Updated Bing Title")).to be_present
     
-    # sign_out
+    # log_off
   end
 
 end

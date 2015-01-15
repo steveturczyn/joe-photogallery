@@ -25,7 +25,7 @@ end
 
 group :development, :test do
   gem 'sqlite3'
-  gem 'rspec-rails', '3.0.0.beta1'
+  gem 'rspec-rails', '3.0.0.beta2'
   gem 'pry'
   gem 'pry-nav'
   gem 'fabrication'
