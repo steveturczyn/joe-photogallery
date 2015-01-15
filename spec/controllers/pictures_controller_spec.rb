@@ -179,6 +179,14 @@ describe PicturesController do
     end
 
     describe 'PATCH update' do
+      it "should produce a flash error message if the picture represents the category and the user is trying to change the picture's category" do
+        patch :update, user_id: charlie.id, id: bing.id, params: { id: dark_hudson.id }, picture: { category_id: 2, title: "Bing" }
+        expect(flash[:error]).to eq("Your \"Bing\" photo currently represents the \"Cherries\" category. To move \"Bing\" to a new category, please select a new photo to represent the \"Cherries\" category. Once you've done that, you can go back and change the \"Bing\" photo to a new category.")
+      end
+      it "should render the edit_pictures template if the picture represents the category and the user is trying to change the picture's category" do
+        patch :update, user_id: charlie.id, id: bing.id, params: { id: dark_hudson.id }, picture: { category_id: 2, title: "Bing" }
+        expect(response).to render_template :edit_pictures
+      end
       it "should produce a flash success message if picture has been updated" do
         patch :update, user_id: charlie.id, id: dark_hudson.id, params: { id: dark_hudson.id }, picture: { title: "Dark Hudson2" }
         expect(flash[:success]).to eq("You have successfully updated your picture \"Dark Hudson2.\"")
