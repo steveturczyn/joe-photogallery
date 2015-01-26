@@ -187,6 +187,16 @@ describe PicturesController do
         patch :update, user_id: charlie.id, id: bing.id, params: { id: dark_hudson.id }, picture: { category_id: 2, title: "Bing" }
         expect(response).to render_template :edit_pictures
       end
+      it "should produce a flash error message if the user is trying to have a picture that represents a category no longer represent that category" do
+        patch :update, user_id: charlie.id, id: bing.id, params: { id: dark_hudson.id }, picture: { category_id: cherries.id, title: "Bing", represent_user: "true", represent_category: "false" }
+        expect(flash[:error]).to eq("Your \"Bing\" photo currently represents the \"Cherries\" category. Please select a new photo to represent the \"Cherries\" category.")
+        expect(response).to render_template :edit_pictures
+      end
+      it "should produce a flash error message if the user no longer wants the photo to represent his portfolio" do
+        patch :update, user_id: charlie.id, id: bing.id, params: { id: dark_hudson.id }, picture: { category_id: cherries.id, title: "Bing", represent_category: "true", represent_user: "false" }
+        expect(flash[:error]).to eq("Your \"Bing\" photo currently represents your portfolio. Please select a new photo to represent your portfolio.")
+        expect(response).to render_template :edit_pictures
+      end
       it "should produce a flash success message if picture has been updated" do
         patch :update, user_id: charlie.id, id: dark_hudson.id, params: { id: dark_hudson.id }, picture: { title: "Dark Hudson2" }
         expect(flash[:success]).to eq("You have successfully updated your picture \"Dark Hudson2.\"")

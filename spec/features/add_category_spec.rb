@@ -12,7 +12,7 @@ feature "add category" do
     click_button "Add Category"
     expect(Category.where(name: "Apples")).to be_present
     
-    # log_off
+    log_off
   end
 
 end

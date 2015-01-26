@@ -58,7 +58,7 @@ class Picture < ActiveRecord::Base
   end
 
   def fix_represent_category
-    self.class.set_represent_category_to_false(category_id) if represent_category
+    self.class.set_represent_category_to_false(self) if represent_category
     true
   end
 
@@ -82,8 +82,8 @@ class Picture < ActiveRecord::Base
     select {|picture| picture.category_id == category_id }
   end
 
-  def self.set_represent_category_to_false(category_id)
-    picture = select {|picture| picture.represent_category == true && picture.category_id == category_id.to_i }.first
+  def self.set_represent_category_to_false(current_picture)
+    picture = select {|picture| picture.represent_category == true && picture.category_id == current_picture.category.id && picture.id != current_picture.id }.first
     picture.represent_category = false if picture
     picture.save if picture
   end

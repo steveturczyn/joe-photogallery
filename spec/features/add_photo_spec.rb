@@ -18,7 +18,7 @@ feature "add photo" do
     click_button "Add Photo"
     expect(Picture.where(title: "Bright Red Sour")).to be_present
     
-    # log_off
+    log_off
   end
 
 end

@@ -12,11 +12,12 @@ feature "edit photo" do
     click_button "Select Picture"
     expect(page).to have_content "Upload Replacement Photo?"
     fill_in "Title", with: "Updated Bing Title"
+    choose "picture_represent_user_true", "Yes"
     click_button "Update Photo"
     expect(page).to have_content "You have successfully updated your picture \"Updated Bing Title.\""
     expect(Picture.where(title: "Updated Bing Title")).to be_present
     
-    # log_off
+    log_off
   end
 
 end

@@ -34,6 +34,9 @@ describe CategoriesController do
         expect(assigns(:category)).to be_new_record
         expect(assigns(:category)).to be_instance_of(Category)
       end
+      it_behaves_like "require sign in" do
+        let(:action) { get :new, user_id: user.id }
+      end
       it "should render the Add a Category page" do
         get :new, user_id: user.id
         expect(response).to render_template :new
@@ -47,13 +50,18 @@ describe CategoriesController do
       end
     end
     describe "POST create" do
+      it_behaves_like "require sign in" do
+        let(:action) { post :create, user_id: user.id, category: { name: "Apples" } }
+      end
       it "should redirect to the Add a Picture page" do
-        category = Fabricate(:category)
-        post :create, user_id: user.id, category: { name: category.name }
+        post :create, user_id: user.id, category: { name: "Bananas" }
         expect(response).to redirect_to new_user_picture_path(user)
       end
     end
     describe "POST #which_category_to_edit" do
+      it_behaves_like "require sign in" do
+        let(:action) { post :which_category_to_edit, user_id: user.id, id: "" }
+      end
       it "should produce a flash error when submitted without selecting a category" do
         post :which_category_to_edit, user_id: user.id, id: ""
         expect(flash[:error]).to eq("Please select a category to edit.")

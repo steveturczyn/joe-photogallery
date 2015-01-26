@@ -39,6 +39,17 @@ class PicturesController < ApplicationController
       get_sorted_pictures
       @pictures = Picture.select{|picture| picture.category_id == @picture.category_id && picture.id != @picture.id }.sort_by {|p| p.title.upcase }
       render :edit_pictures
+    elsif @picture.represent_category && (params[:picture][:represent_category].to_bool == false)
+      flash.now[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents the \"#{@picture.category.name}\" category. Please select a new photo to represent the \"#{@picture.category.name}\" category."
+      get_sorted_pictures
+      @pictures = Picture.select{|picture| picture.category_id == @picture.category_id && picture.id != @picture.id }.sort_by {|p| p.title.upcase }
+      render :edit_pictures
+    elsif @picture.represent_category && (params[:picture][:represent_user].to_bool == false)
+      flash.now[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents your portfolio. Please select a new photo to represent your portfolio."
+      get_sorted_pictures
+      @category_ids = Category.select{|category| category.user_id == current_user.id }.map{|c| c.id }
+      @pictures = Picture.select{|picture| (@category_ids.include? picture.category_id) && (picture.id != @picture.id) }.sort_by {|p| p.title.upcase }
+      render :edit_pictures
     elsif @picture.update_attributes(picture_params)
       flash[:success] = "You have successfully updated your picture \"#{@picture.title}.\""
       redirect_to user_picture_path

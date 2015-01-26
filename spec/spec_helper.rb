@@ -56,6 +56,8 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 
+  config.deprecation_stream = 'deprecations.txt'
+
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
   end

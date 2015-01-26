@@ -15,7 +15,7 @@ feature "edit category" do
     expect(page).to have_content "You have successfully updated your category. The category is now \"Updated Cherries Name.\""
     expect(Category.where(name: "Updated Cherries Name")).to be_present
     
-    # log_off
+    log_off
   end
 
 end

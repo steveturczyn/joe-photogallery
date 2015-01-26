@@ -13,7 +13,7 @@ feature "delete photo" do
     expect(page).to have_content "Your photo \"Dark Hudson\" has been deleted."
     expect(Picture.where(title: "Dark Hudson")).not_to be_present
     
-    # log_off
+    log_off
   end
 
 end

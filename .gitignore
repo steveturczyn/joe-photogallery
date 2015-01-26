@@ -18,6 +18,7 @@
 /public/uploads/picture/*
 /public/uploads/tmp
 /public/uploads/tmp/*
+deprecations.txt
 
 # Ignore environmental variables and Procfile
 .env

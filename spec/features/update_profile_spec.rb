@@ -14,7 +14,7 @@ feature "update profile" do
     expect(User.where(last_name: "Chan")).not_to be_present
     expect(User.where(last_name: "Chan2")).to be_present
     
-    # log_off
+    log_off
   end
 
 end

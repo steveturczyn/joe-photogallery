@@ -14,7 +14,7 @@ feature "delete category" do
     expect(Category.where(name: "Bananas")).not_to be_present
     expect(Category.where(name: "Uncategorized")).to be_present
     
-    # log_off
+    log_off
   end
 
 end
