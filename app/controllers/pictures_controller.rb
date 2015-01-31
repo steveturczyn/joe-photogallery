@@ -123,7 +123,6 @@ class PicturesController < ApplicationController
     else
       flash[:success] = "Your photo \"#{Picture.find(params[:id]).title}\" has been deleted."
       Picture.destroy(params[:id])
-      S3Object.delete('#{Picture.find(params[:id]).title}', 'photogallery-joe') if Rails.env.production?
       redirect_to user_path(current_user)
     end
   end
