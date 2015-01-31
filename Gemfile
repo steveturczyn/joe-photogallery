@@ -47,8 +47,6 @@ end
 group :production do
   gem 'pg'
   gem 'rails_12factor'
-  gem 'aws-s3'
-  gem 's3lib'
 end
 
 group :doc do
