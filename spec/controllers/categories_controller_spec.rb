@@ -146,11 +146,12 @@ describe CategoriesController do
       end
     end
     describe "POST confirm_category_delete" do
-      # it "should confirm that the category count is now 0" do
-      #   category = Fabricate(:category, user: user, name: "Uncategorized")
-      #   post confirm_category_delete_user_categories_path(user), confirm: true
-      #   expect(flash[:error]).to eq("Since you have deleted your last category, please add a category.")
-      # end
+      it "should delete the category" do
+        category = Fabricate(:category, user: user, name: "Uncategorized")
+        expect(Category.count).to eq(1)
+        post :confirm_category_delete, user_id: user.id, confirm: true
+        expect(Category.count).to eq(0)
+      end
     end
   end
 end
