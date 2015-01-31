@@ -18,8 +18,6 @@ gem 'possessive', '~> 1.0.1'
 gem 'fog'
 gem 'figaro'
 gem 'sidekiq'
-gem 'aws-s3'
-gem 's3lib'
 
 group :development do
   gem 'better_errors'
@@ -49,6 +47,8 @@ end
 group :production do
   gem 'pg'
   gem 'rails_12factor'
+  gem 'aws-s3'
+  gem 's3lib'
 end
 
 group :doc do
