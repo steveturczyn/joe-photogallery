@@ -8,6 +8,9 @@ describe PicturesController do
     before do
       sign_in charlie
     end
+    # it_behaves_like "require sign in" do
+    #   let(:action) { get :new, user_id: charlie.id }
+    # end
     it "creates a new Picture object" do
       get :new, user_id: charlie.id
       expect(assigns(:picture)).to be_new_record

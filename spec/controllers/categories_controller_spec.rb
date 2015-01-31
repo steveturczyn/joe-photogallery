@@ -29,13 +29,13 @@ describe CategoriesController do
       sign_in user
     end
     describe "GET new" do
+      it_behaves_like "require sign in" do
+        let(:action) { get :new, user_id: user.id }
+      end
       it "creates a new Category object" do
         get :new, user_id: user.id
         expect(assigns(:category)).to be_new_record
         expect(assigns(:category)).to be_instance_of(Category)
-      end
-      it_behaves_like "require sign in" do
-        let(:action) { get :new, user_id: user.id }
       end
       it "should render the Add a Category page" do
         get :new, user_id: user.id
@@ -74,29 +74,33 @@ describe CategoriesController do
       end
     end
     describe "PUT update" do
+      let(:category) {Fabricate(:category)}
+      it_behaves_like "require sign in" do
+        let(:action) { put :update, user_id: user.id, category: category, category: { name: "villages" }, id: category.id }
+      end
       it "should produce a flash error when submitting form with a blank category" do
-        category = Fabricate(:category)
         put :update, user_id: user.id, category: category, category: { name: "" }, id: category.id
         expect(flash[:error]).to eq("Please fix the 1 error below:")
         expect(response).to render_template :new
       end
       it "should produce a flash success message" do
-        category = Fabricate(:category)
         put :update, user_id: user.id, category: category, category: { name: "villages" }, id: category.id
         expect(flash[:success]).to eq("You have successfully updated your category. The category is now \"villages.\"")
       end
       it "should update the category name in the database" do
-        category = Fabricate(:category)
         put :update, user_id: user.id, category: category, category: { name: "villages" }, id: category.id
         expect(category.reload.name).to eq("villages")
       end
       it "should redirect to the Show Category page" do
-        category = Fabricate(:category)
         put :update, user_id: user.id, category: category, category: { name: "category.name" }, id: category.id
         expect(response).to redirect_to user_category_path(user, category)
       end
     end
     describe "POST #which_category_to_delete" do
+      it_behaves_like "require sign in" do
+        let(:category) {Fabricate(:category)}
+        let(:action) { post :which_category_to_delete, user_id: user.id, id: category.id }
+      end
       it "should produce a flash error when submitted without selecting a category" do
         post :which_category_to_delete, user_id: user.id, id: ""
         expect(flash[:error]).to eq("Please select a category to delete.")
@@ -133,6 +137,9 @@ describe CategoriesController do
       end
     end
     describe "GET delete_categories" do
+      it_behaves_like "require sign in" do
+        let(:action) { get :delete_categories, user_id: user.id }
+      end
       it "should create a flash message if there are no categories to delete" do
         get :delete_categories, user_id: user.id
         expect(flash[:error]).to eq("You have no categories. Please add a category.")
@@ -146,6 +153,9 @@ describe CategoriesController do
       end
     end
     describe "POST confirm_category_delete" do
+      it_behaves_like "require sign in" do
+        let(:action) { post :confirm_category_delete, user_id: user.id, confirm: true }
+      end
       it "should delete the category" do
         category = Fabricate(:category, user: user, name: "Uncategorized")
         expect(Category.count).to eq(1)
