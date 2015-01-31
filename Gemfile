@@ -18,6 +18,8 @@ gem 'possessive', '~> 1.0.1'
 gem 'fog'
 gem 'figaro'
 gem 'sidekiq'
+gem 'aws-s3'
+gem 's3lib'
 
 group :development do
   gem 'better_errors'
