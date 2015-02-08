@@ -56,7 +56,8 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 
-  config.deprecation_stream = 'deprecations.txt'
+  # Use config.deprecation_stream if I want to output the deprecation errors to a file, rather than to the console
+  # config.deprecation_stream = 'deprecations.txt'
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)

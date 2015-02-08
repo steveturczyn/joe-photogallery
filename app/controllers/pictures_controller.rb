@@ -1,5 +1,7 @@
 class PicturesController < ApplicationController
 
+  before_action :authenticate_user!, except: [:show]
+
   def new
     if current_user.categories.empty?
       flash[:error] = "You must create a category before you can add, edit, or delete photos."

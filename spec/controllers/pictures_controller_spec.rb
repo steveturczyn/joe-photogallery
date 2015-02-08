@@ -8,9 +8,9 @@ describe PicturesController do
     before do
       sign_in charlie
     end
-    # it_behaves_like "require sign in" do
-    #   let(:action) { get :new, user_id: charlie.id }
-    # end
+    it_behaves_like "require sign in" do
+      let(:action) { get :new, user_id: charlie.id }
+    end
     it "creates a new Picture object" do
       get :new, user_id: charlie.id
       expect(assigns(:picture)).to be_new_record
@@ -33,6 +33,9 @@ describe PicturesController do
       before do
         sign_in charlie
       end
+      it_behaves_like "require sign in" do
+        let(:action) { post :create, user_id: charlie.id, picture: { category_id: cherries.id, location: bing.location, description: bing.description, image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: bing.represent_category, represent_user: bing.represent_user } }
+      end
       it "should render the new template" do
         post :create, user_id: charlie.id, picture: { category_id: cherries.id, location: bing.location, description: bing.description, image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: bing.represent_category, represent_user: bing.represent_user }
         expect(response).to render_template :new
@@ -49,6 +52,9 @@ describe PicturesController do
       before do
         sign_in charlie
       end
+      it_behaves_like "require sign in" do
+        let(:action) { post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Bing", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: false, represent_user: false } }
+      end
       context "bad input" do
         it "should return a flash error message if represent_category is false" do
           post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Bing", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: false, represent_user: false }
@@ -60,6 +66,9 @@ describe PicturesController do
         end
       end
       context "good input" do
+        it_behaves_like "require sign in" do
+          let(:action) { post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Bing", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: true, represent_user: true } }
+        end
         it "should add the picture to the database if represent_category and represent_user are both true" do
           post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Bing", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: true, represent_user: true }
           updated_bing = Picture.select {|picture| picture.title == "Bing" }.first
@@ -87,6 +96,9 @@ describe PicturesController do
       let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)}
       before do
         sign_in charlie
+      end
+      it_behaves_like "require sign in" do
+        let(:action) { post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), represent_category: "true", represent_user: "true" } }
       end
       context "represent_user is true and represent_category is true" do
         it "should alter represent_user and represent_category fields in existing record in database and add new record to database" do
@@ -166,6 +178,9 @@ describe PicturesController do
     before do
       sign_in charlie
     end
+    it_behaves_like "require sign in" do
+      let(:action) { post :which_picture_to_edit, user_id: charlie.id, id: "" }
+    end
     describe 'POST #which_picture_to_edit' do
       it "should produce a flash error when submitted without selecting a picture" do
         post :which_picture_to_edit, user_id: charlie.id, id: ""
@@ -182,6 +197,9 @@ describe PicturesController do
     end
 
     describe 'PATCH update' do
+      it_behaves_like "require sign in" do
+        let(:action) { patch :update, user_id: charlie.id, id: bing.id, params: { id: dark_hudson.id }, picture: { category_id: 2, title: "Bing" } }
+      end
       it "should produce a flash error message if the picture represents the category and the user is trying to change the picture's category" do
         patch :update, user_id: charlie.id, id: bing.id, params: { id: dark_hudson.id }, picture: { category_id: 2, title: "Bing" }
         expect(flash[:error]).to eq("Your \"Bing\" photo currently represents the \"Cherries\" category. To move \"Bing\" to a new category, please select a new photo to represent the \"Cherries\" category. Once you've done that, you can go back and change the \"Bing\" photo to a new category.")
@@ -223,6 +241,9 @@ describe PicturesController do
     end
     
     describe "POST #which_picture_to_delete" do
+      it_behaves_like "require sign in" do
+        let(:action) { post :which_picture_to_delete, user_id: charlie.id, id: "" }
+      end
       it "should produce a flash error when submitted without selecting a picture" do
         post :which_picture_to_delete, user_id: charlie.id, id: ""
         expect(flash[:error]).to eq("Please select a photo to delete.")
@@ -254,6 +275,9 @@ describe PicturesController do
       let!(:apples) {Fabricate(:category, name: "Apples", user: alice)}
       before do
         sign_in alice
+      end
+      it_behaves_like "require sign in" do
+        let(:action) { get :delete_pictures, user_id: alice.id }
       end
       it "should create a flash message if there are no pictures to delete" do
         get :delete_pictures, user_id: alice.id

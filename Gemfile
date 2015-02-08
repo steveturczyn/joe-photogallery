@@ -35,8 +35,8 @@ end
 
 group :test do
   gem 'shoulda-matchers'
-  gem 'capybara'
-  gem 'capybara-email'
+  gem 'capybara', '2.4.4'
+  gem 'capybara-email', '2.4.0'
   gem 'database_cleaner'
   gem 'launchy'
   gem 'selenium-webdriver', '2.39.0'
