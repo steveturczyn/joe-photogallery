@@ -36,21 +36,20 @@ class PicturesController < ApplicationController
 
   def update
     @picture = Picture.find(params[:id])
-    if params[:picture][:category_id].to_i != @picture.category.id && @picture.represent_category
+    if moving_picture_that_represents_category?
       flash.now[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents the \"#{@picture.category.name}\" category. To move \"#{params[:picture][:title]}\" to a new category, please select a new photo to represent the \"#{@picture.category.name}\" category. Once you've done that, you can go back and change the \"#{params[:picture][:title]}\" photo to a new category."
       get_sorted_pictures
-      @pictures = Picture.select{|picture| picture.category_id == @picture.category_id && picture.id != @picture.id }.sort_by {|p| p.title.upcase }
+      @pictures = other_pictures_in_category
       render :edit_pictures
-    elsif @picture.represent_category && (params[:picture][:represent_category].to_bool == false)
+    elsif picture_losing_category_status?
       flash.now[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents the \"#{@picture.category.name}\" category. Please select a new photo to represent the \"#{@picture.category.name}\" category."
       get_sorted_pictures
-      @pictures = Picture.select{|picture| picture.category_id == @picture.category_id && picture.id != @picture.id }.sort_by {|p| p.title.upcase }
+      @pictures = other_pictures_in_category
       render :edit_pictures
-    elsif @picture.represent_category && (params[:picture][:represent_user].to_bool == false)
+    elsif picture_losing_user_status?
       flash.now[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents your portfolio. Please select a new photo to represent your portfolio."
       get_sorted_pictures
-      @category_ids = Category.select{|category| category.user_id == current_user.id }.map{|c| c.id }
-      @pictures = Picture.select{|picture| (@category_ids.include? picture.category_id) && (picture.id != @picture.id) }.sort_by {|p| p.title.upcase }
+      @pictures = other_pictures_for_user
       render :edit_pictures
     elsif @picture.update_attributes(picture_params)
       flash[:success] = "You have successfully updated your picture \"#{@picture.title}.\""
@@ -113,19 +112,21 @@ class PicturesController < ApplicationController
     if params[:id].blank?
       flash[:error] = "Please select a photo to delete."
       redirect_to delete_pictures_user_pictures_path(current_user)
-    elsif Picture.find(params[:id]).represent_user
-      flash.now[:error] = "Your \"#{Picture.find(params[:id]).title}\" photo is the photo that currently represents your portfolio. To delete \"#{Picture.find(params[:id]).title},\" please select a new photo to represent your portfolio."
-      @category_ids = Category.select{|category| category.user_id == current_user.id }.map{|c| c.id }
-      @pictures = Picture.select{|picture| (@category_ids.include? picture.category_id) && (picture.id != params[:id].to_i) }.sort_by {|p| p.title.upcase }
-      render :edit_pictures
-    elsif Picture.find(params[:id]).represent_category
-      flash.now[:error] = "Your \"#{Picture.find(params[:id]).title}\" photo currently represents the \"#{Picture.find(params[:id]).category.name}\" category. To delete \"#{Picture.find(params[:id]).title},\" please select a new photo to represent the \"#{Picture.find(params[:id]).category.name}\" category."
-      @pictures = Picture.select{|picture| picture.category == Picture.find(params[:id]).category && picture.id != params[:id].to_i }.sort_by {|p| p.title.upcase }
-      render :edit_pictures
     else
-      flash[:success] = "Your photo \"#{Picture.find(params[:id]).title}\" has been deleted."
-      Picture.destroy(params[:id])
-      redirect_to user_path(current_user)
+      @picture = Picture.find(params[:id])
+      if @picture.represent_user
+        flash.now[:error] = "Your \"#{Picture.find(params[:id]).title}\" photo is the photo that currently represents your portfolio. To delete \"#{Picture.find(params[:id]).title},\" please select a new photo to represent your portfolio."
+        @pictures = other_pictures_for_user
+        render :edit_pictures
+      elsif @picture.represent_category
+        flash.now[:error] = "Your \"#{Picture.find(params[:id]).title}\" photo currently represents the \"#{Picture.find(params[:id]).category.name}\" category. To delete \"#{Picture.find(params[:id]).title},\" please select a new photo to represent the \"#{Picture.find(params[:id]).category.name}\" category."
+        @pictures = other_pictures_in_category
+        render :edit_pictures
+      else
+        flash[:success] = "Your photo \"#{Picture.find(params[:id]).title}\" has been deleted."
+        @picture.destroy
+        redirect_to user_path(current_user)
+      end
     end
   end
 
@@ -141,5 +142,25 @@ class PicturesController < ApplicationController
 
   def picture_params
     params.require(:picture).permit(:title, :location, :description, :image_link, :image_link_cache, :category_id, :represent_category, :represent_user)
+  end
+
+  def moving_picture_that_represents_category?
+    params[:picture][:category_id].to_i != @picture.category.id && @picture.represent_category && @picture.category.pictures.count > 1
+  end
+
+  def other_pictures_in_category
+    @picture.category.pictures.reject{ |p| p == @picture }
+  end
+
+  def picture_losing_category_status?
+    @picture.represent_category && (params[:picture][:represent_category].to_bool == false)
+  end
+
+  def picture_losing_user_status?
+    @picture.represent_user && (params[:picture][:represent_user].to_bool == false)
+  end
+
+  def other_pictures_for_user
+    current_user.pictures.reject{|p| p == @picture }
   end
 end
