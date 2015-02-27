@@ -1,0 +1,14 @@
+%display
+  .wrapper
+    %header
+      %h1
+        = "Select a New Photo for Category #{@category.name}"
+    %text
+      = bootstrap_form_tag url: "/users/:user_id/pictures/assign_cat_picture" do |f|
+        %fieldset
+          .row
+            .col-sm-4
+              = f.form_group :id, label: {text: "Which photo will represent the #{@category.name} category now?"} do
+                - @pictures.each do |picture|
+                  = f.radio_button :id, picture.id, label: "#{picture.title}", :checked => false
+              = f.submit "Select Picture"

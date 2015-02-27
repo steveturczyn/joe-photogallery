@@ -36,7 +36,7 @@ class Picture < ActiveRecord::Base
 
   def first_picture_must_represent_user
     return unless category
-    if self.class.find_pictures_of_user(category.user_id).empty?
+    if self.class.retrieve_pictures_of_user(category.user_id).empty?
       if !represent_user
         errors.add(:represent_user, "Your first picture must represent the user.")
       end
@@ -71,11 +71,12 @@ class Picture < ActiveRecord::Base
   end
 
   def self.user_representations
-    select {|picture| picture.represent_user? }.sort_by {|p| p.user.last_name }
+    where("represent_user = ?", true).sort_by{ |p| p.user.last_name }
   end
 
-  def self.find_pictures_of_user(current_user_id)
+  def self.retrieve_pictures_of_user(current_user_id)
     select {|picture| picture.category.user_id == current_user_id }
+    # joins(:category).where(category: { user_id: current_user_id })
   end
 
   def self.find_pictures_of_category(category_id)

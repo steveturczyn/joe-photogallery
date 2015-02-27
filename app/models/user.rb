@@ -11,6 +11,8 @@ class User < ActiveRecord::Base
   has_many :categories, -> { order(:name) }, dependent: :destroy
   has_many :pictures, through: :categories
 
+  has_one :saved_record
+
   def full_name
     "#{first_name} #{last_name}"
   end

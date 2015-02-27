@@ -37,10 +37,11 @@ class PicturesController < ApplicationController
   def update
     @picture = Picture.find(params[:id])
     if moving_picture_that_represents_category?
-      flash.now[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents the \"#{@picture.category.name}\" category. To move \"#{params[:picture][:title]}\" to a new category, please select a new photo to represent the \"#{@picture.category.name}\" category. Once you've done that, you can go back and change the \"#{params[:picture][:title]}\" photo to a new category."
+      SavedRecord.create(record_json: params[:picture].to_json, picture_id: @picture.id, user_id: current_user.id)
+      flash.now[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents the \"#{@picture.category.name}\" category. To move \"#{params[:picture][:title]}\" to a new category, please select a new photo to represent the \"#{@picture.category.name}\" category."
       get_sorted_pictures
-      @pictures = other_pictures_in_category
-      render :edit_pictures
+      redirect_to select_cat_picture_user_pictures_path(current_user)
+      return
     elsif picture_losing_category_status?
       flash.now[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents the \"#{@picture.category.name}\" category. Please select a new photo to represent the \"#{@picture.category.name}\" category."
       get_sorted_pictures
@@ -128,6 +129,29 @@ class PicturesController < ApplicationController
         redirect_to user_path(current_user)
       end
     end
+  end
+
+  def select_cat_picture
+    saved_record = current_user.saved_record
+    @picture = Picture.find(saved_record.picture_id)
+    @category = @picture.category
+    @pictures = other_pictures_in_category
+  end
+
+  def assign_cat_picture
+    if params[:id].blank?
+      flash[:error] = "Please select a picture to represent the category."
+      redirect_to select_cat_picture_path
+      return
+    end
+    new_cat_picture = Picture.find(params[:id])
+    new_cat_picture.represent_category = true
+    new_cat_picture.save
+    saved_record = current_user.saved_record
+    moved_picture = Picture.find(saved_record.picture_id)
+    moved_picture.assign_attributes(JSON.load(saved_record.record_json))
+    saved_record.destroy
+    redirect_to user_picture_path(current_user, moved_picture)
   end
 
   private
