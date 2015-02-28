@@ -151,7 +151,14 @@ class PicturesController < ApplicationController
     moved_picture = Picture.find(saved_record.picture_id)
     moved_picture.assign_attributes(JSON.load(saved_record.record_json))
     saved_record.destroy
-    redirect_to user_picture_path(current_user, moved_picture)
+    if moved_picture.save
+      redirect_to user_picture_path(current_user, moved_picture)
+    else
+      get_sorted_pictures
+      @picture = moved_picture
+      @categories = Category.select{|category| category.user_id == current_user.id }
+      render :edit
+    end
   end
 
   private
