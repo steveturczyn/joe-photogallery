@@ -67,30 +67,29 @@ class Picture < ActiveRecord::Base
   end
 
   def self.category_representation(category)
-    picture = select {|picture| picture.represent_category == true && picture.category_id == category.id }.first
+    picture = where(:represent_category => true).where(:category_id => category.id).first
   end
 
   def self.user_representations
-    where("represent_user = ?", true).sort_by{ |p| p.user.last_name }
+    where(:represent_user => true).sort_by{ |p| p.user.last_name }
   end
 
   def self.retrieve_pictures_of_user(current_user_id)
-    select {|picture| picture.category.user_id == current_user_id }
-    # joins(:category).where(category: { user_id: current_user_id })
+    joins(:category).where("categories.user_id = ?", current_user_id)
   end
 
   def self.find_pictures_of_category(category_id)
-    select {|picture| picture.category_id == category_id }
+    where(:category_id => category_id)
   end
 
   def self.set_represent_category_to_false(current_picture)
-    picture = select {|picture| picture.represent_category == true && picture.category_id == current_picture.category.id && picture.id != current_picture.id }.first
+    picture = where(:represent_category => true).where(:category_id => current_picture.category.id).where("id != ?", current_picture.id).first
     picture.represent_category = false if picture
     picture.save if picture
   end
 
   def self.set_represent_user_to_false(current_user_id)
-    picture = select {|picture| picture.category.user_id == current_user_id && picture.represent_user }.first
+    picture = joins(:category).where("categories.user_id = ?", current_user_id).where(:represent_user => true).readonly(false).first
     picture.represent_user = false if picture
     picture.save if picture
   end
