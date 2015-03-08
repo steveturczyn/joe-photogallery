@@ -1,7 +1,8 @@
 class WelcomesController < ApplicationController
 
+  before_action :get_sorted_pictures
+
   def index
-    get_sorted_pictures
     @pictures = get_sorted_pictures.dup
     @picture = Picture.find_by(id: params[:id]) || @pictures.sample
     @show_user = @picture.user

@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
 
-  def show
+  before_action :get_sorted_pictures
 
-    get_sorted_pictures
+  def show
 
     @show_user = User.find(params[:id])
 

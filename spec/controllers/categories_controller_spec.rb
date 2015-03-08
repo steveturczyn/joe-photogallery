@@ -16,7 +16,7 @@ describe CategoriesController do
     let!(:mcintosh) {Fabricate(:picture, title: "McIntosh", category: apples, category_id: apples.id, represent_category: true, represent_user: true)}
     it "creates an array of Category id's" do
       get :index, user_id: charlie.id
-      expect(assigns(:categories)).to eq([apples.id, bananas.id, cherries.id])
+      expect(assigns(:categories)).to eq([apples, bananas, cherries])
     end
     it "creates a sorted array of Picture objects" do
       get :index, user_id: charlie.id

@@ -30,6 +30,8 @@ Photogallery::Application.routes.draw do
       collection do
         delete 'destroy', as: 'delete_picture'
       end
+    end
+    resources :cat_pictures, only: [] do
       collection do
         get 'select_cat_picture'
         post 'assign_cat_picture', action: 'assign_cat_picture'

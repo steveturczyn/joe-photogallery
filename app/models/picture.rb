@@ -83,7 +83,11 @@ class Picture < ActiveRecord::Base
   end
 
   def self.set_represent_category_to_false(current_picture)
-    picture = where(:represent_category => true).where(:category_id => current_picture.category.id).where("id != ?", current_picture.id).first
+    if current_picture.id
+      picture = where(:represent_category => true).where(:category_id => current_picture.category.id).where("id != ?", current_picture.id).first
+    else  
+      picture = where(:represent_category => true).where(:category_id => current_picture.category.id).first
+    end
     picture.represent_category = false if picture
     picture.save if picture
   end

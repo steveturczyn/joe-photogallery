@@ -1,20 +1,19 @@
 class PicturesController < ApplicationController
 
   before_action :authenticate_user!, except: [:show]
+  before_action :get_sorted_pictures, except: [:which_picture_to_edit, :which_picture_to_delete, :select_cat_picture]
 
   def new
     if current_user.categories.empty?
       flash[:error] = "You must create a category before you can add, edit, or delete photos."
       redirect_to new_user_category_path(current_user)
     else
-      get_sorted_pictures
       @categories = current_user.categories
       @picture = Picture.new
     end
   end
 
   def create
-    get_sorted_pictures
     @categories = current_user.categories
     @picture = Picture.new(picture_params)
     if @picture.save
@@ -29,7 +28,6 @@ class PicturesController < ApplicationController
   end
 
   def edit
-    get_sorted_pictures
     @picture = Picture.find(params[:id])
     @categories = Category.select{|category| category.user_id == current_user.id }
   end
@@ -37,19 +35,16 @@ class PicturesController < ApplicationController
   def update
     @picture = Picture.find(params[:id])
     if moving_picture_that_represents_category?
-      SavedRecord.create(record_json: params[:picture].to_json, picture_id: @picture.id, user_id: current_user.id)
+      SavedRecord.create(record_json: params[:picture], picture_id: @picture.id, user_id: current_user.id)
       flash.now[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents the \"#{@picture.category.name}\" category. To move \"#{params[:picture][:title]}\" to a new category, please select a new photo to represent the \"#{@picture.category.name}\" category."
-      get_sorted_pictures
-      redirect_to select_cat_picture_user_pictures_path(current_user)
+      redirect_to select_cat_picture_user_cat_pictures_path(current_user)
       return
     elsif picture_losing_category_status?
       flash.now[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents the \"#{@picture.category.name}\" category. Please select a new photo to represent the \"#{@picture.category.name}\" category."
-      get_sorted_pictures
       @pictures = other_pictures_in_category
       render :edit_pictures
     elsif picture_losing_user_status?
       flash.now[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents your portfolio. Please select a new photo to represent your portfolio."
-      get_sorted_pictures
       @pictures = other_pictures_for_user
       render :edit_pictures
     elsif @picture.update_attributes(picture_params)
@@ -58,7 +53,6 @@ class PicturesController < ApplicationController
     else
       flash.now[:error] = "Please fix the #{view_context.pluralize(@picture.errors.count, "error")} below:"
       @categories = current_user.categories
-      get_sorted_pictures
       render :edit
     end
   end
@@ -68,7 +62,6 @@ class PicturesController < ApplicationController
       flash[:error] = "You don't have any photos to edit."
       redirect_to new_user_picture_path(current_user)
     else
-      get_sorted_pictures
       @category_ids = Category.select{|category| category.user_id == current_user.id }.map{|c| c.id }
       @pictures = Picture.select{|picture| @category_ids.include? picture.category_id }.sort_by {|p| p.title.upcase }
     end
@@ -84,7 +77,6 @@ class PicturesController < ApplicationController
   end
 
   def show
-    get_sorted_pictures
     @picture = Picture.find(params[:id])
     @sorted_pictures_of_category = Picture.select {|picture| picture.category_id == @picture.category_id }.sort_by {|p| p.id }
     @show_user = @picture.user
@@ -103,7 +95,6 @@ class PicturesController < ApplicationController
       flash[:error] = "You don't have any photos to delete."
       redirect_to new_user_picture_path(current_user)
     else
-      get_sorted_pictures
       @category_ids = Category.select{|category| category.user_id == current_user.id }.map{|c| c.id }
       @pictures = Picture.select{|picture| @category_ids.include? picture.category_id }.sort_by {|p| p.title.upcase }
     end
@@ -131,36 +122,6 @@ class PicturesController < ApplicationController
     end
   end
 
-  def select_cat_picture
-    saved_record = current_user.saved_record
-    @picture = Picture.find(saved_record.picture_id)
-    @category = @picture.category
-    @pictures = other_pictures_in_category
-  end
-
-  def assign_cat_picture
-    if params[:id].blank?
-      flash[:error] = "Please select a picture to represent the category."
-      redirect_to select_cat_picture_path
-      return
-    end
-    new_cat_picture = Picture.find(params[:id])
-    new_cat_picture.represent_category = true
-    new_cat_picture.save
-    saved_record = current_user.saved_record
-    moved_picture = Picture.find(saved_record.picture_id)
-    moved_picture.assign_attributes(JSON.load(saved_record.record_json))
-    saved_record.destroy
-    if moved_picture.save
-      redirect_to user_picture_path(current_user, moved_picture)
-    else
-      get_sorted_pictures
-      @picture = moved_picture
-      @categories = Category.select{|category| category.user_id == current_user.id }
-      render :edit
-    end
-  end
-
   private
 
   def prev_picture
@@ -177,10 +138,6 @@ class PicturesController < ApplicationController
 
   def moving_picture_that_represents_category?
     params[:picture][:category_id].to_i != @picture.category.id && @picture.represent_category && @picture.category.pictures.count > 1
-  end
-
-  def other_pictures_in_category
-    @picture.category.pictures.reject{ |p| p == @picture }
   end
 
   def picture_losing_category_status?

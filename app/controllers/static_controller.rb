@@ -1,7 +1,8 @@
 class StaticController < ApplicationController
 
+  before_action :get_sorted_pictures
+
   def about
-    get_sorted_pictures
   end
 
 end

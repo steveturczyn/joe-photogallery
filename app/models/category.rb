@@ -7,5 +7,7 @@ class Category < ActiveRecord::Base
   validates :name, :user_id, presence: true
   validates :name, uniqueness: { case_sensitive: false, scope: :user_id }
 
-
+  def representative_picture
+    @picture ||= Picture.find_by(category_id: self.id, represent_category: true)
+  end
 end
