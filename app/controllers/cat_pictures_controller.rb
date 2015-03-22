@@ -31,10 +31,4 @@ class CatPicturesController < ApplicationController
       render :edit
     end
   end
-
-  private
-
-  def other_pictures_in_category
-    @picture.category.pictures.reject{ |p| p == @picture }
-  end
 end

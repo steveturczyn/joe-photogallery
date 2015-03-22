@@ -39,4 +39,8 @@ class ApplicationController < ActionController::Base
       root_path
     end
   end
+
+  def other_pictures_in_category
+    @picture.category.pictures.reject{ |p| p == @picture }
+  end
 end

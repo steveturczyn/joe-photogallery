@@ -20,6 +20,6 @@ end
 def follow_links_to_sign_in
   visit root_path
   expect(page).to have_content "View Portfolio"
-  click_link "Log In/Sign Up"
+  click_link "Log In"
   expect(page).to have_content "Log In"
 end
