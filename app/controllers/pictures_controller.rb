@@ -16,12 +16,18 @@ class PicturesController < ApplicationController
   def create
     @categories = current_user.categories
     @picture = Picture.new(picture_params)
+    @picture.set_user_picture = picture_params[:set_user_picture].to_s.downcase == "true" ? true : false
+    @picture.set_cat_picture = picture_params[:set_cat_picture].to_s.downcase == "true" ? true : false
+    @picture.represents_category = nil
+    @picture.represents_user = nil
+    @picture.represents_category = @picture.category if @picture.category && @picture.set_cat_picture
+    @picture.represents_user = @picture.user if @picture.category && @picture.set_user_picture
     if @picture.save
       flash[:success] = "You have successfully added your new photo \"#{@picture.title}.\""
       redirect_to new_user_picture_path
     else
-      flash.now[:error] = @picture.errors[:represent_category].first
-      flash.now[:error] ||= @picture.errors[:represent_user].first
+      flash.now[:error] = @picture.errors[:represents_category].first
+      flash.now[:error] ||= @picture.errors[:represents_user].first
       flash.now[:error] ||= "Please fix the #{view_context.pluralize(@picture.errors.count, "error")} below:"
       render :new
     end
@@ -47,8 +53,7 @@ class PicturesController < ApplicationController
       flash.now[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents your portfolio. Please select a new photo to represent your portfolio."
       @pictures = other_pictures_for_user
       render :edit_pictures
-    elsif @picture.update_attributes(picture_params)
-      flash[:success] = "You have successfully updated your picture \"#{@picture.title}.\""
+    elsif picture_update_attributes
       redirect_to user_picture_path
     else
       flash.now[:error] = "Please fix the #{view_context.pluralize(@picture.errors.count, "error")} below:"
@@ -106,11 +111,11 @@ class PicturesController < ApplicationController
       redirect_to delete_pictures_user_pictures_path(current_user)
     else
       @picture = Picture.find(params[:id])
-      if @picture.represent_user
+      if @picture.represents_user
         flash.now[:error] = "Your \"#{Picture.find(params[:id]).title}\" photo is the photo that currently represents your portfolio. To delete \"#{Picture.find(params[:id]).title},\" please select a new photo to represent your portfolio."
         @pictures = other_pictures_for_user
         render :edit_pictures
-      elsif @picture.represent_category
+      elsif @picture.represents_category
         flash.now[:error] = "Your \"#{Picture.find(params[:id]).title}\" photo currently represents the \"#{Picture.find(params[:id]).category.name}\" category. To delete \"#{Picture.find(params[:id]).title},\" please select a new photo to represent the \"#{Picture.find(params[:id]).category.name}\" category."
         @pictures = other_pictures_in_category
         render :edit_pictures
@@ -133,22 +138,43 @@ class PicturesController < ApplicationController
   end
 
   def picture_params
-    params.require(:picture).permit(:title, :location, :description, :image_link, :image_link_cache, :category_id, :represent_category, :represent_user)
+    params.require(:picture).permit(:title, :location, :description, :image_link, :image_link_cache, :category_id, :set_cat_picture, :set_user_picture)
   end
 
   def moving_picture_that_represents_category?
-    params[:picture][:category_id].to_i != @picture.category.id && @picture.represent_category && @picture.category.pictures.count > 1
+    params[:picture][:category_id].to_i != @picture.category.id && @picture.represents_category && @picture.category.pictures.count > 1
   end
 
   def picture_losing_category_status?
-    @picture.represent_category && (params[:picture][:represent_category].to_bool == false)
+    @picture.represents_category && (params[:picture][:set_cat_picture].to_bool == false)
   end
 
   def picture_losing_user_status?
-    @picture.represent_user && (params[:picture][:represent_user].to_bool == false)
+    @picture.represents_user && (params[:picture][:set_user_picture].to_bool == false)
   end
 
   def other_pictures_for_user
     current_user.pictures.reject{|p| p == @picture }
+  end
+
+  def picture_update_attributes
+    binding.pry
+    temp_picture_id = @picture.user.picture_id
+    @picture.assign_attributes(picture_params)
+    @picture.set_user_picture = picture_params[:set_user_picture].to_s.downcase == "true" ? true : false
+    @picture.set_cat_picture = picture_params[:set_cat_picture].to_s.downcase == "true" ? true : false
+    @picture.represents_user = nil if !@picture.set_user_picture
+    @picture.represents_category = nil if !@picture.set_cat_picture
+    @picture.represents_user = @picture.category.user if @picture.category
+    binding.pry
+    @picture.category.picture_id = @picture.id if @picture.set_cat_picture
+    @picture.user.picture_id = temp_picture_id if !@picture.set_user_picture
+    @picture.represents_category = @picture.category if @picture.category
+    @picture.save
+    if !@picture.set_cat_picture && @picture.set_user_picture
+      flash[:success] = "Since \"#{@picture.title}\" represents your portfolio, it now represents your \"#{@picture.category.name}\" category as well."
+    else
+      flash[:success] = "You have successfully updated your picture \"#{@picture.title}.\""
+    end
   end
 end

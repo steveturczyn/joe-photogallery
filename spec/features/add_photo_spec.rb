@@ -13,8 +13,8 @@ feature "add photo" do
     fill_in "Location", with: "Boston, MA"
     fill_in "Description", with: "Beautiful cherries"
     attach_file "Name of Photo", "public/tmp/bird.jpg"
-    choose "picture_represent_category_true", "No"
-    choose "picture_represent_user_true", "No"
+    choose "picture_set_cat_picture_true", "No"
+    choose "picture_set_user_picture_true", "No"
     click_button "Add Photo"
     expect(Picture.where(title: "Bright Red Sour")).to be_present
     

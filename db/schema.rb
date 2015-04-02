@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150222162416) do
+ActiveRecord::Schema.define(version: 20150329114118) do
 
   create_table "categories", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
+    t.integer  "picture_id"
   end
 
   create_table "pictures", force: true do |t|
@@ -26,10 +27,8 @@ ActiveRecord::Schema.define(version: 20150222162416) do
     t.text     "description"
     t.string   "image_link"
     t.integer  "category_id"
-    t.boolean  "represent_category"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "represent_user"
   end
 
   create_table "saved_records", force: true do |t|
@@ -54,6 +53,7 @@ ActiveRecord::Schema.define(version: 20150222162416) do
     t.string   "last_name"
     t.string   "first_name"
     t.text     "bio"
+    t.integer  "picture_id"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

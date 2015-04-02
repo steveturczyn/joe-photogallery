@@ -3,7 +3,7 @@ Fabricator(:picture) do
   location { Faker::Lorem.words(2).join(" ") }
   description { Faker::Lorem.words(2).join(" ") }
   category { Fabricate(:category) }
-  represent_category { false }
-  represent_user { false }
+  represents_category { nil }
+  represents_user { nil }
   image_link { File.open(Rails.root.join("public/tmp/panda.jpg")) }
 end

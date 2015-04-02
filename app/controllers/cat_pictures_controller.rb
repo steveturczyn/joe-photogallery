@@ -17,7 +17,7 @@ class CatPicturesController < ApplicationController
       return
     end
     new_cat_picture = Picture.find(params[:id])
-    new_cat_picture.represent_category = true
+    new_cat_picture.represents_category = new_cat_picture.category
     new_cat_picture.save
     saved_record = current_user.saved_record
     moved_picture = Picture.find(saved_record.picture_id)

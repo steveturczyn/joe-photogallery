@@ -16,10 +16,10 @@
               <strong>Your current photo:</strong>
               %img{:src => "#{@picture.image_link.thumb}"}
               = f.file_field :image_link, label: "Upload Replacement Photo?", class: "btn btn-default btn-file"
-              = f.form_group :represent_category, label: {text: 'Represents this Category?'} do
-                = f.radio_button :represent_category, true, label: "Yes", checked: @picture.represent_category
-                = f.radio_button :represent_category, false, label: "No", checked: !@picture.represent_category
-              = f.form_group :represent_user, label: {text: 'Represents this User?'} do
-                = f.radio_button :represent_user, true, label: "Yes", checked: @picture.represent_user
-                = f.radio_button :represent_user, false, label: "No", checked: !@picture.represent_user
+              = f.form_group :set_cat_picture, label: {text: 'Represents this Category?'} do
+                = f.radio_button :set_cat_picture, true, label: "Yes", checked: @picture.set_cat_picture
+                = f.radio_button :set_cat_picture, false, label: "No", checked: !@picture.set_cat_picture
+              = f.form_group :set_user_picture, label: {text: 'Represents this User?'} do
+                = f.radio_button :set_user_picture, true, label: "Yes", checked: @picture.set_user_picture
+                = f.radio_button :set_user_picture, false, label: "No", checked: !@picture.set_user_picture
               = f.submit "Update Photo"

@@ -11,9 +11,9 @@ describe CategoriesController do
     let!(:bananas) {Fabricate(:category, name: "Bananas", user: charlie)}
     let!(:apples) {Fabricate(:category, name: "Apples", user: charlie)}
     
-    let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represent_category: true, represent_user: true)}
-    let!(:chiquita) {Fabricate(:picture, title: "Chiquita", category: bananas, category_id: bananas.id, represent_category: true, represent_user: true)}
-    let!(:mcintosh) {Fabricate(:picture, title: "McIntosh", category: apples, category_id: apples.id, represent_category: true, represent_user: true)}
+    let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represents_category: cherries, represents_user: cherries.user)}
+    let!(:chiquita) {Fabricate(:picture, title: "Chiquita", category: bananas, category_id: bananas.id, represents_category: bananas, represents_user: bananas.user)}
+    let!(:mcintosh) {Fabricate(:picture, title: "McIntosh", category: apples, category_id: apples.id, represents_category: apples, represents_user: apples.user)}
     it "creates an array of Category id's" do
       get :index, user_id: charlie.id
       expect(assigns(:categories)).to eq([apples, bananas, cherries])
@@ -131,7 +131,7 @@ describe CategoriesController do
       it "should redirect to the User Show page if there are one or more pictures" do
         category1 = Fabricate(:category, user: user)
         category2 = Fabricate(:category, user: user)
-        photo = Fabricate(:picture, title: "Bing", category: category2, category_id: category2.id, represent_category: true, represent_user: true)
+        photo = Fabricate(:picture, title: "Bing", category: category2, category_id: category2.id, represents_category: category2, represents_user: user)
         post :which_category_to_delete, user_id: user.id, id: category1.id
         expect(response).to redirect_to user_path(user)
       end

@@ -11,6 +11,8 @@ class User < ActiveRecord::Base
   has_many :categories, -> { order(:name) }, dependent: :destroy
   has_many :pictures, through: :categories
 
+  belongs_to :representative_picture, class_name: "Picture", foreign_key: "picture_id"
+
   has_one :saved_record
 
   def full_name

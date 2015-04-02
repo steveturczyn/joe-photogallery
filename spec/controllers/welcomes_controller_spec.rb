@@ -10,9 +10,9 @@ describe WelcomesController do
     let!(:fruits2) {Fabricate(:category, name: "Fruits2", user: barry)}
     let!(:wildlife) {Fabricate(:category, name: "Wildlife", user: charlie)}
     
-    let!(:apple) {Fabricate(:picture, title: "Apple", category: fruits1, represent_category: true, represent_user: true)}
-    let!(:banana) {Fabricate(:picture, title: "Banana", category: fruits2, represent_category: true, represent_user: true)}
-    let!(:cheetah) {Fabricate(:picture, title: "Cheetah", category: wildlife, represent_category: true, represent_user: true)}
+    let!(:apple) {Fabricate(:picture, title: "Apple", category: fruits1, represents_category: fruits1, represents_user: fruits1.user)}
+    let!(:banana) {Fabricate(:picture, title: "Banana", category: fruits2, represents_category: fruits2, represents_user: fruits2.user)}
+    let!(:cheetah) {Fabricate(:picture, title: "Cheetah", category: wildlife, represents_category: wildlife, represents_user: wildlife.user)}
     it "verifies that Picture objects have been sorted by last name" do
       get :index
       expect(assigns(:sorted_pictures).first).to eq(apple)
