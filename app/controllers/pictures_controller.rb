@@ -158,18 +158,16 @@ class PicturesController < ApplicationController
   end
 
   def picture_update_attributes
-    binding.pry
     temp_picture_id = @picture.user.picture_id
     @picture.assign_attributes(picture_params)
     @picture.set_user_picture = picture_params[:set_user_picture].to_s.downcase == "true" ? true : false
     @picture.set_cat_picture = picture_params[:set_cat_picture].to_s.downcase == "true" ? true : false
     @picture.represents_user = nil if !@picture.set_user_picture
     @picture.represents_category = nil if !@picture.set_cat_picture
-    @picture.represents_user = @picture.category.user if @picture.category
-    binding.pry
+    @picture.represents_user = @picture.category.user if @picture.category && @picture.set_user_picture
     @picture.category.picture_id = @picture.id if @picture.set_cat_picture
     @picture.user.picture_id = temp_picture_id if !@picture.set_user_picture
-    @picture.represents_category = @picture.category if @picture.category
+    @picture.represents_category = @picture.category if @picture.category && @picture.set_cat_picture
     @picture.save
     if !@picture.set_cat_picture && @picture.set_user_picture
       flash[:success] = "Since \"#{@picture.title}\" represents your portfolio, it now represents your \"#{@picture.category.name}\" category as well."
