@@ -100,15 +100,6 @@ describe PicturesController do
           expect(dark_hudson.title).to eq("Dark Hudson")
         end
       end
-      context "represents_user is present and represents_category is nil" do
-        it "should produce a flash error message" do
-          post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), set_cat_picture: "false", set_user_picture: "true" }
-          expect(flash[:error]).to eq("Since your picture represents this user, it must also represent this category.")
-          bing = Picture.select {|picture| picture.title == "Bing" }.first
-          expect(bing.represents_category).to eq(cherries)
-          expect(bing.represents_user).to eq(cherries.user)
-        end
-      end
       context "represents_user is nil and represents_category is present" do
         it "should display a flash error message" do
           post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), set_cat_picture: true, set_user_picture: false }
@@ -189,6 +180,21 @@ describe PicturesController do
     describe 'PATCH update' do
       it_behaves_like "require sign in" do
         let(:action) { patch :update, user_id: charlie.id, id: bing.id, params: { id: dark_hudson.id }, picture: { category_id: 2, title: "Bing" } }
+      end
+      it "should not change the 'represents_user' status when changing the 'represent_category' status from no to yes" do
+        apples = Fabricate(:category, name: "Apples", user: charlie)
+        mcintosh = Fabricate(:picture, title: "McIntosh", category: apples, category_id: apples.id, represents_category: apples, represents_user: nil)
+        fuji = Fabricate(:picture, title: "Fuji", category: apples, category_id: apples.id, represents_category: nil, represents_user: nil)
+        patch :update, user_id: charlie.id, id: fuji.id, params: { id: fuji.id }, picture: { category_id: apples.id, title: "New Fuji", set_cat_picture: "true" }
+        expect(fuji.reload.represents_category).to eq(apples)
+        expect(fuji.reload.represents_user).to be_nil
+      end
+      it "should not change the 'represents_category' status when not changing the 'represent_category' status" do
+        apples = Fabricate(:category, name: "Apples", user: charlie)
+        mcintosh = Fabricate(:picture, title: "McIntosh", category: apples, category_id: apples.id, represents_category: apples, represents_user: nil)
+        fuji = Fabricate(:picture, title: "Fuji", category: apples, category_id: apples.id, represents_category: nil, represents_user: nil)
+        patch :update, user_id: charlie.id, id: fuji.id, params: { id: fuji.id }, picture: { category_id: apples.id, title: "New Fuji", set_cat_picture: "false" }
+        expect(fuji.reload.represents_category).to be_nil
       end
       it "should produce a flash error message if the picture represents the category and the user is trying to change the picture's category" do
         patch :update, user_id: charlie.id, id: bing.id, params: { id: dark_hudson.id }, picture: { category_id: 2, title: "Bing" }

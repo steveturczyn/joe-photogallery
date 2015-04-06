@@ -53,7 +53,8 @@ class PicturesController < ApplicationController
       flash.now[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents your portfolio. Please select a new photo to represent your portfolio."
       @pictures = other_pictures_for_user
       render :edit_pictures
-    elsif picture_update_attributes
+    elsif picture_update_attributes?
+      flash[:success] = "You have successfully updated your picture \"#{@picture.title}.\""
       redirect_to user_picture_path
     else
       flash.now[:error] = "Please fix the #{view_context.pluralize(@picture.errors.count, "error")} below:"
@@ -157,7 +158,7 @@ class PicturesController < ApplicationController
     current_user.pictures.reject{|p| p == @picture }
   end
 
-  def picture_update_attributes
+  def picture_update_attributes?
     temp_picture_id = @picture.user.picture_id
     @picture.assign_attributes(picture_params)
     @picture.set_user_picture = picture_params[:set_user_picture].to_s.downcase == "true" ? true : false
@@ -169,10 +170,5 @@ class PicturesController < ApplicationController
     @picture.user.picture_id = temp_picture_id if !@picture.set_user_picture
     @picture.represents_category = @picture.category if @picture.category && @picture.set_cat_picture
     @picture.save
-    if !@picture.set_cat_picture && @picture.set_user_picture
-      flash[:success] = "Since \"#{@picture.title}\" represents your portfolio, it now represents your \"#{@picture.category.name}\" category as well."
-    else
-      flash[:success] = "You have successfully updated your picture \"#{@picture.title}.\""
-    end
   end
 end

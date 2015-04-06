@@ -13,7 +13,6 @@ class Picture < ActiveRecord::Base
   validates :title, :location, :description, :category_id, :image_link, presence: true
 
   validate :first_picture_must_represent_user
-  validate :represent_user_must_represent_category
   validate :there_must_be_one_picture_representing_user
   validate :first_picture_in_category_must_represent_category
 
@@ -26,12 +25,6 @@ class Picture < ActiveRecord::Base
   attr_accessor :set_user_picture
 
   after_initialize :set_representative_booleans
-
-  def represent_user_must_represent_category
-    if represents_user && !represents_category
-      errors.add(:represents_category, "Since your picture represents this user, it must also represent this category.")
-    end
-  end
 
   def there_must_be_one_picture_representing_user
     return unless category
