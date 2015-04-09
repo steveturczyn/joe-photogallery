@@ -4,7 +4,8 @@
       - @pictures.each_with_index do |picture, index| 
         .item{class:("active" if index == 0), data: {user: picture.user.as_json(methods: :full_name, only: [:full_name, :first_name])}}
           .item-wrapper
-            %img{:src => "#{picture.image_link}"}
+            .image-wrapper
+              %img{:src => "#{picture.image_link}"}
           %nav
             %ul
               %li= link_to "View Portfolio", user_path(picture.user)

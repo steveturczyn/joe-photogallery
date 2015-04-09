@@ -10,7 +10,9 @@ categorydetail {
   }
   img {
     display: block;
-    height: 90%;
+    @media (min-width: $screen-sm-min) {
+      height: 90%;
+    }
     margin-left: auto;
     margin-right: auto;
     border-style: solid;

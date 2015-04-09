@@ -1,9 +1,8 @@
 bio {
-  .wrapper {
+  .container {
     @media (min-width: $screen-sm-min) {
       margin-left: auto;
       margin-right: auto;
-      width: 1000px;
     }
     margin-left: 15px;
     margin-right: 15px;

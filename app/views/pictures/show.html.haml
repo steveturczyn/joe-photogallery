@@ -6,7 +6,8 @@
           %header
             %h1= link_to(@picture.category.name, user_category_path(@picture.user, @picture.category))
           .item-wrapper.with-header
-            %img{:src => "#{picture.image_link}"}
+            .image-wrapper
+              %img{:src => "#{picture.image_link}"}
           %nav
             %ul
               .title

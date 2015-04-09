@@ -45,14 +45,27 @@ body.pictures-new, body.pictures-create, body.pictures-edit_pictures, body.pictu
       .item-wrapper {
         height: 100%;
         padding-bottom: 40px;
+        @media (max-width: $screen-xs-max) {
+          display: table;
+        }
         &.with-header {
           margin-top: -60px;
           padding-top: 50px;
         }
+        .image-wrapper {
+          @media (max-width: $screen-xs-max) {
+            display: table-cell;
+            vertical-align: middle;
+          }
+          height: 100%;
+        }
       }
       img {
-        height: 100%;
-        max-width: 90%;
+        @media (min-width: $screen-sm-min) {
+          height: 100%;
+          max-width: 90%;
+        }
+        max-width: 70%;
       }
     }
   }

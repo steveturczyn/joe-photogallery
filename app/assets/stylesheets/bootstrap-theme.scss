@@ -1,0 +1,97 @@
+$navbar-default-bg: #650c03;
+$navbar-default-color: white;
+$navbar-default-link-color: white;
+$navbar-default-brand-hover-color: white;
+$navbar-default-link-hover-color: goldenrod;
+$navbar-default-link-active-color: goldenrod;
+$navbar-default-link-active-bg: transparent;
+
+@import "bootstrap";
+
+.navbar {
+  z-index: 9000;
+}
+
+.navbar-nav {
+  a {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: verdana;
+    font-size: 11px;
+  }
+}
+
+.navbar-brand {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-family: arial;
+  font-size: 20px;
+}
+
+@media (max-width: $screen-xs-max) {
+  .navbar-collapse {
+    max-height: none;
+  }
+  .dropdown-menu {
+    .divider {
+      margin-left: 25px;
+      width: 150px;
+    }
+  }
+}
+
+@media (min-width: $screen-sm-min) {
+  .navbar-collapse.collapse {
+    display: inline-block !important;
+  }
+
+  .navbar-header {
+    float: none;
+    display: inline-block;
+    vertical-align: top;
+    .navbar-brand {
+      padding-top: 12px;
+    }
+  }
+
+  .navbar {
+    .container-fluid {
+      text-align: center;
+    }
+  }
+}
+
+.navbar-nav {
+  > li.dropdown {
+    @media (min-width: $screen-sm-min) {
+      &:hover {
+        .dropdown-menu {
+          display: block;
+        }
+      }
+    }
+  }
+  > li > .dropdown-menu {
+    @media (max-width: $screen-xs-max) {
+      background-color: white;
+    }
+    @media (min-width: $screen-sm-min) {
+      margin-top: -15px;
+    }
+    border-top-right-radius: $border-radius-base;
+    border-top-left-radius: $border-radius-base;
+    right: 0;
+    a {
+      color: #650c03;
+      font-weight: bold;
+    }
+    li {
+      &:hover {
+        a {
+          color: #650c03;
+          background-color: lighten(goldenrod, 40%);
+        }
+      }
+    }
+  }
+}

@@ -1,56 +1,57 @@
-%section#header
-  .navbar-header
-    - if @show_user
-      %name.navbar-brand #{@show_user.full_name}
-    %button.navbar-toggle.collapsed(type="button" data-toggle="collapse" data-target="#navbarlinks-1")
-      %span.sr-only Toggle navigation
-      %span.icon-bar
-      %span.icon-bar
-      %span.icon-bar
-  %nav.collapse.navbar-collapse#navbarlinks-1
-    %ul
+.navbar.navbar-default#header
+  .container-fluid
+    .navbar-header
+      %button.navbar-toggle.collapsed(type="button" data-toggle="collapse" data-target="#navbarlinks-1")
+        %span.sr-only Toggle navigation
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
       - if @show_user
-        - if controller_name != "welcomes"
-          - possessive_name = "#{@show_user.first_name}".possessive
-          %li
-            =link_to user_categories_path(@show_user) do
-              %firstname #{possessive_name}
-              Portfolios
-          %li= link_to "Bio", user_bios_path(@show_user)
-      
-      %li.dropdown
-        %a.dropdown-toggle(href="#" data-toggle="dropdown")
-          = "All Photographers"
-          %span.caret
-        %ul.dropdown-menu
-          - Picture.user_representations.each do |picture|
+        %name.navbar-brand #{@show_user.full_name}
+    %nav.collapse.navbar-collapse#navbarlinks-1
+      %ul.nav.navbar-nav
+        - if @show_user
+          - if controller_name != "welcomes"
+            - possessive_name = "#{@show_user.first_name}".possessive
             %li
-              = link_to "#{picture.user.first_name} #{picture.user.last_name}", user_path(picture.user)
-
-      - if controller_name == "welcomes"
-        %li= link_to "About", about_path
-
-      - if user_signed_in?
+              =link_to user_categories_path(@show_user) do
+                %firstname #{possessive_name}
+                Portfolios
+            %li= link_to "Bio", user_bios_path(@show_user)
+        
         %li.dropdown
           %a.dropdown-toggle(href="#" data-toggle="dropdown")
-            = "Add/Modify Content"
+            = "All Photographers"
             %span.caret
           %ul.dropdown-menu
-            %li= link_to "Add a Photo", new_user_picture_path(current_user)
-            %li= link_to "Edit a Photo", edit_pictures_user_pictures_path(current_user)
-            %li= link_to "Delete a Photo", delete_pictures_user_pictures_path(current_user)
-            %p= link_to "--------------"
-            %li= link_to "Add a Category", new_user_category_path(current_user)
-            %li= link_to "Edit a Category", edit_categories_user_categories_path(current_user)
-            %li= link_to "Delete a Category",
-              delete_categories_user_categories_path(current_user)
-            %p= link_to "--------------"
-            %li= link_to "Update Profile", edit_user_registration_path
-        %li= link_to "Log Off", destroy_user_session_path, :method => :delete
-        - if controller_name != "welcomes"
-          %li= link_to "Home", root_path
-      - else
-        %li= link_to "Log In", user_session_path
-        %li= link_to "Sign Up", new_user_registration_path
-        - if controller_name != "welcomes"
-          %li= link_to "Home", root_path
+            - Picture.user_representations.each do |picture|
+              %li
+                = link_to "#{picture.user.first_name} #{picture.user.last_name}", user_path(picture.user)
+
+        - if controller_name == "welcomes"
+          %li= link_to "About", about_path
+
+        - if user_signed_in?
+          %li.dropdown
+            %a.dropdown-toggle(href="#" data-toggle="dropdown")
+              = "Add/Modify Content"
+              %span.caret
+            %ul.dropdown-menu
+              %li= link_to "Add a Photo", new_user_picture_path(current_user)
+              %li= link_to "Edit a Photo", edit_pictures_user_pictures_path(current_user)
+              %li= link_to "Delete a Photo", delete_pictures_user_pictures_path(current_user)
+              %li.divider
+              %li= link_to "Add a Category", new_user_category_path(current_user)
+              %li= link_to "Edit a Category", edit_categories_user_categories_path(current_user)
+              %li= link_to "Delete a Category",
+                delete_categories_user_categories_path(current_user)
+              %li.divider
+              %li= link_to "Update Profile", edit_user_registration_path
+          %li= link_to "Log Off", destroy_user_session_path, :method => :delete
+          - if controller_name != "welcomes"
+            %li= link_to "Home", root_path
+        - else
+          %li= link_to "Log In", user_session_path
+          %li= link_to "Sign Up", new_user_registration_path
+          - if controller_name != "welcomes"
+            %li= link_to "Home", root_path

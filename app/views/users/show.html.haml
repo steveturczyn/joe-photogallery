@@ -6,7 +6,8 @@
           %header
             %h1 #{picture.category.name}
           .item-wrapper.with-header
-            %img{:src => "#{picture.image_link}"}
+            .image-wrapper
+              %img{:src => "#{picture.image_link}"}
           %nav
             %ul
               %li= link_to  "View Portfolio", user_category_path(@show_user, picture.category)

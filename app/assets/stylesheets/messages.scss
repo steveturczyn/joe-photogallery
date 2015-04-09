@@ -1,4 +1,8 @@
 section#messages {
+  @media (max-width: $screen-xs-max) {
+    left: 15px;
+    right: 15px;
+  }
   left: 100px;
   right: 100px;
   position: absolute;
