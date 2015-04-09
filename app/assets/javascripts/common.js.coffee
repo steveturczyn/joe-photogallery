@@ -7,4 +7,4 @@ jQuery ->
       $(".alert").fadeOut()
     $(".alert").bind 'click', (ev) =>
       $(".alert").fadeOut()
-    setTimeout flashCallback, 5000
+    setTimeout flashCallback, 15000

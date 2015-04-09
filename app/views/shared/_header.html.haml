@@ -1,8 +1,15 @@
 %section#header
-  %nav
+  .navbar-header
+    - if @show_user
+      %name.navbar-brand #{@show_user.full_name}
+    %button.navbar-toggle.collapsed(type="button" data-toggle="collapse" data-target="#navbarlinks-1")
+      %span.sr-only Toggle navigation
+      %span.icon-bar
+      %span.icon-bar
+      %span.icon-bar
+  %nav.collapse.navbar-collapse#navbarlinks-1
     %ul
       - if @show_user
-        %name #{@show_user.full_name}
         - if controller_name != "welcomes"
           - possessive_name = "#{@show_user.first_name}".possessive
           %li

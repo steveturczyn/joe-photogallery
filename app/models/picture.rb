@@ -57,7 +57,7 @@ class Picture < ActiveRecord::Base
   end
 
   def self.user_representations
-    User.all.map(&:representative_picture).select{ |p| p}.sort_by{ |p| p.user.last_name }
+    User.all.map(&:representative_picture).select{ |p| p }.sort_by{ |p| p.user.last_name }
   end
 
   def remove_directory
