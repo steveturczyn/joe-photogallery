@@ -12,6 +12,10 @@ $navbar-default-link-active-bg: transparent;
   z-index: 9000;
 }
 
+.navbar-toggle {
+    background-color: #650c03 !important;
+}
+
 .navbar-nav {
   a {
     text-transform: uppercase;
