@@ -13,6 +13,10 @@ user {
     @media (min-width: $screen-sm-min) {
       height: 100%;
     }
+    @media (max-width: $screen-xs-max) 
+    and (orientation: landscape) {
+      max-height: 100% !important;
+    }
     margin-left: auto;
     margin-right: auto;
     border-style: solid;
