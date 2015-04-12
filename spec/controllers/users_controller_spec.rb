@@ -8,9 +8,9 @@ describe UsersController do
     let!(:bananas) {Fabricate(:category, name: "Bananas", user: charlie)}
     let!(:apples) {Fabricate(:category, name: "Apples", user: charlie)}
     
-    let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represents_category: cherries, represents_user: cherries.user)}
-    let!(:chiquita) {Fabricate(:picture, title: "Chiquita", category: bananas, category_id: bananas.id, represents_category: bananas, represents_user: bananas.user)}
-    let!(:mcintosh) {Fabricate(:picture, title: "McIntosh", category: apples, category_id: apples.id, represents_category: apples, represents_user: apples.user)}
+    let!(:bing) {Fabricate(:picture, title: "Bing", categories: [cherries], represents_category: cherries, represents_user: cherries.user)}
+    let!(:chiquita) {Fabricate(:picture, title: "Chiquita", categories: [bananas], represents_category: bananas, represents_user: bananas.user)}
+    let!(:mcintosh) {Fabricate(:picture, title: "McIntosh", categories: [apples], represents_category: apples, represents_user: apples.user)}
 
     it "builds a Categories collection" do
       get :show, id: charlie.id

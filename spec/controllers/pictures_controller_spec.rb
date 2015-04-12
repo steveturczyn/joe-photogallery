@@ -28,8 +28,8 @@ describe PicturesController do
 
       let!(:cherries) {Fabricate(:category, name: "Cherries", user: charlie)}
 
-      let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represents_category: cherries, represents_user: cherries.user)}
-      let!(:dark_hudson) {Fabricate(:picture, title: "Dark Hudson", category: cherries, category_id: cherries.id, represents_category: cherries, represents_user: cherries.user)}
+      let!(:bing) {Fabricate(:picture, title: "Bing", categories: [cherries], represents_category: cherries, represents_user: cherries.user)}
+      let!(:dark_hudson) {Fabricate(:picture, title: "Dark Hudson", categories: [cherries], represents_category: cherries, represents_user: cherries.user)}
       before do
         sign_in charlie
       end
@@ -69,13 +69,13 @@ describe PicturesController do
           expect(updated_bing.title).to eq("Bing")
         end
         it "should add the picture to the database when it's the second picture of a given category and the picture does not represent the category" do
-          bing = Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represents_category: cherries, represents_user: cherries.user)
+          bing = Fabricate(:picture, title: "Bing", categories: [cherries], represents_category: cherries, represents_user: cherries.user)
           post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), set_cat_picture: false, set_user_picture: false }
           updated_darkhudson = Picture.select {|picture| picture.title == "Dark Hudson" }.first
           expect(updated_darkhudson.title).to eq("Dark Hudson")
         end
         it "should set represent_category boolean of existing picture to false when adding a new picture that represents the category" do
-          bing = Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represents_category: cherries, represents_user: cherries.user)
+          bing = Fabricate(:picture, title: "Bing", categories: [cherries], represents_category: cherries, represents_user: cherries.user)
           post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), set_cat_picture: true, set_user_picture: true }
           expect(bing.reload.represents_category).to eq(nil)
           updated_darkhudson = Picture.select {|picture| picture.title == "Dark Hudson" }.first
@@ -87,7 +87,7 @@ describe PicturesController do
     context "represents_category and represents_user tests" do
       let!(:charlie) {Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)}
       let!(:cherries) {Fabricate(:category, name: "Cherries", user: charlie)}
-      let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represents_category: cherries, represents_user: cherries.user)}
+      let!(:bing) {Fabricate(:picture, title: "Bing", categories: [cherries], represents_category: cherries, represents_user: cherries.user)}
       before do
         sign_in charlie
       end
@@ -98,12 +98,6 @@ describe PicturesController do
           expect(bing.reload.represents_user).to be_nil
           dark_hudson = Picture.select {|picture| picture.title == "Dark Hudson" }.first
           expect(dark_hudson.title).to eq("Dark Hudson")
-        end
-      end
-      context "represents_user is nil and represents_category is present" do
-        it "should display a flash error message" do
-          post :create, user_id: charlie.id, picture: { category_id: cherries.id, title: "Dark Hudson", location: "Boston, MA", description: "nice cherry", image_link: Rack::Test::UploadedFile.new(Rails.root.join("public/tmp/panda.jpg")), set_cat_picture: true, set_user_picture: false }
-          expect(flash[:error]).to eq("A picture must represent a user.")
         end
       end
       context "represents_user is nil and represents_category is nil" do
@@ -128,11 +122,11 @@ describe PicturesController do
     let!(:cherries) {Fabricate(:category, name: "Cherries", user: charlie)}
     let!(:bananas) {Fabricate(:category, name: "Bananas", user: charlie)}
     let!(:apples) {Fabricate(:category, name: "Apples", user: charlie)}
-    let!(:dark_hudson) {Fabricate(:picture, title: "Dark Hudson", category: cherries, category_id: cherries.id, represents_category: cherries, represents_user: cherries.user, id: 1)}
-    let!(:bright_red_sour) {Fabricate(:picture, title: "Bright Red Sour", category: cherries, category_id: cherries.id, represents_category: nil, id: 2)}
-    let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represents_category: nil, represents_user: nil, id: 3)}
-    let!(:chiquita) {Fabricate(:picture, title: "Chiquita", category: bananas, category_id: bananas.id, represents_category: bananas)}
-    let!(:mcintosh) {Fabricate(:picture, title: "McIntosh", category: apples, category_id: apples.id, represents_category: apples)}
+    let!(:dark_hudson) {Fabricate(:picture, title: "Dark Hudson", categories: [cherries], represents_category: cherries, represents_user: cherries.user, id: 1)}
+    let!(:bright_red_sour) {Fabricate(:picture, title: "Bright Red Sour", categories: [cherries], represents_category: nil, id: 2)}
+    let!(:bing) {Fabricate(:picture, title: "Bing", categories: [cherries], represents_category: nil, represents_user: nil, id: 3)}
+    let!(:chiquita) {Fabricate(:picture, title: "Chiquita", categories: [bananas], represents_category: bananas)}
+    let!(:mcintosh) {Fabricate(:picture, title: "McIntosh", categories: [apples], represents_category: apples)}
     it "selects the correct picture object" do
       get :show, user_id: charlie.id, id: bright_red_sour.id
       expect(assigns(:picture)).to eq(bright_red_sour)
@@ -154,8 +148,8 @@ describe PicturesController do
   context "edit, update, and delete tests" do
     let!(:charlie) {Fabricate(:user, first_name: "Charlie", last_name: "Chan", id: 1)}
     let!(:cherries) {Fabricate(:category, name: "Cherries", user: charlie)}
-    let!(:bing) {Fabricate(:picture, title: "Bing", category: cherries, category_id: cherries.id, represents_category: cherries, represents_user: cherries.user)}
-    let!(:dark_hudson) {Fabricate(:picture, title: "Dark Hudson", category: cherries, category_id: cherries.id, represents_category: nil, represents_user: nil)}
+    let!(:bing) {Fabricate(:picture, title: "Bing", categories: [cherries], represents_category: cherries, represents_user: cherries.user)}
+    let!(:dark_hudson) {Fabricate(:picture, title: "Dark Hudson", categories: [cherries], represents_category: nil, represents_user: nil)}
     before do
       sign_in charlie
     end
@@ -183,16 +177,16 @@ describe PicturesController do
       end
       it "should not change the 'represents_user' status when changing the 'represent_category' status from no to yes" do
         apples = Fabricate(:category, name: "Apples", user: charlie)
-        mcintosh = Fabricate(:picture, title: "McIntosh", category: apples, category_id: apples.id, represents_category: apples, represents_user: nil)
-        fuji = Fabricate(:picture, title: "Fuji", category: apples, category_id: apples.id, represents_category: nil, represents_user: nil)
+        mcintosh = Fabricate(:picture, title: "McIntosh", categories: [apples], represents_category: apples, represents_user: nil)
+        fuji = Fabricate(:picture, title: "Fuji", categories: [apples], represents_category: nil, represents_user: nil)
         patch :update, user_id: charlie.id, id: fuji.id, params: { id: fuji.id }, picture: { category_id: apples.id, title: "New Fuji", set_cat_picture: "true" }
         expect(fuji.reload.represents_category).to eq(apples)
         expect(fuji.reload.represents_user).to be_nil
       end
       it "should not change the 'represents_category' status when not changing the 'represent_category' status" do
         apples = Fabricate(:category, name: "Apples", user: charlie)
-        mcintosh = Fabricate(:picture, title: "McIntosh", category: apples, category_id: apples.id, represents_category: apples, represents_user: nil)
-        fuji = Fabricate(:picture, title: "Fuji", category: apples, category_id: apples.id, represents_category: nil, represents_user: nil)
+        mcintosh = Fabricate(:picture, title: "McIntosh", categories: [apples], represents_category: apples, represents_user: nil)
+        fuji = Fabricate(:picture, title: "Fuji", categories: [apples], represents_category: nil, represents_user: nil)
         patch :update, user_id: charlie.id, id: fuji.id, params: { id: fuji.id }, picture: { category_id: apples.id, title: "New Fuji", set_cat_picture: "false" }
         expect(fuji.reload.represents_category).to be_nil
       end
@@ -252,8 +246,8 @@ describe PicturesController do
       end
       it "should produce a flash error when trying to delete a photo that represents the user's category" do
         apples = Fabricate(:category, name: "Apples", user: charlie)
-        mcintosh = Fabricate(:picture, title: "McIntosh", category: apples, category_id: apples.id, represents_category: apples, represents_user: apples.user)
-        bright_red_sour = Fabricate(:picture, title: "Bright Red Sour", category: cherries, category_id: cherries.id, represents_category: cherries, represents_user: nil)
+        mcintosh = Fabricate(:picture, title: "McIntosh", categories: [apples], represents_category: apples, represents_user: apples.user)
+        bright_red_sour = Fabricate(:picture, title: "Bright Red Sour", categories: [cherries], represents_category: cherries, represents_user: nil)
         post :which_picture_to_delete, user_id: charlie.id, id: bright_red_sour.id
         expect(flash[:error]).to eq("Your \"Bright Red Sour\" photo currently represents the \"Cherries\" category. To delete \"Bright Red Sour,\" please select a new photo to represent the \"Cherries\" category.")
         expect(response).to render_template :edit_pictures
@@ -281,8 +275,8 @@ describe PicturesController do
         expect(response).to redirect_to new_user_picture_path(alice)
       end
       it "should render the Delete a Photo page if there are photos to delete" do
-        mcintosh = Fabricate(:picture, title: "McIntosh", category: apples, category_id: apples.id, represents_category: apples, represents_user: apples.user)
-        fuji = Fabricate(:picture, title: "Fuji", category: apples, category_id: apples.id, represents_category: nil, represents_user: nil)
+        mcintosh = Fabricate(:picture, title: "McIntosh", categories: [apples], represents_category: apples, represents_user: apples.user)
+        fuji = Fabricate(:picture, title: "Fuji", categories: [apples], represents_category: nil, represents_user: nil)
         get :delete_pictures, user_id: alice.id
         expect(response).to render_template :delete_pictures
       end

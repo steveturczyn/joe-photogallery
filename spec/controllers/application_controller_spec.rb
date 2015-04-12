@@ -12,7 +12,7 @@ describe ApplicationController do
     it "routes existing user to the User Show page" do
       angela = Fabricate(:user, first_name: "Angela", last_name: "Atkins")
       apples = Fabricate(:category, name: "Apples", user: angela)
-      mcintosh = Fabricate(:picture, title: "McIntosh", category: apples, category_id: apples.id, represents_category: apples, represents_user: apples.user)
+      mcintosh = Fabricate(:picture, title: "McIntosh", categories: [apples], represents_category: apples, represents_user: apples.user)
       sign_in angela
       expect(controller.after_sign_in_path_for(angela)).to eq(user_path(angela))
     end

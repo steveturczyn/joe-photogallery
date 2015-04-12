@@ -16,6 +16,7 @@ class PicturesController < ApplicationController
   def create
     @categories = current_user.categories
     @picture = Picture.new(picture_params)
+    @picture.categories = [Category.find(picture_params[:category_id])] if picture_params[:category_id].present?
     @picture.set_user_picture = picture_params[:set_user_picture].to_s.downcase == "true" ? true : false
     @picture.set_cat_picture = picture_params[:set_cat_picture].to_s.downcase == "true" ? true : false
     @picture.represents_category = nil
@@ -68,8 +69,7 @@ class PicturesController < ApplicationController
       flash[:error] = "You don't have any photos to edit."
       redirect_to new_user_picture_path(current_user)
     else
-      @category_ids = Category.select{|category| category.user_id == current_user.id }.map{|c| c.id }
-      @pictures = Picture.select{|picture| @category_ids.include? picture.category_id }.sort_by {|p| p.title.upcase }
+      @pictures = current_user.pictures.uniq.sort_by {|p| p.title.upcase }
     end
   end
 
@@ -101,8 +101,7 @@ class PicturesController < ApplicationController
       flash[:error] = "You don't have any photos to delete."
       redirect_to new_user_picture_path(current_user)
     else
-      @category_ids = Category.select{|category| category.user_id == current_user.id }.map{|c| c.id }
-      @pictures = Picture.select{|picture| @category_ids.include? picture.category_id }.sort_by {|p| p.title.upcase }
+      @pictures = current_user.pictures.uniq.sort_by {|p| p.title.upcase }
     end
   end
 
@@ -161,6 +160,7 @@ class PicturesController < ApplicationController
   def picture_update_attributes?
     temp_picture_id = @picture.user.picture_id
     @picture.assign_attributes(picture_params)
+    @picture.categories = [Category.find(picture_params[:category_id])] if picture_params[:category_id].present?
     @picture.set_user_picture = picture_params[:set_user_picture].to_s.downcase == "true" ? true : false
     @picture.set_cat_picture = picture_params[:set_cat_picture].to_s.downcase == "true" ? true : false
     @picture.represents_user = nil if !@picture.set_user_picture

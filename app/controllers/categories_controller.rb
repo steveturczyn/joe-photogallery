@@ -91,7 +91,7 @@ class CategoriesController < ApplicationController
       replacement_category ||= Category.create(name: "Uncategorized", user: current_user)
       flash[:success] = "Your pictures have been moved to the \"Uncategorized\" category."
       category.pictures.each do |picture|
-        picture.category = replacement_category
+        picture.categories = [replacement_category]
         picture.save
       end
     end

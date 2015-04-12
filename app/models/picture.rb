@@ -1,6 +1,6 @@
 class Picture < ActiveRecord::Base
 
-  belongs_to :category
+  has_and_belongs_to_many :categories, -> { order ('name') }
 
   has_one :represents_user, class_name: "User", foreign_key: "picture_id"
 
@@ -10,10 +10,9 @@ class Picture < ActiveRecord::Base
 
   mount_uploader :image_link, MyUploader
 
-  validates :title, :location, :description, :category_id, :image_link, presence: true
+  validates :title, :location, :description, :categories, :image_link, presence: true
 
   validate :first_picture_must_represent_user
-  validate :there_must_be_one_picture_representing_user
   validate :first_picture_in_category_must_represent_category
 
   before_save :fix_represent_user
@@ -23,16 +22,10 @@ class Picture < ActiveRecord::Base
 
   attr_accessor :set_cat_picture
   attr_accessor :set_user_picture
+  attr_accessor :category_id
 
   after_initialize :set_representative_booleans
-
-  def there_must_be_one_picture_representing_user
-    return unless category
-    return if !set_user_picture && !set_cat_picture
-    if !set_user_picture && (user.representative_picture == nil || (user.representative_picture.category == category && user.representative_picture != self))
-        errors.add(:represents_user, "A picture must represent a user.")
-    end
-  end
+  after_initialize :set_category_id
 
   def first_picture_must_represent_user
     return unless category
@@ -52,6 +45,10 @@ class Picture < ActiveRecord::Base
     end
   end
 
+  def category
+    categories.first
+  end
+
   def user
     category.user
   end
@@ -67,6 +64,10 @@ class Picture < ActiveRecord::Base
   def set_representative_booleans
     self.set_cat_picture = !!represents_category
     self.set_user_picture = !!represents_user
+  end
+
+  def set_category_id
+    self.category_id = categories.first.id unless categories.empty?
   end
 
   def fix_represent_user
