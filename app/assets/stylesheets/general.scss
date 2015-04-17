@@ -36,6 +36,9 @@ body.pictures-new, body.pictures-create, body.pictures-edit_pictures, body.pictu
   height: 100%;
   .carousel-inner {
     height: 100%;
+    @media (max-width: $screen-xs-max) {
+      overflow-y: auto;
+    }
     .item {
       height: 100%;
       nav {
