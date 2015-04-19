@@ -15,8 +15,8 @@ class Picture < ActiveRecord::Base
   validate :first_picture_must_represent_user
   validate :first_picture_in_category_must_represent_category
 
-  before_save :fix_represent_user
-  before_save :fix_represent_category
+  after_save :fix_represent_user
+  after_save :fix_represent_category
 
   after_destroy :remove_directory
 
