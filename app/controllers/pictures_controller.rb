@@ -43,7 +43,7 @@ class PicturesController < ApplicationController
     @picture = Picture.find(params[:id])
     if moving_picture_that_represents_category?
       SavedRecord.create(record_json: params[:picture], picture_id: @picture.id, user_id: current_user.id)
-      flash.now[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents the \"#{@picture.category.name}\" category. To move \"#{params[:picture][:title]}\" to a new category, please select a new photo to represent the \"#{@picture.category.name}\" category."
+      flash[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents the \"#{@picture.category.name}\" category. To move \"#{params[:picture][:title]}\" to a new category, please select a new photo to represent the \"#{@picture.category.name}\" category."
       redirect_to select_cat_picture_user_cat_pictures_path(current_user)
       return
     elsif picture_losing_category_status?
