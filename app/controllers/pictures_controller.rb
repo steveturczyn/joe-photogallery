@@ -41,16 +41,19 @@ class PicturesController < ApplicationController
 
   def update
     @picture = Picture.find(params[:id])
-    if moving_picture_that_represents_category?
+    #if moving_picture_that_represents_category?
+    if false
       SavedRecord.create(record_json: params[:picture], picture_id: @picture.id, user_id: current_user.id)
       flash[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents the \"#{@picture.category.name}\" category. To move \"#{params[:picture][:title]}\" to a new category, please select a new photo to represent the \"#{@picture.category.name}\" category."
       redirect_to select_cat_picture_user_cat_pictures_path(current_user)
       return
-    elsif picture_losing_category_status?
+    #elsif picture_losing_category_status?
+    elsif false
       flash.now[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents the \"#{@picture.category.name}\" category. Please select a new photo to represent the \"#{@picture.category.name}\" category."
       @pictures = other_pictures_in_category
       render :edit_pictures
-    elsif picture_losing_user_status?
+    #elsif picture_losing_user_status?
+    elsif false
       flash.now[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents your portfolio. Please select a new photo to represent your portfolio."
       @pictures = other_pictures_for_user
       render :edit_pictures
@@ -138,7 +141,7 @@ class PicturesController < ApplicationController
   end
 
   def picture_params
-    params.require(:picture).permit(:title, :location, :description, :image_link, :image_link_cache, :category_id, :set_cat_picture, :set_user_picture)
+    params.require(:picture).permit(:title, :location, :description, :image_link, :image_link_cache, :set_cat_picture, :set_user_picture, category_id: [])
   end
 
   def moving_picture_that_represents_category?
@@ -158,9 +161,10 @@ class PicturesController < ApplicationController
   end
 
   def picture_update_attributes?
+    
     temp_picture_id = @picture.user.picture_id
     @picture.assign_attributes(picture_params)
-    @picture.categories = [Category.find(picture_params[:category_id])] if picture_params[:category_id].present?
+    @picture.categories = picture_params[:category_id].select{|category_id| category_id.present? }.map{|category_id| Category.find(category_id)} if picture_params[:category_id].present?
     @picture.set_user_picture = picture_params[:set_user_picture].to_s.downcase == "true" ? true : false
     @picture.set_cat_picture = picture_params[:set_cat_picture].to_s.downcase == "true" ? true : false
     @picture.represents_user = nil if !@picture.set_user_picture

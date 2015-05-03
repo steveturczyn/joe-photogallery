@@ -7,9 +7,15 @@
         %fieldset
           .row
             .col-sm-4
-              = f.form_group :category_id, label: {text: 'Category'} do
-                - @categories.each do |category|
-                  = f.radio_button :category_id, category.id, label: "#{category.name}"
+              -# f.form_group :category_id, label: {text: 'Category'} do
+                -# @categories.each do |category|
+                  -# f.radio_button :category_id, category.id, label: "#{category.name}"
+                  -#= f.check_box(:category_id[], label: category.name)
+
+                  -#check_box(object_name, method, options = {}, checked_value = "1", unchecked_value = "0")
+                  -#<%= fields_for 'product[]' , product do |product_fields| -%>
+              = f.collection_check_boxes(:category_id, @categories, :id, :name)
+
               = f.text_field :title, autofocus: true
               = f.text_field :location
               = f.text_field :description

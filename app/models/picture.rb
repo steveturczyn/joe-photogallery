@@ -67,7 +67,7 @@ class Picture < ActiveRecord::Base
   end
 
   def set_category_id
-    self.category_id = categories.first.id unless categories.empty?
+    self.category_id = categories.map{|category| category.id }
   end
 
   def fix_represent_user
