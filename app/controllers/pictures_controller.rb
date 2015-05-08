@@ -36,27 +36,41 @@ class PicturesController < ApplicationController
 
   def edit
     @picture = Picture.find(params[:id])
-    @categories = Category.select{|category| category.user_id == current_user.id }
+    @categories = Category.select{|category| category.user_id == current_user.id }.sort_by{ |c| c.name }
+    @categories_containing_photo = CategoriesPicture.where(picture_id: @picture.id).map{ |category| category.category_id }
+    @radiobutton_category_names = Category.select{|category| category.user_id == current_user.id }.sort_by{ |c| c.name }.map{|c| c.name}.unshift("None")
+    name = @picture.category.name
+    updated_radiobutton_category_names = []
+    @radiobutton_category_names.each do |categoryname|
+      if categoryname == name
+        updated_radiobutton_category_names << ["#{categoryname}", true]
+      else
+        updated_radiobutton_category_names << ["#{categoryname}", false]
+      end
+    end
+    @radiobutton_category_names = updated_radiobutton_category_names
   end
 
   def update
     @picture = Picture.find(params[:id])
-    #if moving_picture_that_represents_category?
-    if false
+    if moving_picture_that_represents_category?
+      binding.pry
       SavedRecord.create(record_json: params[:picture], picture_id: @picture.id, user_id: current_user.id)
       flash[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents the \"#{@picture.category.name}\" category. To move \"#{params[:picture][:title]}\" to a new category, please select a new photo to represent the \"#{@picture.category.name}\" category."
       redirect_to select_cat_picture_user_cat_pictures_path(current_user)
       return
-    #elsif picture_losing_category_status?
-    elsif false
+    elsif picture_losing_category_status?
       flash.now[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents the \"#{@picture.category.name}\" category. Please select a new photo to represent the \"#{@picture.category.name}\" category."
       @pictures = other_pictures_in_category
       render :edit_pictures
-    #elsif picture_losing_user_status?
-    elsif false
+    elsif picture_losing_user_status?
       flash.now[:error] = "Your \"#{params[:picture][:title]}\" photo currently represents your portfolio. Please select a new photo to represent your portfolio."
       @pictures = other_pictures_for_user
       render :edit_pictures
+    elsif picture_has_no_category?
+      flash.now[:error] = "Please select a category."
+      @categories = current_user.categories
+      render :edit
     elsif picture_update_attributes?
       flash[:success] = "You have successfully updated your picture \"#{@picture.title}.\""
       redirect_to user_picture_path
@@ -145,11 +159,20 @@ class PicturesController < ApplicationController
   end
 
   def moving_picture_that_represents_category?
-    params[:picture][:category_id].to_i != @picture.category.id && @picture.represents_category && @picture.category.pictures.count > 1
+    category_and_represents_category = params[:picture][:set_cat_picture].split(" ")
+    category = category_and_represents_category[0]
+    @picture.represents_category && (category != @picture.represents_category.name) && @picture.represents_category.pictures.count > 1
   end
 
   def picture_losing_category_status?
-    @picture.represents_category && (params[:picture][:set_cat_picture].to_bool == false)
+    category_ids = params[:picture][:category_id].select{|id| id != ""}.map(&:to_i)
+    category_and_represents_category = params[:picture][:set_cat_picture].split(" ")
+    category = category_and_represents_category[0]
+    represents_category = category_and_represents_category[1].to_bool
+    return false if represents_category
+    category_in_db = Category.find_by(picture_id: @picture.id)
+    name_in_db = category_in_db.name
+    (category_in_db.name != category) || category == "None" ? true : false
   end
 
   def picture_losing_user_status?
@@ -160,19 +183,27 @@ class PicturesController < ApplicationController
     current_user.pictures.reject{|p| p == @picture }
   end
 
+  def picture_has_no_category?
+    params[:picture][:category_id] == [""] ? true : false
+  end
+
   def picture_update_attributes?
-    
     temp_picture_id = @picture.user.picture_id
     @picture.assign_attributes(picture_params)
-    @picture.categories = picture_params[:category_id].select{|category_id| category_id.present? }.map{|category_id| Category.find(category_id)} if picture_params[:category_id].present?
-    @picture.set_user_picture = picture_params[:set_user_picture].to_s.downcase == "true" ? true : false
-    @picture.set_cat_picture = picture_params[:set_cat_picture].to_s.downcase == "true" ? true : false
+    @picture.categories = picture_params[:category_id].select{|category_id| category_id.present?}.map{|category_id| Category.find(category_id)} if picture_params[:category_id].present?
+    @picture.set_user_picture = picture_params[:set_user_picture].to_s.downcase == "true"
     @picture.represents_user = nil if !@picture.set_user_picture
-    @picture.represents_category = nil if !@picture.set_cat_picture
     @picture.represents_user = @picture.category.user if @picture.category && @picture.set_user_picture
-    @picture.category.picture_id = @picture.id if @picture.set_cat_picture
+    name = params[:picture][:set_cat_picture].split(" ")
+    name = name[0]
+    if name != "None"
+      id = Category.where(id: params[:picture][:category_id], name: name).map{|category| category.id}.first
+      category = Category.find(id)
+      @picture.represents_category = category
+    else
+      @picture.represents_category = nil
+    end
     @picture.user.picture_id = temp_picture_id if !@picture.set_user_picture
-    @picture.represents_category = @picture.category if @picture.category && @picture.set_cat_picture
     @picture.save
   end
 end

@@ -6,7 +6,7 @@ class CategoriesController < ApplicationController
   def index
     @show_user = User.find(params[:user_id])
     @categories = @show_user.categories
-    @pictures = @categories.map(&:representative_picture).sort!{|a, b| a.category.name <=> b.category.name }
+    @pictures = @categories.map(&:representative_picture).sort!{|a, b| a.represents_category.name <=> b.represents_category.name }
   end
 
   def new

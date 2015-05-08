@@ -7,25 +7,18 @@
         %fieldset
           .row
             .col-sm-4
-              -# f.form_group :category_id, label: {text: 'Category'} do
-                -# @categories.each do |category|
-                  -# f.radio_button :category_id, category.id, label: "#{category.name}"
-                  -#= f.check_box(:category_id[], label: category.name)
-
-                  -#check_box(object_name, method, options = {}, checked_value = "1", unchecked_value = "0")
-                  -#<%= fields_for 'product[]' , product do |product_fields| -%>
-              = f.collection_check_boxes(:category_id, @categories, :id, :name)
-
+              - selected = @categories_containing_photo
+              = f.collection_check_boxes(:category_id, @categories, :id, :name, checked: selected)
               = f.text_field :title, autofocus: true
               = f.text_field :location
               = f.text_field :description
               <strong>Your current photo:</strong>
               %img{:src => "#{@picture.image_link.thumb}"}
               = f.file_field :image_link, label: "Upload Replacement Photo?", class: "btn btn-default btn-file"
-              = f.form_group :set_cat_picture, label: {text: 'Represents this Category?'} do
-                = f.radio_button :set_cat_picture, true, label: "Yes", checked: @picture.set_cat_picture
-                = f.radio_button :set_cat_picture, false, label: "No", checked: !@picture.set_cat_picture
-              = f.form_group :set_user_picture, label: {text: 'Represents this User?'} do
+              = f.form_group :set_cat_picture, label: {text: 'Represents the Category?'} do
+                - @radiobutton_category_names.each do |category|
+                  = f.radio_button :set_cat_picture, category, label: "#{category[0]}", checked: category[1]
+              = f.form_group :set_user_picture, label: {text: 'Represents Your Portfolio?'} do
                 = f.radio_button :set_user_picture, true, label: "Yes", checked: @picture.set_user_picture
                 = f.radio_button :set_user_picture, false, label: "No", checked: !@picture.set_user_picture
               = f.submit "Update Photo"
