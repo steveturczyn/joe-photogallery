@@ -15,14 +15,19 @@ class CatPicturesController < ApplicationController
       return
     end
     new_cat_picture = Picture.find(params[:id])
+    saved_record = current_user.saved_record
     get_picture_and_category
+    set_represents_category(saved_record.record_json[:set_cat_picture], @picture)
     new_cat_picture.represents_category = @category
     new_cat_picture.save
-    saved_record = current_user.saved_record
+    
     saved_record.record_json[:category_id].select{|id| id != ""}.each do |new_category_id|
       Category.find(new_category_id.to_i).pictures << @picture unless Category.find(new_category_id.to_i).pictures.include?(@picture)
     end
-    @category.pictures.delete(@picture)
+  
+    @picture.categories = saved_record.record_json[:category_id].map{|id|Category.find_by(id: id)}.compact
+    @picture.save
+    @picture.categories.each {|c|x = c.pictures.uniq; c.pictures = []; c.pictures = x; c.save}
     saved_record.destroy
     redirect_to user_picture_path(current_user, @picture)
   end

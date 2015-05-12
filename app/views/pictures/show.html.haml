@@ -4,7 +4,7 @@
       - @pictures.each_with_index do |picture, index| 
         .item{class:("active" if index == 0)}
           %header
-            %h1= link_to(@picture.category.name, user_category_path(@picture.user, @picture.category))
+            %h1= link_to(@picture.categories.first.name, user_category_path(@picture.user, @picture.categories.first))
           .item-wrapper.with-header
             .image-wrapper
               %img{:src => "#{picture.image_link}"}

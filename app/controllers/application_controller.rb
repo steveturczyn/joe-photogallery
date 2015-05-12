@@ -41,6 +41,22 @@ class ApplicationController < ActionController::Base
   end
 
   def other_pictures_in_category
-    @picture.category.pictures.reject{ |p| p == @picture }
+    @picture.represents_category.pictures.reject{ |p| p == @picture }
+  end
+
+  def extract_represents_category(represent_string)
+    name = represent_string.split(" ")[0]
+    if name != "None"
+      represents_category = Category.find_by(name: name, user_id: current_user.id)
+    else
+      represents_category = nil
+    end
+    represents_category
+  end
+
+  def set_represents_category(represent_string, picture)
+    picture.represents_category = extract_represents_category(represent_string)
+    picture.save
+
   end
 end
